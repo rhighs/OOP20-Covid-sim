@@ -1,5 +1,3 @@
-// package it.unibo.oop.project.Json.Rob.doge.savi.Persona
-
 class PersonaImpl implements Persona {
     private long x;
     private long y;
@@ -27,5 +25,13 @@ class PersonaImpl implements Persona {
 
     public boolean isInfected() {
         return infected;
+    }
+
+    public void update() {
+
+    }
+
+    public void draw() {
+
     }
 }
