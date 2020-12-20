@@ -1,4 +1,6 @@
-interface Persona {
+package Simulation;
+
+interface Person {
     // called every frame, this is the "logic"
     void    update();
     // also called every frame, these are drawing directives

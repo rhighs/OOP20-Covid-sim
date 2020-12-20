@@ -1,4 +1,6 @@
-class PersonaImpl implements Persona {
+package Simulation;
+
+class PersonImpl implements Person {
     private long x;
     private long y;
     private long z;
@@ -12,7 +14,13 @@ class PersonaImpl implements Persona {
     private int yolo; // suggested by savini
 
     // graphics information, such as mesh, models, whatever
+    
+    // move using some algorithm
+    public void move() {
 
+    }
+    
+    // move to a point
     public void move(long x, long y, long z) {
         this.x = x;
         this.y = y;
