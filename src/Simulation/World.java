@@ -2,16 +2,18 @@ package Simulation;
 
 import java.util.List;
 import java.util.ArrayList;
+import items.Point2d;
+import items.Rect2d;
 import items.Geometric;
 
 /* World contains the areas */
 class WorldHandler {
     class Area {
         Rect2d  area;
-        List<T> personList; // array of references (pointers) to persons
+        List<Person> personList; // array of references (pointers) to persons
 
         Area() {
-            personList = new ArrayList<Person>;
+            personList = new ArrayList<Person>();
         }
         
         void assign(Person p) {
@@ -19,9 +21,9 @@ class WorldHandler {
         }
 
         void moveAll() {
-            for (var p : personList) {
+            for (Person p : personList) {
                 p.move();
-                if (!Geometric) {
+                if (!Geometric.inside(p.position(), area)) {
                     reassign(p);
                     // and then delete p
                     // if you use a filter here instead you're cool
@@ -33,13 +35,13 @@ class WorldHandler {
     List<Area> areaList;
     Area topLeft, topRight, bottomLeft, bottomRight;
     
-    World() {
+    WorldHandler() {
         areaList = new ArrayList<>();
     }
 
     void reassign(Person p) {
         // find the correct area
-        for (var a : areaList) {
+        for (Area a : areaList) {
             if (Geometric.inside(p.position(), a.area)) {
                 a.assign(p);
             }

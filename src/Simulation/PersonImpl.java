@@ -1,5 +1,7 @@
 package Simulation;
 
+import items.Point2d;
+
 class PersonImpl implements Person {
     private long x;
     private long y;
@@ -41,5 +43,9 @@ class PersonImpl implements Person {
 
     public void draw() {
 
+    }
+    
+    public Point2d position() {
+        return null;
     }
 }

@@ -99,7 +99,7 @@ public class App extends SimpleApplication implements ActionListener {
         stateManager.attach(ba);
         
         CollisionShape cs = new CollisionShapeFactory().createMeshShape(plane.getGeometry());
-        CapsuleCollsionShape 
+        //CapsuleCollsionShape 
         landscape = new RigidBodyControl(cs, 0);
         plane.getGeometry().addControl(landscape);
 
