@@ -6,7 +6,7 @@ import com.jme3.scene.Mesh;
 class Entity {
     String name;
     Spatial sp;
-    Material mat;
+    //Material mat;
     Mesh mesh;  // box, circle, etc., can be null
     Vector3f pos;
     
