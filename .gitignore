@@ -9,6 +9,9 @@
 .classpath
 factoryConfiguration.json
 
+##nbproject
+nbproject/private/*
+
 ### Eclipse ###
 .metadata
 bin/
