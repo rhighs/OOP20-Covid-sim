@@ -17,7 +17,7 @@ final class Grid {
         cells = new ArrayList<>(NUM_CELLS*NUM_CELLS);
         for (int x = 0; x < NUM_CELLS; x++) {
             for (int y = 0; y < NUM_CELLS; y++) {
-                cells.set(pos(x, y), new LinkedList<Person>());
+                cells.set(pos(x, y), new LinkedList<>());
             }
         }
     }

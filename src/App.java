@@ -49,7 +49,7 @@ public class App extends SimpleApplication implements ActionListener {
     }
 
     public void simpleInitApp() {
-        MeshEntity em = new MeshEntity(0, "test", new Mesh(), new Material());
+        //MeshEntity em = new MeshEntity(0, "test", new Mesh(), new Material());
     }
 
     @Override

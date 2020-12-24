@@ -20,5 +20,9 @@ class Person {
     public boolean inRange(Person p) {
         return false;
     }
+    
+    public void handleCollision(Person p) {
+        
+    }
 }
 
