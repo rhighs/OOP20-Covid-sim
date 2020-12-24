@@ -24,7 +24,7 @@ public class Entity extends GhostControl implements PhysicsCollisionListener{
     protected Material material;
     protected Vector3f position;
     protected int id;
-    
+
     public Entity(final Spatial spatial, final Material material, final int id){
         this.spatial = spatial;
         this.material = material;
@@ -71,7 +71,6 @@ public class Entity extends GhostControl implements PhysicsCollisionListener{
     }
 
     @Override
-    public void collision(PhysicsCollisionEvent arg0) {
-        //do something
+    public void collision(PhysicsCollisionEvent event) {
     }
 }

@@ -121,7 +121,6 @@ public class App extends SimpleApplication implements ActionListener {
         movingPlane = new CharacterControl(cs, 0.5f);
         player = new CharacterControl(cap, 0.05f);
 
-
         player.setJumpSpeed(20);
         player.setFallSpeed(30);
         player.setGravity(new Vector3f(0, -40f, 0));
