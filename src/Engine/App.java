@@ -1,6 +1,5 @@
 package Engine;
 
-import Engine.items.BoxEntity;
 import Engine.items.Entity;
 import com.jme3.app.FlyCamAppState;
 import com.jme3.math.Vector3f;
@@ -30,6 +29,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.MaterialDef;
 import java.util.stream.*;
+import Engine.items.MeshEntity;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -47,38 +47,6 @@ public class App extends SimpleApplication implements ActionListener {
         App app = new App();
         app.start();
     }
-
-    //coliision driven objects
-    private Spatial sceneModel;
-    private BulletAppState bulletAppState;
-    private RigidBodyControl landscape;
-    private Vector3f walkDirection = new Vector3f();
-    private boolean left = false, right = false, up = false, down = false;
-
-    //Temporary vectors used on each frame.
-    //They here to avoid instanciating new vectors on each frame
-    private Vector3f camDir = new Vector3f();
-    private Vector3f camLeft = new Vector3f();
-    private CharacterControl player;
-    private CharacterControl movingPlane;
-
-    //Image i = new Image(BACKGROUND_IMAGE);
-    Node pivot = new Node("pivot");
-    static Node spherePivot = new Node("spivot");
-    final Box b = new Box(200f, .1f, 160f);
-    final Sphere s = new Sphere(100, 100, 1);
-    final Spatial geom = new Geometry("sku", s);
-    final Spatial geom2 = new Geometry("cubo2", s);
-     float xpos = 0, xRotation = 0;
-    static final Vector3f vs = new Vector3f(4, 0, 0);
-    static final Vector3f vs1 = new Vector3f(-4, 0, 0);
-    static final Vector3f c = new Vector3f(0, -7, -5);
-    final float multiplier = 1f / 255;
-    final ColorRGBA bgcolor = new ColorRGBA().set(40f * multiplier, 188f * multiplier, 211f * multiplier, 1.0f);
-    final CollisionResults results = new CollisionResults();
-    Entity wb;
-    Entity plane;
-    Entity plane1;
 
     public void simpleInitApp() {
         flyCam.setMoveSpeed(100);
@@ -162,58 +130,14 @@ public class App extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
-        xRotation++;
-        //spherePivot.rotate(0, xRotation, 0);
-        plane.move(2*tpf,0,0);
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
 
     }
-
-    public void setLight() {
-        DirectionalLight sunn = new DirectionalLight();
-        sunn.setColor(ColorRGBA.White);
-        sunn.setDirection(new Vector3f(10f, -10f, -10f));
-
-        rootNode.addLight(sunn);
-    }
-
-    public void setKeysMapping() {
-        inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
-        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_M));
-        inputManager.addMapping("Rotate", new KeyTrigger(KeyInput.KEY_SPACE), new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-    }
-
-    private void setUpKeys() {
-        inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
-        inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addListener(this, "Left");
-        inputManager.addListener(this, "Right");
-        inputManager.addListener(this, "Up");
-        inputManager.addListener(this, "Down");
-        inputManager.addListener(this, "Jump");
-    }
-
+    
+    @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
-        if (binding.equals("Left")) {
-            left = isPressed;
-        } else if (binding.equals("Right")) {
-            right = isPressed;
-        } else if (binding.equals("Up")) {
-            up = isPressed;
-        } else if (binding.equals("Down")) {
-            down = isPressed;
-        } else if (binding.equals("Jump")) {
-            if (isPressed) {
-                player.jump();
-            }
-        }
     }
 }
