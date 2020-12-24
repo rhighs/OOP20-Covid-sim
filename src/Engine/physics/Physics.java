@@ -5,9 +5,11 @@
  */
 package Engine.physics;
 
+import Engine.items.Entity;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
+import java.util.List;
 
 /**
  *
@@ -18,6 +20,10 @@ public class Physics implements PhysicsTickListener{
     
     public Physics(BulletAppState bullet){
         this.bullet = bullet;
+    }
+    
+    public void add(final List<Entity> entities){
+        
     }
 
     @Override
