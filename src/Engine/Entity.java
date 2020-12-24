@@ -55,7 +55,7 @@ public class Entity extends GhostControl implements PhysicsCollisionListener {
         position.z += z;
         spatial.setLocalTranslation(position);
     }
-
+    
     public void moveOnPlane(final float x, final float y) {
         this.move(x, position.y, y);
     }
