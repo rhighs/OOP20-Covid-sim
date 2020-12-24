@@ -14,7 +14,6 @@ import com.jme3.scene.Spatial;
  * @author rob, chris
  */
 public class Entity extends GhostControl implements PhysicsCollisionListener {
-
     protected int id;
     protected String name;
     protected Spatial spatial;
