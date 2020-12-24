@@ -14,17 +14,18 @@ import com.jme3.scene.Spatial;
  * @author rob, chris
  */
 public class Entity extends GhostControl implements PhysicsCollisionListener {
+
     protected int id;
     protected String name;
     protected Spatial spatial;
     protected Material material;
     protected Vector3f position;
-    
-    public Entity(final int id, final String name, final Spatial spatial, final Material material){
-        this.name     = name;
-        this.spatial  = spatial;
+
+    public Entity(final int id, final String name, final Spatial spatial, final Material material) {
+        this.name = name;
+        this.spatial = spatial;
         this.material = material;
-        this.id       = id;
+        this.id = id;
         super.setCollisionShape(new CollisionShapeFactory().createMeshShape(this.spatial.clone().scale(2)));
     }
 
@@ -47,7 +48,7 @@ public class Entity extends GhostControl implements PhysicsCollisionListener {
         position.z += z;
         spatial.setLocalTranslation(position);
     }
-    
+
     public void moveOnPlane(final float x, final float y) {
         this.move(x, position.y, y);
     }
@@ -56,6 +57,15 @@ public class Entity extends GhostControl implements PhysicsCollisionListener {
         spatial.rotate(x, y, z);
     }
     
-    public void collision(PhysicsCollisionEvent event){
+    /*just a test*/
+    public void collision(PhysicsCollisionEvent event) {
+        Spatial a = event.getNodeA() == spatial ? spatial : event.getNodeB();
+        Spatial b = event.getNodeB() != spatial ? event.getNodeB() : spatial;
+        
+        if ((boolean)a.getUserData("infection") == true && (boolean)b.getUserData("infection") == false) {
+            b.setUserData("infection", true);
+        }
+        
+        //super.getOverlappingObjects().get(idx).setUserObject(objectId);
     }
 }
