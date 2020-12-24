@@ -19,12 +19,14 @@ public class Entity extends GhostControl implements PhysicsCollisionListener {
     protected Spatial spatial;
     protected Material material;
     protected Vector3f position;
+    protected Node parent;
     
     public Entity(final int id, final String name, final Spatial spatial, final Material material){
         this.name     = name;
         this.spatial  = spatial;
         this.material = material;
         this.id       = id;
+        this.parent   = null;
         super.setCollisionShape(new CollisionShapeFactory().createMeshShape(this.spatial.clone().scale(2)));
     }
 
@@ -37,8 +39,14 @@ public class Entity extends GhostControl implements PhysicsCollisionListener {
         spatial.setLocalTranslation(this.position);
     }
 
-    public void setParent(final Node parent) {
+    public void show(final Node parent) {
+        this.parent = parent;
         parent.attachChild(spatial);
+    }
+
+    public void hide() {
+        parent.detachChild(spatial);
+        parent = null;
     }
 
     public void move(final float x, final float y, final float z) {

@@ -1,16 +1,24 @@
 package Simulation;
 
-import items.Point2d;
+class Person {
+    protected Grid grid;
+    //private GraphicsComponent gfx;
+    //private PhysicsComponent  phyc;
+    protected float gx, gy;
 
-interface Person {
-    // called every frame, this is the "logic"
-    void    update();
-    // also called every frame, these are drawing directives
-    void    draw();
-    void    move();
-    void    move(long x, long y, long z);
-    void    infect();
-    boolean isInfected();
-    Point2d position();
+    public Person(Grid grid, float x, float y) {
+        this.gx   = x;
+        this.gy   = y;
+        this.grid = grid;
+        this.grid.add(this);
+    }
+
+    public void move(float x, float y) {
+        grid.move(this, x, y);
+    }
+
+    public boolean inRange(Person p) {
+        return false;
+    }
 }
 
