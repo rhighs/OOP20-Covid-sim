@@ -1,28 +1,50 @@
 package Simulation;
 
-class Person {
-    protected Grid grid;
-    //private GraphicsComponent gfx;
-    //private PhysicsComponent  phyc;
-    protected float gx, gy;
+import com.jme3.math.Vector3f;
 
-    public Person(Grid grid, float x, float y) {
-        this.gx   = x;
-        this.gy   = y;
-        this.grid = grid;
-        this.grid.add(this);
+class Person implements Entity {
+    private GraphicsComponent gfx;
+    private PhysicsComponent  phyc;
+    private boolean infected;
+    private Vector3f oldPos, pos;
+
+    public Person() {
+        gfx = new GraphicsComponent(this);
+        phyc = new PhysicsComponent(this);
     }
 
-    public void move(float x, float y) {
-        grid.move(this, x, y);
+    public Vector3f algoritmoMovimento() {
+        throw new UnsupportedOperationException();
     }
 
-    public boolean inRange(Person p) {
-        return false;
+    public void update() {
+        Vector3f newPos = algoritmoMovimento();
+        oldPos = pos;
+        pos = newPos;
+        gfx.move(newPos);
     }
     
-    public void handleCollision(Person p) {
-        
+    public Spatial getSpatial() {
+        return gfx.getSpatial();
+    }
+
+    public void collision(Entity e) {
+        switch (e.getIdentificator()) {
+        case PERSON:
+            // algoritmo infezione
+            break;
+        case WALL:
+            // move back
+            break;
+        case UNKNOWN:
+            throw new UnsupportedOperationException();
+        default:
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public Identificator getIdentificator() {
+        return Identificator.PERSON;
     }
 }
 
