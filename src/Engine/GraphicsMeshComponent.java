@@ -4,11 +4,11 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 
-public class MeshEntity extends Entity {
+public class GraphicsMeshComponent extends Entity {
     private Mesh mesh;
 
-    public MeshEntity(final int id, final String name, final Mesh mesh, final Material material) {
-        super(id, name, new Geometry(name, mesh), material);
+    public MeshEntity(final String name, final Mesh mesh, final Material material) {
+        super(new Geometry(name, mesh), material);
         this.mesh = mesh;
     }
 
