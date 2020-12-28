@@ -4,13 +4,17 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 public class GraphicsComponent {
+    private Entity entity;
     private Spatial sp;
     private Material mat;
     private Node parent;
+    private ColorRGBA color = ColorRGBA.Green;
 
-    public Entity(final Spatial sp, final Material mat, Node parent) {
+    public GraphicsComponent(final Entity entity, final Spatial sp, final AssetManager assetManager, String matName, Node parent) {
+        this.entity = entity;
         this.sp = sp;
-        this.mat = mat;
+        this.mat = new Material(assetManager, matName);
+        this.sp.setMaterial(mat);
         this.parent = parent;
     }
 
@@ -32,5 +36,14 @@ public class GraphicsComponent {
 
     public void hide() {
         parent.detachChild(sp);
+    }
+
+    public boolean changeColor(final ColorRGBA color){
+        if (!this.color.equals(color)) {
+            material.setColor(color.toString(), color);
+            spatial.setMaterial(material);
+            return true;
+        }
+        return false;
     }
 }
