@@ -1,49 +1,55 @@
 package Simulation;
 
-import Engine.items.Entityp;
+import Engine.graphics.GraphicsComponent;
+import Engine.physics.PhysicsComponent;
+import com.jme3.math.Vector3f;
 
-public class Person {
-    //protected Grid grid;
-    protected Entityp entity;
-    protected boolean infection;
-    //private GraphicsComponent gfx;
-    //private PhysicsComponent  phyc;
-    protected float gx, gy;
+public class Person implements Entity {
+    private GraphicsComponent gfx;
+    private PhysicsComponent  phyc;
+    private boolean infected;
+    private Vector3f oldPos, pos;
 
-    public Person(float x, float y, boolean infection) {
-        this.gx   = x;
-        this.gy   = y;
-        //this.grid = grid;
-        //this.grid.add(this);
-        this.infection = infection;
-        
-        entity.setUserObject(this);
+    public Person() {
+        gfx = new GraphicsComponent(this);
+        phyc = new PhysicsComponent(this);
+    }
+
+    public Vector3f algoritmoMovimento() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void update() {
+        Vector3f newPos = algoritmoMovimento();
+        oldPos = pos;
+        pos = newPos;
+        phyc.move(newPos);
     }
     
-    public void infect(){
-        if(!infection){
-            infection = true;
+    public Spatial getSpatial() {
+        return gfx.getSpatial();
+    }
+
+    public void collision(final Entity e, final float distance) {
+        switch (e.getIdentificator()) {
+        case PERSON:
+            // algoritmo infezione
+            break;
+        case WALL:
+            // move back
+            break;
+        case UNKNOWN:
+            throw new UnsupportedOperationException();
+        default:
+            throw new UnsupportedOperationException();
         }
+    }
+
+    public Identificator getIdentificator() {
+        return Identificator.PERSON;
     }
     
     public boolean isInfected(){
-        return infection;
-    }
-    
-    public Entityp getEntity(){
-        return entity;
-    }
-
-    public void move(float x, float y) {
-        //grid.move(this, x, y);
-        entity.moveOnPlane(x, y);
-    }
-
-    public boolean inRange(Person p) {
-        return false;
-    }
-    
-    public void handleCollision(Person p) {
-        
+        return infected;
     }
 }

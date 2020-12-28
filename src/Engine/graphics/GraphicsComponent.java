@@ -16,7 +16,7 @@ import com.jme3.scene.Spatial;
  *
  * @author rob
  */
-public class Graphics {
+public class GraphicsComponent {
     private Node node;
     private Entity entity;
     private Spatial spatial;
@@ -24,11 +24,11 @@ public class Graphics {
     private AssetManager assetManager;
     private ColorRGBA color = ColorRGBA.Green;
     
-    public Graphics(final Entity entity, final Spatial Spatial, final Node node, final AssetManager assetManager){
+    public GraphicsComponent(final Entity entity, final Spatial Spatial, final Node node, final AssetManager assetManager){
         this.assetManager = assetManager;
-        this.entity = entity;
-        this.spatial = spatial;
-        this.node = node;
+        this.entity       = entity;
+        this.spatial      = spatial;
+        this.node         = node;
         
         material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         this.spatial.setMaterial(material);
@@ -43,6 +43,19 @@ public class Graphics {
             return true;
         }
         return false;
+    }
+    
+    public Spatial getSpatial(){
+        return this.spatial;
+    }
+    
+    //adding arms or other stuff to the gfx object
+    public void attachShape(final Node n){
+        ((Node)spatial).attachChild(n);
+    }
+    
+    public void hide(){
+        this.node.detachChild(spatial);
     }
     
 }
