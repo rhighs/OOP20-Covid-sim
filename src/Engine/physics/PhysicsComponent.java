@@ -30,12 +30,14 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     private Entity entity;
     private Spatial spatial;
     private CollisionShape collisionShape;
+    private boolean isCollisionEnabled;
 
     public PhysicsComponent(final Entity entity, final BulletAppState bullet) {
         this.bullet = bullet;
         this.entity = entity;
         this.spatial = entity.getSpatial();
-        collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
+        this.collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
+        this.isCollisionEnabled = true;
 
         this.setCollisionShape(collisionShape);
         add(this);
@@ -49,14 +51,18 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
             Vector3f v1 = entity.getSpatial().getLocalTranslation();
             Vector3f v2;
             
-            for (var person : this.getOverlappingObjects()) {
-                e = ((PhysicsComponent) person).getEntity();
+            for (var collidingEntity : this.getOverlappingObjects()) {
+                e = ((PhysicsComponent) collidingEntity).getEntity();
                 v2 = e.getSpatial().getLocalTranslation();
                 distance = v1.distance(v2);
                 entity.collision(e, distance);
             }
         }
         
+    }
+    
+    public void setCollisionEnabled(boolean enabled){
+        isCollisionEnabled = enabled;
     }
 
     public void move(final Vector3f offset) {
@@ -82,18 +88,8 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
 
     @Override
     public void physicsTick(PhysicsSpace arg0, float arg1) {
-        switch (entity.getIdentificator()) {     
-            case PERSON:
-                if(((Person)entity).isInfected()){
-                    check();
-                }
-                break;
-            case WALL:
-                //do nothing
-                break;
-            case UNKNOWN:
-                //do nothing
-                break;
+        if(isCollisionEnabled){
+            check();
         }
     }
 }
