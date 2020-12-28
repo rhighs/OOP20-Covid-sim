@@ -2,23 +2,30 @@ package Simulation;
 
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
+import com.jme3.asset.AssetManager;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
-public class Person implements Entity {
+import com.jme3.scene.Spatial;
+
+public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
     private PhysicsComponent  phyc;
-    private boolean infected;
     private Vector3f oldPos, pos;
+    private boolean infected;
+    private Mask mask;
 
-    public Person() {
-        gfx = new GraphicsComponent(this);
-        phyc = new PhysicsComponent(this);
+    
+    public Person(Node node, AssetManager assetManager, BulletAppState bullet){       
+        gfx = new GraphicsComponent(this, null, node, assetManager);
+        phyc = new PhysicsComponent(this, bullet);
     }
 
     public Vector3f algoritmoMovimento() {
         throw new UnsupportedOperationException();
     }
-
+    
     public void update() {
         Vector3f newPos = algoritmoMovimento();
         oldPos = pos;
@@ -29,8 +36,8 @@ public class Person implements Entity {
     public Spatial getSpatial() {
         return gfx.getSpatial();
     }
-
-    public void collision(final Entity e, final float distance) {
+    
+    public void collision(Entity e, float distance) {
         switch (e.getIdentificator()) {
         case PERSON:
             // algoritmo infezione
@@ -44,12 +51,24 @@ public class Person implements Entity {
             throw new UnsupportedOperationException();
         }
     }
-
+    
     public Identificator getIdentificator() {
         return Identificator.PERSON;
     }
     
+    public Mask getMask(){
+        return mask;
+    }
+    
+    public void maskDown(){
+        mask = Mask.DOWN;
+    }
+    
     public boolean isInfected(){
         return infected;
+    }
+    
+    public void infect(){
+        infected = true;
     }
 }

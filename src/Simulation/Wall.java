@@ -1,15 +1,14 @@
-
 package Simulation;
 
 import Engine.graphics.GraphicsComponent;
+import Engine.physics.PhysicsComponent;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 class Wall implements Entity {
     Vector3f pos;
     GraphicsComponent gfx;
-    physicsComponent phyc;
-    
+    PhysicsComponent phyc;
 
     public Wall(Vector3f pos) {
         this.pos = pos;
@@ -29,7 +28,7 @@ class Wall implements Entity {
     }
     
     // lol i dunno what to put here
-    public void collision(Entity e) {
+    public void collision(Entity e, float distance) {
         switch (e.getIdentificator()) {
         case PERSON: break;
         case WALL: break;
