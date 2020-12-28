@@ -5,7 +5,7 @@ import com.jme3.scene.Spatial;
 
 public class GraphicsComponent {
     private Entity entity;
-    private Spatial sp;
+    private Node sp;
     private Material mat;
     private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
@@ -45,5 +45,13 @@ public class GraphicsComponent {
             return true;
         }
         return false;
+    }
+
+    Spatial getSpatial() {
+        return sp;
+    }
+
+    public void attachShape(final Node n){
+        sp.attachChild(n);
     }
 }
