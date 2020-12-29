@@ -1,18 +1,24 @@
 package Simulation;
 
+import Engine.graphics.GraphicsComponent;
+import Engine.physics.PhysicsComponent;
+import com.jme3.asset.AssetManager;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
 import com.jme3.scene.Spatial;
 
-class PersonImpl implements Entity, Person {
+class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
     private PhysicsComponent  phyc;
     private boolean infected;
     private Mask mask;
     private Vector3f oldPos, pos;
     
-    
-    public PersonImpl(){       
+    public Person(Node node, AssetManager assetManager, BulletAppState bullet) {       
+        gfx = new GraphicsComponent(this, null, node, assetManager);
+        phyc = new PhysicsComponent(this, bullet);
         gfx = new GraphicsComponent(this);
         phyc = new PhysicsComponent(this);
     }
@@ -20,11 +26,13 @@ class PersonImpl implements Entity, Person {
     public Vector3f algoritmoMovimento() {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public void update() {
         Vector3f newPos = algoritmoMovimento();
         oldPos = pos;
         pos = newPos;
+        //phyc.move(newPos);
         gfx.move(newPos);
     }
     @Override
@@ -68,4 +76,3 @@ class PersonImpl implements Entity, Person {
         infected = true;
     }
 }
-

@@ -7,7 +7,7 @@ import com.jme3.scene.Mesh;
 public class GraphicsMeshComponent extends Entity {
     private Mesh mesh;
 
-    public MeshEntity(final String name, final Mesh mesh, final Material material) {
+    public GraphicsMeshComponent(final String name, final Mesh mesh, final Material material) {
         super(new Geometry(name, mesh), material);
         this.mesh = mesh;
     }

@@ -47,7 +47,7 @@ public class GraphicsComponent {
         return false;
     }
 
-    Spatial getSpatial() {
+    public Spatial getSpatial() {
         return sp;
     }
 

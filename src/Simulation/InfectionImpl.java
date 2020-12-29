@@ -10,7 +10,7 @@ class InfectionImpl implements InfectionAlg{
 
     @Override
     public void infection(Person p) {
-        if(!p.isInfected()  && p.getMask() == Person.Mask.DOWN){
+        if(!p.isInfected() && p.getMask() == Person.Mask.DOWN){
             p.infect();
         }else{
             maskInfection(p);
@@ -36,6 +36,4 @@ class InfectionImpl implements InfectionAlg{
                 }
             }
     }
-    
-    
 }
