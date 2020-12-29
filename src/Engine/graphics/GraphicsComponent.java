@@ -8,19 +8,20 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.asset.AssetManager;
 import Engine.items.Entity;
 
-public class GraphicsComponent {
+public class GraphicsComponent{
     private Entity entity;
-    private Node sp;
+    private Spatial sp;
     private Material mat;
     private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
 
-    public GraphicsComponent(final Entity entity, final Node sp, final AssetManager assetManager, String matName, Node parent) {
+    public GraphicsComponent(final Entity entity, final Spatial sp, final AssetManager assetManager, String matName, Node parent) {
         this.entity = entity;
         this.sp = sp;
         this.mat = new Material(assetManager, matName);
         this.sp.setMaterial(mat);
         this.parent = parent;
+        parent.attachChild(sp);
     }
 
     public void moveTo(final Vector3f pos) {
@@ -56,7 +57,4 @@ public class GraphicsComponent {
         return sp;
     }
 
-    public void attachShape(final Node n){
-        sp.attachChild(n);
-    }
 }

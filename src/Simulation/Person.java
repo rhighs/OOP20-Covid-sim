@@ -8,6 +8,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import Engine.items.Entity;
+import java.util.Collections;
+import java.util.Map;
 
 class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -27,6 +29,7 @@ class Person implements Entity, IPerson {
 
     @Override
     public void update() {
+        
         Vector3f newPos = algoritmoMovimento();
         oldPos = pos;
         pos = newPos;
@@ -39,19 +42,24 @@ class Person implements Entity, IPerson {
         return gfx.getSpatial();
     }
     
-    @Override
-    public void collision(Entity e, float dist) {
-        switch (e.getIdentificator()) {
-        case PERSON:
-            // algoritmo infezione
-            break;
-        case WALL:
-            // move back
-            break;
-        case UNKNOWN:
-            throw new UnsupportedOperationException();
-        default:
-            throw new UnsupportedOperationException();
+    public void collision() {
+        if(!phyc.getCollidingEntities().equals(Collections.EMPTY_MAP)){
+            Map<Entity, Float> colliding = phyc.getCollidingEntities();
+            
+            for(var e : colliding.entrySet()){
+                switch (e.getKey().getIdentificator()) {
+                    case PERSON:
+                        // algoritmo infezione
+                    break;
+                    case WALL:
+                        // move back
+                    break;
+                    case UNKNOWN:
+                        throw new UnsupportedOperationException();
+                    default:
+                        throw new UnsupportedOperationException();
+                }
+            }
         }
     }
     
@@ -79,5 +87,6 @@ class Person implements Entity, IPerson {
     public void infect()
     {
         infected = true;
+        phyc.setCollisionEnabled(true);
     }
 }

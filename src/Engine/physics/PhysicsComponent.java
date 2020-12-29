@@ -17,7 +17,12 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -30,21 +35,25 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     private Spatial spatial;
     private CollisionShape collisionShape;
     private boolean isCollisionEnabled;
+    private Map<Entity, Float> collidingEntities;
 
     public PhysicsComponent(final Entity entity, final BulletAppState bullet) {
         this.bullet = bullet;
         this.entity = entity;
         this.spatial = entity.getSpatial();
         this.collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
-        this.isCollisionEnabled = true;
-
+        this.isCollisionEnabled = false;
+        this.collidingEntities = new HashMap<>();
+        
         this.setCollisionShape(collisionShape);
         add(this);
     }
 
     public void check() {
         
-        if (this.getOverlappingCount() != 0) {
+        if (this.getOverlappingCount() != 0) { 
+            this.collidingEntities.clear();
+            
             Entity e;
             float distance;
             Vector3f v1 = entity.getSpatial().getLocalTranslation();
@@ -54,10 +63,15 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
                 e = ((PhysicsComponent) collidingEntity).getEntity();
                 v2 = e.getSpatial().getLocalTranslation();
                 distance = v1.distance(v2);
-                entity.collision(e, distance);
+                
+                this.collidingEntities.put(e, distance);
             }
         }
         
+    }
+    
+    public Map<Entity, Float> getCollidingEntities(){
+        return this.collidingEntities;
     }
     
     public void setCollisionEnabled(boolean enabled){

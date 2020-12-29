@@ -8,6 +8,6 @@ public interface Entity {
     }
     void    update();
     Spatial getSpatial();
-    void    collision(Entity e, float distance);
+    void    collision();
     Identificator getIdentificator();
 }
