@@ -2,17 +2,13 @@ package Simulation;
 
 import com.jme3.math.Vector3f;
 
-import com.jme3.scene.Spatial;
-
-class PersonImpl implements Entity, Person {
+class Person implements Entity {
     private GraphicsComponent gfx;
     private PhysicsComponent  phyc;
     private boolean infected;
-    private Mask mask;
     private Vector3f oldPos, pos;
-    
-    
-    public PersonImpl(){       
+
+    public Person() {
         gfx = new GraphicsComponent(this);
         phyc = new PhysicsComponent(this);
     }
@@ -20,18 +16,18 @@ class PersonImpl implements Entity, Person {
     public Vector3f algoritmoMovimento() {
         throw new UnsupportedOperationException();
     }
-    @Override
+
     public void update() {
         Vector3f newPos = algoritmoMovimento();
         oldPos = pos;
         pos = newPos;
         gfx.move(newPos);
     }
-    @Override
+    
     public Spatial getSpatial() {
         return gfx.getSpatial();
     }
-    @Override
+
     public void collision(Entity e) {
         switch (e.getIdentificator()) {
         case PERSON:
@@ -46,26 +42,8 @@ class PersonImpl implements Entity, Person {
             throw new UnsupportedOperationException();
         }
     }
-    @Override
+
     public Identificator getIdentificator() {
         return Identificator.PERSON;
     }
-    @Override
-    public Mask getMask(){
-        return mask;
-    }
-    @Override
-    public void maskDown(){
-        mask = Mask.DOWN;
-    }
-    @Override
-    public boolean isInfected(){
-        return infected;
-    }
-    @Override
-    public void infect()
-    {
-        infected = true;
-    }
 }
-
