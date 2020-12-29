@@ -15,6 +15,7 @@ class PersonImpl implements Entity, Person {
     public PersonImpl(){       
         gfx = new GraphicsComponent(this);
         phyc = new PhysicsComponent(this);
+        
     }
 
     public Vector3f algoritmoMovimento() {
@@ -55,8 +56,12 @@ class PersonImpl implements Entity, Person {
         return mask;
     }
     @Override
+    public void wearMask(Mask m){
+        this.mask = m;
+    }
+    @Override
     public void maskDown(){
-        mask = Mask.DOWN;
+        this.mask.maskDown();
     }
     @Override
     public boolean isInfected(){
