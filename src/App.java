@@ -1,6 +1,6 @@
-package Engine;
+//package Engine;
 
-import Engine.items.Entity;
+//import Engine.items.Entity;
 import com.jme3.app.FlyCamAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.light.*;
@@ -29,7 +29,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.MaterialDef;
 import java.util.stream.*;
-import Engine.items.MeshEntity;
+//import Engine.items.MeshEntity;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.

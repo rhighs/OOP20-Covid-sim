@@ -6,8 +6,7 @@
 package Engine.physics;
 
 import Engine.items.Entityp;
-import Simulation.Entity;
-import Simulation.Person;
+import Engine.items.Entity;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;

@@ -1,5 +1,6 @@
 package Simulation;
 
+import Engine.items.Entity;
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
 import com.jme3.math.Vector3f;

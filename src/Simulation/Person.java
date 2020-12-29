@@ -6,8 +6,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-
 import com.jme3.scene.Spatial;
+import Engine.items.Entity;
 
 class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -17,10 +17,8 @@ class Person implements Entity, IPerson {
     private Vector3f oldPos, pos;
     
     public Person(Node node, AssetManager assetManager, BulletAppState bullet) {       
-        gfx = new GraphicsComponent(this, null, node, assetManager);
+        //gfx = new GraphicsComponent(this, null, node, assetManager);
         phyc = new PhysicsComponent(this, bullet);
-        gfx = new GraphicsComponent(this);
-        phyc = new PhysicsComponent(this);
     }
 
     public Vector3f algoritmoMovimento() {
@@ -32,15 +30,17 @@ class Person implements Entity, IPerson {
         Vector3f newPos = algoritmoMovimento();
         oldPos = pos;
         pos = newPos;
-        //phyc.move(newPos);
-        gfx.move(newPos);
+        phyc.move(newPos);
+        //gfx.move(newPos);
     }
+    
     @Override
     public Spatial getSpatial() {
         return gfx.getSpatial();
     }
+    
     @Override
-    public void collision(Entity e) {
+    public void collision(Entity e, float dist) {
         switch (e.getIdentificator()) {
         case PERSON:
             // algoritmo infezione
@@ -54,22 +54,27 @@ class Person implements Entity, IPerson {
             throw new UnsupportedOperationException();
         }
     }
+    
     @Override
     public Identificator getIdentificator() {
         return Identificator.PERSON;
     }
+    
     @Override
     public Mask getMask(){
         return mask;
     }
+    
     @Override
     public void maskDown(){
         mask = Mask.DOWN;
     }
+    
     @Override
     public boolean isInfected(){
         return infected;
     }
+    
     @Override
     public void infect()
     {

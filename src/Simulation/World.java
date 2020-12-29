@@ -32,7 +32,6 @@ class WorldHandler {
     void reassign(Person p) {
         for (Area a : areaList) {
                 a.assign(p);
-            }
         }
     }
 }
