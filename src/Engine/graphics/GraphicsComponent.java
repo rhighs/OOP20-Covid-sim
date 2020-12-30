@@ -15,13 +15,17 @@ public class GraphicsComponent{
     private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
 
-    public GraphicsComponent(final Entity entity, final Spatial sp, final AssetManager assetManager, String matName, Node parent) {
+    public GraphicsComponent(final Entity entity, final Spatial sp, Node parent) {
         this.entity = entity;
         this.sp = sp;
-        this.mat = new Material(assetManager, matName);
-        this.sp.setMaterial(mat);
         this.parent = parent;
         parent.attachChild(sp);
+    }
+
+    public GraphicsComponent(final Entity entity, final Spatial sp, final Material mat, Node parent) {
+        this(entity, sp, parent);
+        this.mat = mat;
+        this.sp.setMaterial(mat);
     }
 
     public void moveTo(final Vector3f pos) {
@@ -30,6 +34,10 @@ public class GraphicsComponent{
 
     public void rotate(final float x, final float y, final float z) {
         sp.rotate(x, y, z);
+    }
+
+    public void scale(final float x, final float y, final float z) {
+        sp.scale(x, y, z);
     }
     
     public void setParent(Node parent) {

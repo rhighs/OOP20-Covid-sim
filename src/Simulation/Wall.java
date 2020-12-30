@@ -27,14 +27,8 @@ class Wall implements Entity {
     public Identificator getIdentificator() {
         return Identificator.WALL;
     }
-    
-    // lol i dunno what to put here
-    public void collision(Entity e, float distance) {
-        switch (e.getIdentificator()) {
-        case PERSON: break;
-        case WALL: break;
-        case UNKNOWN: break;
-        default: break;
-        }
+
+    public void collision() {
+        // lol i dunno what to put here
     }
 }

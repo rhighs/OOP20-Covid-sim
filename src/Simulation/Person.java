@@ -11,22 +11,25 @@ import Engine.items.Entity;
 import java.util.Collections;
 import java.util.Map;
 
-class Person implements Entity, IPerson {
+public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
     private PhysicsComponent  phyc;
     private boolean infected;
     private Mask mask;
     private Vector3f oldPos, pos;
-    
-    public Person(Node node, AssetManager assetManager, BulletAppState bullet) {       
-        //gfx = new GraphicsComponent(this, null, node, assetManager);
-        phyc = new PhysicsComponent(this, bullet);
+
+    //final AssetManager assetManager, String matName,
+    public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
+        gfx = new GraphicsComponent(this, assetManager.loadModel("Models/Ninja/Ninja.mesh.xml"), parent);
+        gfx.scale(0.05f, 0.05f, 0.05f);
+        gfx.rotate(0.0f, -3.0f, 0.0f);
+        phyc = new PhysicsComponent(this, bState);
     }
 
     public Vector3f algoritmoMovimento() {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public void update() {
         
@@ -37,28 +40,34 @@ class Person implements Entity, IPerson {
         //gfx.move(newPos);
     }
     
+    // i need this for debugging
+    public void move(Vector3f pos) {
+        phyc.move(pos);
+    }
+    
     @Override
     public Spatial getSpatial() {
         return gfx.getSpatial();
     }
-    
+
     public void collision() {
-        if(!phyc.getCollidingEntities().equals(Collections.EMPTY_MAP)){
-            Map<Entity, Float> colliding = phyc.getCollidingEntities();
-            
-            for(var e : colliding.entrySet()){
-                switch (e.getKey().getIdentificator()) {
-                    case PERSON:
-                        // algoritmo infezione
-                    break;
-                    case WALL:
-                        // move back
-                    break;
-                    case UNKNOWN:
-                        throw new UnsupportedOperationException();
-                    default:
-                        throw new UnsupportedOperationException();
-                }
+        // only call getCollidingEntities once
+        Map<Entity, Float> colliding = phyc.getCollidingEntities();
+        if (colliding.equals(Collections.EMPTY_MAP)) {
+            return;
+        }
+        for(var e : colliding.entrySet()){
+            switch (e.getKey().getIdentificator()) {
+            case PERSON:
+                // algoritmo infezione
+                break;
+            case WALL:
+                // move back
+                break;
+            case UNKNOWN:
+                throw new UnsupportedOperationException();
+            default:
+                throw new UnsupportedOperationException();
             }
         }
     }
