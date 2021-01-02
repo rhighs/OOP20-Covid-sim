@@ -27,11 +27,8 @@ class Wall implements Entity {
     public Identificator getIdentificator() {
         return Identificator.WALL;
     }
-    
-    // lol i dunno what to put here
-    public void collision(Entity e, float distance) {
-    }
 
     public void collision() {
+        // lol i dunno what to put here
     }
 }

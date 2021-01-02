@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Engine.physics;
 
 import Engine.items.Entityp;
@@ -50,24 +45,22 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     }
 
     public void check() {
-        
-        if (this.getOverlappingCount() != 0) { 
-            this.collidingEntities.clear();
-            
-            Entity e;
-            float distance;
-            Vector3f v1 = entity.getSpatial().getLocalTranslation();
-            Vector3f v2;
-            
-            for (var collidingEntity : this.getOverlappingObjects()) {
-                e = ((PhysicsComponent) collidingEntity).getEntity();
-                v2 = e.getSpatial().getLocalTranslation();
-                distance = v1.distance(v2);
-                
-                this.collidingEntities.put(e, distance);
-            }
+        this.collidingEntities.clear();
+        if (this.getOverlappingCount() == 0) {
+            return;
         }
-        
+
+        Entity e;
+        float distance;
+        Vector3f v1 = entity.getSpatial().getLocalTranslation();
+        Vector3f v2;
+
+        for (var collidingEntity : this.getOverlappingObjects()) {
+            e = ((PhysicsComponent) collidingEntity).getEntity();
+            v2 = e.getSpatial().getLocalTranslation();
+            distance = v1.distance(v2);
+            this.collidingEntities.put(e, distance);
+        }
     }
     
     public Map<Entity, Float> getCollidingEntities(){
