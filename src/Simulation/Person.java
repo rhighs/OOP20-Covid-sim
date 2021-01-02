@@ -89,4 +89,5 @@ class Person implements Entity, IPerson {
         infected = true;
         phyc.setCollisionEnabled(true);
     }
+
 }

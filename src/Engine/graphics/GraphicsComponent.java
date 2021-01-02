@@ -21,7 +21,7 @@ public class GraphicsComponent{
         this.mat = new Material(assetManager, matName);
         this.sp.setMaterial(mat);
         this.parent = parent;
-        parent.attachChild(sp);
+        show();
     }
 
     public void moveTo(final Vector3f pos) {
