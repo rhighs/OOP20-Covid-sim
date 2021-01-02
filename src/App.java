@@ -2,6 +2,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import Simulation.Person;
+import Simulation.InfectionImpl;
 
 /**
  * @author chris, rob, jurismo, savi

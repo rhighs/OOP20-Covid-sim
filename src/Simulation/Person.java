@@ -23,7 +23,7 @@ public class Person implements Entity, IPerson {
     // Vector3f f(Vector3f);
     private Function<Vector3f, Vector3f> movementAlg;
     // void f(Person);
-    private Consumer<Person> infectionAlg;
+    private Function<Person, Boolean> infectionAlg;
 
     //final AssetManager assetManager, String matName,
     public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
@@ -35,7 +35,7 @@ public class Person implements Entity, IPerson {
 
     @Override
     public void update() {
-        Vector3f newPos = movementAlg.apply();
+        Vector3f newPos = movementAlg.apply(pos);
         oldPos = pos;
         pos = newPos;
         phyc.move(newPos);
@@ -101,7 +101,7 @@ public class Person implements Entity, IPerson {
         phyc.setCollisionEnabled(true);
     }
 
-    void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Consumer<Person> infAlg) {
+    void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
         this.movementAlg = mAlg;
         this.infectionAlg = infAlg;
     }
