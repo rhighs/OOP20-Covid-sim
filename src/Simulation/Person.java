@@ -85,11 +85,6 @@ public class Person implements Entity, IPerson {
     }
     
     @Override
-    public void maskDown(){
-        mask = Mask.DOWN;
-    }
-    
-    @Override
     public boolean isInfected(){
         return infected;
     }
@@ -105,8 +100,14 @@ public class Person implements Entity, IPerson {
         this.movementAlg = mAlg;
         this.infectionAlg = infAlg;
     }
-
+    
+    @Override
     public void wearMask(Mask m){
         this.mask = m;
+    }
+    
+    @Override
+    public void maskDown(){
+        this.mask.maskDown();
     }
 }
