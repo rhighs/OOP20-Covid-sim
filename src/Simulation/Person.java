@@ -106,4 +106,8 @@ public class Person implements Entity, IPerson {
         this.movementAlg = mAlg;
         this.infectionAlg = infAlg;
     }
+
+    public void wearMask(Mask m){
+        this.mask = m;
+    }
 }
