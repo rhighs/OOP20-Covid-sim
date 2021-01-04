@@ -1,6 +1,5 @@
 package Simulation;
 
-<<<<<<< HEAD
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
 import com.jme3.asset.AssetManager;

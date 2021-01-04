@@ -29,7 +29,7 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
 
     @Override
     public void simpleUpdate(float tpf) {
-        p.move(1, 1, 1);
+        //p.move(1, 1, 1);
     }
 
     /*
