@@ -32,6 +32,26 @@ public class InfectionImpl implements Function<Person, Boolean> {
         }
         return false;
     }
+
+    /*private void maskInfection(Person p){
+    //bad
+        Random rand = new Random(); //instance of random class
+        final int upperbound = 101;
+        //case mask DOWN
+        if(p.getMask().getStatus() == Mask.MaskStatus.DOWN){
+            //probability of 70% to get infected
+            if(rand.nextInt(upperbound) <= 70 ){
+                p.infect();
+            }
+        //case mask is UP
+        }else{
+            //probability of 30% to get Infected
+           if(rand.nextInt(upperbound) > 70 ){
+                p.infect();
+            }
+        }
+    }*/
+
     //infection depends from Mask status
     // mask status 70% mask type 30%
     private int checkTrasmissibility(Person p){
