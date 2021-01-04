@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import Engine.items.Entity;
 
+//to finish
 public class GraphicsMeshComponent extends GraphicsComponent {
     private List<Geometry> geometries;
 

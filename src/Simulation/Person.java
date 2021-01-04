@@ -27,10 +27,11 @@ public class Person implements Entity, IPerson {
 
     //final AssetManager assetManager, String matName,
     public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
-        gfx = new GraphicsComponent(this, assetManager.loadModel("Models/Ninja/Ninja.mesh.xml"), parent);
-        gfx.scale(0.05f, 0.05f, 0.05f);
-        gfx.rotate(0.0f, -3.0f, 0.0f);
+        final String model = "Models/Ninja/Ninja.mesh.xml";
+        gfx = new GraphicsComponent(this, assetManager.loadModel(model), parent);
+        gfx.scale(2, 2, 2);
         phyc = new PhysicsComponent(this, bState);
+        this.pos = new Vector3f(1,1,1);
     }
 
     @Override
@@ -38,13 +39,14 @@ public class Person implements Entity, IPerson {
         Vector3f newPos = movementAlg.apply(pos);
         oldPos = pos;
         pos = newPos;
-        phyc.move(newPos);
+        phyc.setPosition(newPos);
         //gfx.move(newPos);
     }
     
     // i need this for debugging
-    public void move(Vector3f pos) {
-        phyc.move(pos);
+    public void move(Vector3f offset) {
+        this.pos = this.pos.add(offset);
+        phyc.setPhysicsLocation(pos);
     }
     
     @Override
@@ -87,6 +89,10 @@ public class Person implements Entity, IPerson {
     @Override
     public boolean isInfected(){
         return infected;
+    }
+    
+    public Vector3f getPosition(){
+        return this.pos;
     }
     
     @Override

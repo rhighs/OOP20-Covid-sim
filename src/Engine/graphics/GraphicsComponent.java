@@ -19,7 +19,7 @@ public class GraphicsComponent{
         this.entity = entity;
         this.sp = sp;
         this.parent = parent;
-        parent.attachChild(sp);
+        show();
     }
 
     public GraphicsComponent(final Entity entity, final Spatial sp, final Material mat, Node parent) {

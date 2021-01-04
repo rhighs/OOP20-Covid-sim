@@ -4,12 +4,14 @@ import com.jme3.math.Vector3f;
 import Simulation.Person;
 import Simulation.InfectionImpl;
 
+
 /**
  * @author chris, rob, jurismo, savi
  */
 public class App extends SimpleApplication /*implements ActionListener*/ {
     private BulletAppState bState;
 
+    Person p;
     public App() {
         //super(new FlyCamAppState());
     }
@@ -23,13 +25,13 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
         bState = new BulletAppState();
         stateManager.attach(bState);
         bState.setDebugEnabled(true);
-        Person p = new Person(rootNode, assetManager, bState);
-        p.move(new Vector3f(1, 1, 1));
+        p = new Person(rootNode, assetManager, bState);
+        flyCam.setMoveSpeed(100);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        //p.move(1, 1, 1);
+        p.move(new Vector3f(1*tpf,0,0));
     }
 
     /*

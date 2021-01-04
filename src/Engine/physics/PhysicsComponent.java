@@ -70,9 +70,10 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     public void setCollisionEnabled(boolean enabled){
         isCollisionEnabled = enabled;
     }
-
-    public void move(final Vector3f offset) {
-        spatial.move(offset);
+    
+    public void move(final Vector3f offset){
+        this.spatial.move(offset);
+        System.out.println(this.spatial.getLocalTranslation());
     }
 
     public void setPosition(final Vector3f position) {
