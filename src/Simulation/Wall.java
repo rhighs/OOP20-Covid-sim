@@ -1,19 +1,22 @@
 package Simulation;
 
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
+import com.jme3.bullet.BulletAppState;
 import Engine.items.Entity;
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
+import Engine.graphics.GraphicsMeshComponent;
 
 class Wall implements Entity {
-    Vector3f pos;
-    GraphicsComponent gfx;
+    GraphicsMeshComponent gfx;
     PhysicsComponent phyc;
 
-    public Wall(Vector3f pos) {
-        this.pos = pos;
-        phyc.move(pos);
+    public Wall(Vector3f pos, BulletAppState bState) {
+        // we must create a graphicscomponent somehow!
+        // and this must be done before the creation of the physicsComponent
+        phyc = new PhysicsComponent(this, bState);
+        setPosition(pos);
     }
     
     public void update(float tpf) {
@@ -30,5 +33,10 @@ class Wall implements Entity {
 
     public void collision() {
         // lol i dunno what to put here
+    }
+
+    @Override
+    public void setPosition(Vector3f pos) {
+        phyc.setPosition(pos);
     }
 }
