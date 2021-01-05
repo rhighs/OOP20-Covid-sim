@@ -17,7 +17,7 @@ public class Person implements Entity, IPerson {
     private PhysicsComponent  phyc;
     private boolean infected;
     private Mask mask;
-    private Vector3f oldPos, pos;
+    //private Vector3f oldPos, pos;
 
     // we don't seriously need *more* interfaces...
     // Vector3f f(Vector3f);
@@ -31,22 +31,18 @@ public class Person implements Entity, IPerson {
         gfx = new GraphicsComponent(this, assetManager.loadModel(model), parent);
         gfx.scale(2, 2, 2);
         phyc = new PhysicsComponent(this, bState);
-        this.pos = new Vector3f(1,1,1);
+        //this.pos = new Vector3f(1,1,1);
     }
 
     @Override
-    public void update() {
-        Vector3f newPos = movementAlg.apply(pos);
-        oldPos = pos;
-        pos = newPos;
-        phyc.setPosition(newPos);
-        //gfx.move(newPos);
+    public void update(float tpf) {
     }
     
-    // i need this for debugging
-    public void move(Vector3f offset) {
-        this.pos = this.pos.add(offset);
-        phyc.setPhysicsLocation(pos);
+    // for debug only
+    public void move(Vector3f pos) {
+        phyc.move(pos);
+        //this.pos = this.pos.add(offset);
+        //phyc.setPhysicsLocation(pos);
     }
     
     @Override
@@ -91,22 +87,24 @@ public class Person implements Entity, IPerson {
         return infected;
     }
     
+    /*
     public Vector3f getPosition(){
         return this.pos;
     }
+    */
     
     @Override
     public void infect()
     {
         infected = true;
-        phyc.setCollisionEnabled(true);
+        //phyc.enableCollisions(true);
     }
 
     void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
         this.movementAlg = mAlg;
         this.infectionAlg = infAlg;
     }
-    
+
     @Override
     public void wearMask(Mask m){
         this.mask = m;

@@ -6,7 +6,7 @@ public interface Entity {
     public enum Identificator { // find a better name!
         PERSON, WALL, UNKNOWN
     }
-    void    update();
+    void    update(float tpf);
     Spatial getSpatial();
     void    collision();
     Identificator getIdentificator();

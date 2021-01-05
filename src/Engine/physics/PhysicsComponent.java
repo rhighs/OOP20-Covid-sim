@@ -1,91 +1,66 @@
 package Engine.physics;
 
-import Engine.items.Entityp;
 import Engine.items.Entity;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.PhysicsTickListener;
-import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashMap;
 
 /**
  *
- * @author rob
+ * @author rob, chris
  */
 public class PhysicsComponent extends GhostControl implements PhysicsTickListener {
-
-    private BulletAppState bullet;
     private Entity entity;
     private Spatial spatial;
     private CollisionShape collisionShape;
-    private boolean isCollisionEnabled;
-    private Map<Entity, Float> collidingEntities;
+    private boolean isCollisionEnabled = false;
+    private Map<Entity, Float> collidingEntities = new HashMap<>();;
 
     public PhysicsComponent(final Entity entity, final BulletAppState bullet) {
-        this.bullet = bullet;
         this.entity = entity;
-        this.spatial = entity.getSpatial();
-        this.collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
-        this.isCollisionEnabled = false;
-        this.collidingEntities = new HashMap<>();
-        
-        this.setCollisionShape(collisionShape);
-        add(this);
-    }
-
-    public void check() {
-        this.collidingEntities.clear();
-        if (this.getOverlappingCount() == 0) {
-            return;
-        }
-
-        Entity e;
-        float distance;
-        Vector3f v1 = entity.getSpatial().getLocalTranslation();
-        Vector3f v2;
-
-        for (var collidingEntity : this.getOverlappingObjects()) {
-            e = ((PhysicsComponent) collidingEntity).getEntity();
-            v2 = e.getSpatial().getLocalTranslation();
-            distance = v1.distance(v2);
-            this.collidingEntities.put(e, distance);
-        }
+        spatial = entity.getSpatial();
+        collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
+        setCollisionShape(collisionShape);
+        // this must be at the end or it causes a null exception
+        bullet.getPhysicsSpace().add(this);        
     }
     
+    /* *** Getters and setters *** */
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public Vector3f getPosition() {
+        return spatial.getLocalTranslation();
+    }
+
     public Map<Entity, Float> getCollidingEntities(){
-        return this.collidingEntities;
+        return collidingEntities;
     }
-    
-    public void setCollisionEnabled(boolean enabled){
+
+    public void enableCollision(boolean enabled){
         isCollisionEnabled = enabled;
-    }
-    
-    public void move(final Vector3f offset){
-        this.spatial.move(offset);
-        System.out.println(this.spatial.getLocalTranslation());
     }
 
     public void setPosition(final Vector3f position) {
-        spatial.setLocalTranslation(position);
+        System.err.println("setting spatial to position: " + position.x + "," + position.y + "," + position.z);
+        entity.getSpatial().setLocalTranslation(position);
+        var pos = entity.getSpatial().getLocalTranslation();
+        System.err.println("new spatial position: " + pos.x + "," + pos.y + "," + pos.z);
+        //setPhysicsLocation(position);
     }
 
-    public Entity getEntity() {
-        return this.entity;
-    }
-
-    public void add(final GhostControl ghost) {
-        bullet.getPhysicsSpace().add(ghost);
+    /* *** Actual member functions *** */
+    public void move(final Vector3f offset){
+        spatial.move(offset);
+        //System.out.println(this.spatial.getLocalTranslation());
     }
 
     @Override
@@ -95,8 +70,19 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
 
     @Override
     public void physicsTick(PhysicsSpace arg0, float arg1) {
-        if(isCollisionEnabled){
-            check();
+        if (!isCollisionEnabled) {
+            return;
+        }
+        collidingEntities.clear();
+        if (getOverlappingCount() == 0) {
+            return;
+        }
+        Vector3f v1 = entity.getSpatial().getLocalTranslation();        
+        for (var collidingEntity : getOverlappingObjects()) {
+            Entity e = ((PhysicsComponent) collidingEntity).getEntity();
+            Vector3f v2 = e.getSpatial().getLocalTranslation();
+            float distance = v1.distance(v2);
+            collidingEntities.put(e, distance);
         }
     }
 }

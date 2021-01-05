@@ -16,7 +16,7 @@ class Wall implements Entity {
         phyc.move(pos);
     }
     
-    public void update() {
+    public void update(float tpf) {
         // no operations
     }
 
