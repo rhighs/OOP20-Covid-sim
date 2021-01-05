@@ -38,7 +38,11 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     }
 
     public Vector3f getPosition() {
-        return spatial.getLocalTranslation();
+        return getPhysicsLocation();
+    }
+
+    public void setPosition(final Vector3f newpos) {
+        setPhysicsLocation(newpos);
     }
 
     public Map<Entity, Float> getCollidingEntities(){
@@ -49,18 +53,9 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         isCollisionEnabled = enabled;
     }
 
-    public void setPosition(final Vector3f position) {
-        System.err.println("setting spatial to position: " + position.x + "," + position.y + "," + position.z);
-        entity.getSpatial().setLocalTranslation(position);
-        var pos = entity.getSpatial().getLocalTranslation();
-        System.err.println("new spatial position: " + pos.x + "," + pos.y + "," + pos.z);
-        //setPhysicsLocation(position);
-    }
-
     /* *** Actual member functions *** */
     public void move(final Vector3f offset){
-        spatial.move(offset);
-        //System.out.println(this.spatial.getLocalTranslation());
+        setPhysicsLocation(getPhysicsLocation().add(offset));
     }
 
     @Override

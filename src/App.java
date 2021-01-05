@@ -29,8 +29,7 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
 
     @Override
     public void simpleUpdate(float tpf) {
-        //p.update();
-        p.move(new Vector3f(1*tpf,0,0));
+        p.update(tpf);
     }
 
     /*
