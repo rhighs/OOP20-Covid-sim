@@ -63,7 +63,7 @@ public class Person implements Entity, IPerson {
         infected = true;
     }
 
-    void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
+    public void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
         this.movementAlg = mAlg;
         this.infectionAlg = infAlg;
     }
@@ -71,9 +71,10 @@ public class Person implements Entity, IPerson {
     /* *** Actual member functions *** */
     @Override
     public void update(float tpf) {
+        Vector3f offset = movementAlg.apply(phyc.getPosition());
+        phyc.move(offset.mult(tpf));
         // Vector3f newPos = movementAlg.apply(phyc.getPosition());
         // phyc.setPosition(movementAlg.apply(phyc.getPosition()));
-        phyc.move(new Vector3f(0, 10*tpf, 0));
     }
 
     public void collision() {

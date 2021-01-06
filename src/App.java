@@ -2,6 +2,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import Simulation.Person;
+import Simulation.Movements;
+import Simulation.InfectionImpl;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -24,6 +26,7 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
         stateManager.attach(bState);
         bState.setDebugEnabled(true);
         p = new Person(rootNode, assetManager, bState);
+        p.setAlgorithms(new Movements.SimpleWalk(new Vector3f(0, 10, 0)), new InfectionImpl());
         flyCam.setMoveSpeed(100);
     }
 
