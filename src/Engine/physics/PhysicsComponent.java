@@ -7,6 +7,7 @@ import com.jme3.bullet.PhysicsTickListener;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.cinematic.MotionPath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     private CollisionShape collisionShape;
     private boolean isCollisionEnabled = false;
     private Map<Entity, Float> collidingEntities = new HashMap<>();;
+    final MotionPath path;
 
     public PhysicsComponent(final Entity entity, final BulletAppState bullet) {
         this.entity = entity;
@@ -29,7 +31,9 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
         setCollisionShape(collisionShape);
         // this must be at the end or it causes a null exception
-        bullet.getPhysicsSpace().add(this);        
+        bullet.getPhysicsSpace().add(this);
+        path = new MotionPath();
+        spatial.addControl(this);
     }
     
     /* *** Getters and setters *** */
@@ -42,7 +46,7 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     }
 
     public void setPosition(final Vector3f newpos) {
-        setPhysicsLocation(newpos);
+        spatial.setLocalTranslation(newpos);
     }
 
     public Map<Entity, Float> getCollidingEntities(){
@@ -55,7 +59,7 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
 
     /* *** Actual member functions *** */
     public void move(final Vector3f offset){
-        setPhysicsLocation(getPhysicsLocation().add(offset));
+        spatial.move(offset);
     }
 
     @Override
@@ -68,10 +72,12 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         if (!isCollisionEnabled) {
             return;
         }
+        
         collidingEntities.clear();
         if (getOverlappingCount() == 0) {
             return;
         }
+        
         Vector3f v1 = entity.getSpatial().getLocalTranslation();        
         for (var collidingEntity : getOverlappingObjects()) {
             Entity e = ((PhysicsComponent) collidingEntity).getEntity();
