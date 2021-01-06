@@ -29,7 +29,8 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         collisionShape = new CollisionShapeFactory().createMeshShape(spatial);
         setCollisionShape(collisionShape);
         // this must be at the end or it causes a null exception
-        bullet.getPhysicsSpace().add(this);        
+        bullet.getPhysicsSpace().add(this);      
+        spatial.addControl(this);
     }
     
     /* *** Getters and setters *** */
@@ -38,11 +39,11 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     }
 
     public Vector3f getPosition() {
-        return getPhysicsLocation();
+        return spatial.getLocalTranslation();
     }
 
     public void setPosition(final Vector3f newpos) {
-        setPhysicsLocation(newpos);
+        spatial.setLocalTranslation(newpos);
     }
 
     public Map<Entity, Float> getCollidingEntities(){
@@ -55,7 +56,7 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
 
     /* *** Actual member functions *** */
     public void move(final Vector3f offset){
-        setPhysicsLocation(getPhysicsLocation().add(offset));
+        spatial.move(offset);
     }
 
     @Override
