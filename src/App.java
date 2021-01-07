@@ -9,16 +9,17 @@ import com.jme3.font.BitmapText;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.Geometry;
+import com.jme3.light.DirectionalLight;
+import Engine.Assets;
 
 /**
  * @author chris, rob, jurismo, savi
  */
 public class App extends SimpleApplication /*implements ActionListener*/ {
     private BulletAppState bState;
-    Person p;
 
     public App() {
         //super(new FlyCamAppState());
@@ -42,8 +43,30 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
         bState = new BulletAppState();
         stateManager.attach(bState);
         bState.setDebugEnabled(true);
+        Assets.loadAssets(assetManager);
+
+        Box box = new Box(2.5f, 2.5f, 1.0f);
+        Spatial wall = new Geometry("Box", box );
+        Material mat_brick = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat_brick.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
+        wall.setMaterial(mat_brick);
+        wall.setLocalTranslation(2.0f,-2.5f,0.0f);
+        rootNode.attachChild(wall);
+
+        /*
         p = new Person(rootNode, assetManager, bState);
-        p.setAlgorithms(new Movements.SimpleWalk(new Vector3f(0, 10, 0)), new InfectionImpl());
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        */
         flyCam.setMoveSpeed(100);
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
