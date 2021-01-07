@@ -45,7 +45,7 @@ public class MovementComponent {
         motionControl = new MotionEvent(spatial, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
         motionControl.setRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(2f);
+        motionControl.setInitialDuration(0.1f);
         motionControl.setSpeed(0.1f);
         path.setCurveTension(0.9f);
     }
