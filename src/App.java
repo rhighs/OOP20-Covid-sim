@@ -14,6 +14,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Geometry;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import Engine.Assets;
 
 /**
@@ -78,7 +80,6 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
 
     @Override
     public void simpleUpdate(float tpf) {
-        p.update(tpf);
     }
 
     /*

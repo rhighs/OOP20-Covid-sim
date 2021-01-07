@@ -1,6 +1,7 @@
 package Simulation;
 
 import Engine.movement.MovementComponent;
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -9,6 +10,7 @@ import com.jme3.asset.AssetManager;
 import Engine.items.Entity;
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
+import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.*;
@@ -17,6 +19,7 @@ import Engine.Assets;
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
     private PhysicsComponent  phyc;
+    private MovementComponent mov;
     private boolean infected;
     private Mask mask;
     // we don't seriously need *more* interfaces...
