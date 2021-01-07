@@ -69,6 +69,8 @@ public class PollingArea {
 
         int row = cellNumber / sideTiles;
         int column = (cellNumber) % sideTiles;
+        
+        System.out.println(row + " -- " + column);
 
         Vector2f polled = sec.get(row).get(column).assingOffset();
         return new Vector3f(polled.x, 0, polled.y);

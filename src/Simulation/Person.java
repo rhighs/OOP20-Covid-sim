@@ -34,7 +34,7 @@ public class Person implements Entity, IPerson {
         phyc = new PhysicsComponent(this, bState);
         phyc.setPosition(new Vector3f(1, -10, 1));
         
-        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 20));
+        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 10));
         mov.randomMove(100);
         mov.getPath().enableDebugShape(assetManager, parent);
     }
