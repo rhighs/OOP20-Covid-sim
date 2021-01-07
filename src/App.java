@@ -27,12 +27,22 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
         bState.setDebugEnabled(true);
         
         p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
+        p = new Person(rootNode, assetManager, bState);
         flyCam.setMoveSpeed(100);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        p.update(tpf);
     }
 
     /*

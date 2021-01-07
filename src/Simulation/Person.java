@@ -1,5 +1,6 @@
 package Simulation;
 
+import Engine.movement.MovementComponent;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
@@ -8,6 +9,7 @@ import com.jme3.scene.Spatial;
 import Engine.items.Entity;
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
+import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.*;
@@ -15,6 +17,7 @@ import java.util.function.*;
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
     private PhysicsComponent  phyc;
+    private MovementComponent mov;
     private boolean infected;
     private Mask mask;
     // we don't seriously need *more* interfaces...
@@ -27,9 +30,13 @@ public class Person implements Entity, IPerson {
     public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
         final String model = "Models/Ninja/Ninja.mesh.xml";
         gfx = new GraphicsComponent(this, assetManager.loadModel(model), parent);
-        gfx.scale(2, 2, 2);
+        gfx.scale(0.3f, 0.3f, 0.3f);
         phyc = new PhysicsComponent(this, bState);
         phyc.setPosition(new Vector3f(1, -10, 1));
+        
+        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 20));
+        mov.randomMove(100);
+        mov.getPath().enableDebugShape(assetManager, parent);
     }
 
     /* *** Getters and setters *** */
