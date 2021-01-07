@@ -19,7 +19,7 @@ public class Wall implements Entity {
         gfx = new GraphicsMeshComponent(this, parent, boxName, new Box(x, y, z), Assets.BRICK_WALL);
         phyc = new PhysicsComponent(this, bState);
     }
-    
+
     public void update(float tpf) {
         // no operations
     }
