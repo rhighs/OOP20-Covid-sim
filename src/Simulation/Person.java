@@ -6,6 +6,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.asset.AssetManager;
 import Engine.items.Entity;
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
@@ -13,6 +14,7 @@ import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.*;
+import Engine.Assets;
 
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -28,12 +30,10 @@ public class Person implements Entity, IPerson {
     Vector3f pos;
 
     public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
-        final String model = "Models/Ninja/Ninja.mesh.xml";
-        gfx = new GraphicsComponent(this, assetManager.loadModel(model), parent);
+        gfx = new GraphicsComponent(this, Assets.PERSON_MODEL, parent);
         gfx.scale(0.3f, 0.3f, 0.3f);
         phyc = new PhysicsComponent(this, bState);
         phyc.setPosition(new Vector3f(1, -10, 1));
-        
         mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 10));
         mov.randomMove(100);
         mov.getPath().enableDebugShape(assetManager, parent);
@@ -70,7 +70,7 @@ public class Person implements Entity, IPerson {
         infected = true;
     }
 
-    void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
+    public void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
         this.movementAlg = mAlg;
         this.infectionAlg = infAlg;
     }
@@ -78,9 +78,10 @@ public class Person implements Entity, IPerson {
     /* *** Actual member functions *** */
     @Override
     public void update(float tpf) {
+        Vector3f offset = movementAlg.apply(phyc.getPosition());
+        phyc.move(offset.mult(tpf));
         // Vector3f newPos = movementAlg.apply(phyc.getPosition());
         // phyc.setPosition(movementAlg.apply(phyc.getPosition()));
-        phyc.move(new Vector3f(0, 10*tpf, 0));
     }
 
     public void collision() {

@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import Engine.items.Entity;
 
-//to finish
 public class GraphicsMeshComponent extends GraphicsComponent {
     private List<Geometry> geometries;
 
     public GraphicsMeshComponent(final Entity entity, Node parent, final String name, final Mesh mesh, final Material material) {
-        super(entity, null, parent); // hopefully temporary
+        super(entity, new Node(), parent);
+        //this.entity = entity;
+        //this.parent = parent;
         geometries = new ArrayList<>();
-        addGeometry(name, mesh);
+        addGeometry(name, mesh, material);
     }
 
     public List<Mesh> getMeshes(Mesh mesh) {
@@ -26,7 +27,10 @@ public class GraphicsMeshComponent extends GraphicsComponent {
                 .collect(Collectors.toList());
     }
 
-    public void addGeometry(final String name, final Mesh mesh){
-        geometries.add(new Geometry(name, mesh));
+    public void addGeometry(final String name, final Mesh mesh, final Material mat) {
+        Geometry newGeom = new Geometry(name, mesh);
+        newGeom.setMaterial(mat);
+        ((Node) sp).attachChild(newGeom);
+        geometries.add(newGeom);
     }
 }

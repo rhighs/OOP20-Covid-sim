@@ -42,7 +42,7 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
     }
 
     public Vector3f getPosition() {
-        return getPhysicsLocation();
+        return spatial.getLocalTranslation();
     }
 
     public void setPosition(final Vector3f newpos) {
