@@ -10,17 +10,14 @@ import Engine.physics.PhysicsComponent;
 import Engine.graphics.GraphicsMeshComponent;
 import Engine.Assets;
 
-class Wall implements Entity {
+public class Wall implements Entity {
     GraphicsMeshComponent gfx;
     PhysicsComponent phyc;
 
-    public Wall(Vector3f pos, float x, float y, float z, Node parent, BulletAppState bState) {
-        // we must create a graphicscomponent somehow!
-        // and this must be done before the creation of the physicsComponent
+    public Wall(float x, float y, float z, Node parent, BulletAppState bState) {
         final String boxName = "Wall: " + x + ", " + y + ", " + z;
         gfx = new GraphicsMeshComponent(this, parent, boxName, new Box(x, y, z), Assets.BRICK_WALL);
         phyc = new PhysicsComponent(this, bState);
-        setPosition(pos);
     }
     
     public void update(float tpf) {

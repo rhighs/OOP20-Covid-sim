@@ -2,6 +2,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import Simulation.Person;
+import Simulation.Wall;
 import Simulation.Movements;
 import Simulation.InfectionImpl;
 import com.jme3.app.SimpleApplication;
@@ -44,14 +45,16 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
         stateManager.attach(bState);
         bState.setDebugEnabled(true);
         Assets.loadAssets(assetManager);
-
-        Box box = new Box(2.5f, 2.5f, 1.0f);
-        Spatial wall = new Geometry("Box", box );
-        Material mat_brick = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat_brick.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
-        wall.setMaterial(mat_brick);
-        wall.setLocalTranslation(2.0f,-2.5f,0.0f);
-        rootNode.attachChild(wall);
+        
+        Wall wall = new Wall(2.5f, 2.5f, 1.0f, rootNode, bState);
+        wall.setPosition(new Vector3f(2.0f, -2.5f, 0.0f));
+        // Box box = new Box();
+        // Spatial wall = new Geometry("Box", box );
+        // Material mat_brick = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        // mat_brick.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
+        // wall.setMaterial(mat_brick);
+        // wall.setLocalTranslation();
+        // rootNode.attachChild(wall);
 
         /*
         p = new Person(rootNode, assetManager, bState);
