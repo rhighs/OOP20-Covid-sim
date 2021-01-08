@@ -44,10 +44,8 @@ public class MovementComponent {
         
         motionControl = new MotionEvent(spatial, path);
         motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, Vector3f.UNIT_Y));
-        motionControl.setInitialDuration(0.1f);
-        motionControl.setSpeed(0.1f);
-        path.setCurveTension(0.9f);
+        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
+        path.setCurveTension(0.5f);
     }
     
     public MovementComponent(final Spatial spatial, final Vector3f position){
@@ -74,7 +72,7 @@ public class MovementComponent {
         }
         
         System.out.println(path.getLength());
-        motionControl.setSpeed(40/path.getLength());
+        motionControl.setSpeed(300/path.getLength());
         motionControl.play();
     }
     

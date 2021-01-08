@@ -15,14 +15,15 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Geometry;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import Engine.Assets;
+import com.jme3.math.ColorRGBA;
 
 /**
  * @author chris, rob, jurismo, savi
  */
 public class App extends SimpleApplication /*implements ActionListener*/ {
     private BulletAppState bState;
+    private Person p, a, b, d;
 
     public App() {
         //super(new FlyCamAppState());
@@ -34,26 +35,19 @@ public class App extends SimpleApplication /*implements ActionListener*/ {
     }
 
     public void simpleInitApp() {
+        viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState = new BulletAppState();
         stateManager.attach(bState);
-        bState.setDebugEnabled(true);
         Assets.loadAssets(assetManager);
         
         Wall wall = new Wall(2.5f, 2.5f, 1.0f, rootNode, bState);
         wall.setPosition(new Vector3f(2.0f, -2.5f, 0.0f));
-
         p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
-        p = new Person(rootNode, assetManager, bState);
+        a = new Person(rootNode, assetManager, bState);
+        b = new Person(rootNode, assetManager, bState);
+        d = new Person(rootNode, assetManager, bState);
+        
+        
         flyCam.setMoveSpeed(100);
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));

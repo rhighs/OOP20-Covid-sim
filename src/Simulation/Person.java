@@ -31,10 +31,10 @@ public class Person implements Entity, IPerson {
 
     public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL, parent);
-        gfx.scale(0.3f, 0.3f, 0.3f);
+        //gfx.scale(0.3f, 0.3f, 0.3f);
         phyc = new PhysicsComponent(this, bState);
         phyc.setPosition(new Vector3f(1, -10, 1));
-        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 10));
+        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 20));
         mov.randomMove(100);
         mov.getPath().enableDebugShape(assetManager, parent);
     }
