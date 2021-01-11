@@ -44,20 +44,18 @@ public class PollingArea {
             this.areaIndex = areaIndex;
             this.constantOffset = new Vector2f();
             constantOffset.zero();
+                        coordsOffset = new Vector2f();
             this.constantOffset.x = area.width / (float) PollingArea.this.sideTiles;
             this.constantOffset.y = area.height / (float) PollingArea.this.sideTiles;
-            coordsOffset = Vector2f.ZERO;
         }
 
         public Vector2f assingOffset() {
+            coordsOffset.zero();
             float centerDistanceX = (sideTiles / 2) - areaIndex.x;
             float centerDistanceY = (sideTiles / 2) - areaIndex.y;
 
             this.coordsOffset.x += (centerDistanceX) * constantOffset.x;
             this.coordsOffset.y += (centerDistanceY) * constantOffset.y;
-
-            this.coordsOffset.x *= (this.areaIndex.x < sideTiles / 2) ? -1 : 1;
-            this.coordsOffset.y *= (this.areaIndex.y < sideTiles / 2) ? -1 : 1;
             
             return coordsOffset;
         }

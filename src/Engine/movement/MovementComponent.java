@@ -21,7 +21,7 @@ import com.jme3.scene.Spatial;
  * It must implement Function<Vector3f, Vector3f>.
  * Too many nested classes? We'll care about that later.
  */
-public class MovementComponent {
+public class MovementComponent extends MotionEvent{
     
     /*
         Giving this class a Rectangle as such -> this(pos, --new Rectangle(50, 50)--) means that,
@@ -32,20 +32,23 @@ public class MovementComponent {
     static private final Rectangle DEFAULT_AREA = new Rectangle(50, 50);
     private Vector3f position;
     private final Rectangle area;
-    private final MotionPath path;
-    private final MotionEvent motionControl;
-    private final Spatial spatial;
+    private PollingArea pArea;
+    private int old = 0;
     
     public MovementComponent(final Spatial spatial, final Vector3f position, final Rectangle area){
+        super(spatial, new MotionPath());
         this.position = position;
         this.area = area;
-        path = new MotionPath();
         this.spatial = spatial;
         
-        motionControl = new MotionEvent(spatial, path);
-        motionControl.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        motionControl.setRotation(new Quaternion().fromAngleNormalAxis(0, Vector3f.UNIT_Y));
-        path.setCurveTension(0.5f);
+        this.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        this.setRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, Vector3f.UNIT_Y));
+        path.addWayPoint(new Vector3f(getNextPoint()));
+        path.addWayPoint(new Vector3f(getNextPoint()));
+        path.addWayPoint(new Vector3f(getNextPoint()));
+                                        
+        this.setSpeed(300/path.getLength());
+        path.setCurveTension(0.3f);
     }
     
     public MovementComponent(final Spatial spatial, final Vector3f position){
@@ -58,23 +61,29 @@ public class MovementComponent {
     
     public Vector3f getNextPoint(){
         //haha
-        PollingArea pArea = new PollingArea(area, 9);
+                this.pArea = new PollingArea(area, 50);
+        System.out.println(pArea.getRandomOffset() + " skumonti");
         this.position = this.position.add(pArea.getRandomOffset());
-        
         return this.position;
     }
     
-    public void randomMove(final int steps){
-        for(int i = 0; i<steps; i++){
-            
-            Vector3f a = new Vector3f(getNextPoint());
-            path.addWayPoint(a);
-        }
-        
-        System.out.println(path.getLength());
-        motionControl.setSpeed(300/path.getLength());
-        motionControl.play();
+    public void moveToNextPoint(){
+        this.play();
     }
+    
+    @Override
+    public void onStop(){
+        path = null;
+        path = new MotionPath();
+        path.addWayPoint(this.position);
+        path.addWayPoint(new Vector3f(getNextPoint()));
+        path.addWayPoint(new Vector3f(getNextPoint()));
+        path.addWayPoint(new Vector3f(getNextPoint()));
+        this.setPath(path);        
+        this.setSpeed(300/path.getLength());
+        this.play();
+    }
+    
     
     public MotionPath getPath(){
         return this.path;

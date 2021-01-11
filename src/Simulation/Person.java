@@ -30,13 +30,15 @@ public class Person implements Entity, IPerson {
     Vector3f pos;
 
     public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
-        gfx = new GraphicsComponent(this, Assets.PERSON_MODEL, parent);
+        gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
         //gfx.scale(0.3f, 0.3f, 0.3f);
         phyc = new PhysicsComponent(this, bState);
         phyc.setPosition(new Vector3f(1, -10, 1));
-        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 20));
-        mov.randomMove(100);
-        mov.getPath().enableDebugShape(assetManager, parent);
+        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(400, 400));
+    }
+    
+    public MovementComponent getM(){
+        return this.mov;
     }
 
     /* *** Getters and setters *** */
@@ -78,8 +80,9 @@ public class Person implements Entity, IPerson {
     /* *** Actual member functions *** */
     @Override
     public void update(float tpf) {
-        Vector3f offset = movementAlg.apply(phyc.getPosition());
-        phyc.move(offset.mult(tpf));
+        //Vector3f offset = movementAlg.apply(phyc.getPosition());
+        //phyc.move(offset.mult(tpf));
+        mov.moveToNextPoint();
         // Vector3f newPos = movementAlg.apply(phyc.getPosition());
         // phyc.setPosition(movementAlg.apply(phyc.getPosition()));
     }
