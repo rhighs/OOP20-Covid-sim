@@ -18,6 +18,7 @@ public class GraphicsComponent{
         this.entity = entity;
         this.sp = sp;
         this.parent = parent;
+        this.sp.scale(0.03f);
         show();
     }
 

@@ -1,5 +1,6 @@
 package Engine.movement;
 
+import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.cinematic.MotionPath;
 import java.util.function.Function;
 import com.jme3.math.Vector3f;
@@ -13,6 +14,7 @@ import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 
 /* This class is a container for many classes which implement some kind of
@@ -41,6 +43,7 @@ public class MovementComponent extends MotionEvent{
         this.area = area;
         this.spatial = spatial;
         
+        
         this.setDirectionType(MotionEvent.Direction.PathAndRotation);
         this.setRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, Vector3f.UNIT_Y));
         path.addWayPoint(new Vector3f(getNextPoint()));
@@ -48,7 +51,6 @@ public class MovementComponent extends MotionEvent{
         path.addWayPoint(new Vector3f(getNextPoint()));
                                         
         this.setSpeed(300/path.getLength());
-        path.setCurveTension(0.3f);
     }
     
     public MovementComponent(final Spatial spatial, final Vector3f position){
@@ -61,13 +63,13 @@ public class MovementComponent extends MotionEvent{
     
     public Vector3f getNextPoint(){
         //haha
-                this.pArea = new PollingArea(area, 50);
+        this.pArea = new PollingArea(area, 10);
         System.out.println(pArea.getRandomOffset() + " skumonti");
         this.position = this.position.add(pArea.getRandomOffset());
         return this.position;
     }
     
-    public void moveToNextPoint(){
+    public void moveToNextPoint(){ 
         this.play();
     }
     
