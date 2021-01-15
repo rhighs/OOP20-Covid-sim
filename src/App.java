@@ -17,7 +17,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import Engine.Assets;
-import Engine.movement.AIMovement;
+import Engine.movement.PathFinder;
+
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.math.ColorRGBA;
 import java.util.Timer;
@@ -39,6 +40,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Ray;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Mesh;
@@ -58,11 +60,13 @@ public class App extends SimpleApplication implements ActionListener {
     Node player;
     BetterCharacterControl pControl;
     MotionPath mp;
+    Person p;
+    PathFinder pf;
 
     NavMeshPathfinder navi;
     boolean naviOn = false;
 
-    Vector3f target = new Vector3f(0, 0, 0);
+    Vector3f target = new Vector3f(10, 2, 35);
 
     public App() {
         //super(new FlyCamAppState());
@@ -95,28 +99,31 @@ public class App extends SimpleApplication implements ActionListener {
     }
 
     private void initSceneAndPlayer() {
-        Spatial scene = assetManager.loadModel("test_porcodio.j3o");
+        Spatial scene = assetManager.loadModel("Models/city" + ".j3o");
+        
+        p = new Person(rootNode, scene, assetManager, bState, this);
+        
+        scene.setLocalTranslation(new Vector3f(2,-10,1));
         bState.getPhysicsSpace().addAll(scene);
-        bState.setDebugEnabled(true);
+        bState.setDebugEnabled(false);
 
         rootNode.attachChild(scene);
 
-        AmbientLight ambient = new AmbientLight();
-        ambient.setColor(ColorRGBA.White);
-        rootNode.addLight(ambient);
 
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
         sun.setColor(ColorRGBA.White);
         rootNode.addLight(sun);
 
-        Node p = (Node) assetManager.loadModel("Models/Ninja/Ninja.mesh.xml").scale(0.05f);
+        Node p = (Node) assetManager.loadModel("Models/u.j3o").scale(1);
+        
         player = new Node("PlayerNode");
         player.setLocalTranslation(0, 10, 0);
         player.attachChild(p);
 
-        pControl = new BetterCharacterControl(1.5f, 9f, 15);
+        pControl = new BetterCharacterControl(0.5f, 9f, 15);
         player.addControl(pControl);
+        
         pControl.setGravity(new Vector3f(0, -10, 0));
 
         pControl.setJumpForce(new Vector3f(0, 30, 0));
@@ -131,7 +138,8 @@ public class App extends SimpleApplication implements ActionListener {
 
         Mesh mesh = geom.getMesh();
         NavMesh navMesh = new NavMesh(mesh);
-        System.out.println(player.getLocalTranslation());
+        
+        pf = new PathFinder(scene);
 
         navi = new NavMeshPathfinder(navMesh);
 
@@ -140,25 +148,24 @@ public class App extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleUpdate(float tpf) {
-        System.out.println(naviOn);
         if (naviOn) {
             Waypoint waypoint = navi.getNextWaypoint();
             if (waypoint == null) {
-                System.out.println("waypoint is null coglione");
                 return;
             }
 
             Vector3f v = waypoint.getPosition().subtract(player.getLocalTranslation());
-            pControl.setWalkDirection(v.mult(tpf).mult(100));
-            if (player.getLocalTranslation().distance(waypoint.getPosition()) <= 4 && !navi.isAtGoalWaypoint()) {
+            pControl.setWalkDirection(v.normalize().mult(50));
+            pControl.setViewDirection(v.negate());
+            if (player.getLocalTranslation().distance(waypoint.getPosition()) <= 1 && !navi.isAtGoalWaypoint()) {
                 navi.goToNextWaypoint();
             }
 
-            System.out.println(player.getLocalTranslation() + " posizione player    ");
             
-            if (navi.getPath().getLast().getPosition().equals(player.getLocalTranslation())) {
+            if (navi.isAtGoalWaypoint()) {
                 navi.clearPath();
-                System.out.println(player.getLocalTranslation() + " BASTAAAAAAAAAA");   
+                naviOn = false;
+                pControl.setWalkDirection(Vector3f.ZERO);
             }
         }
     }
@@ -180,8 +187,12 @@ public class App extends SimpleApplication implements ActionListener {
             if (cr.size() != 0) {
                 target = cr.getClosestCollision().getContactPoint();
                 System.out.println(target);
+                
+                p.moveToTarget(target);
+                  
                 navi.setPosition(player.getLocalTranslation());
                 navi.computePath(target);
+
             }
         }
     }

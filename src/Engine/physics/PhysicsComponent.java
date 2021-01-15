@@ -17,12 +17,12 @@ import java.util.HashMap;
  *
  * @author rob, chris
  */
-public class PhysicsComponent extends GhostControl implements PhysicsTickListener {
+public class PhysicsComponent extends GhostControl implements PhysicsTickListener{
     private Entity entity;
     private Spatial spatial;
     private CollisionShape collisionShape;
     private boolean isCollisionEnabled = false;
-    private Map<Entity, Float> collidingEntities = new HashMap<>();;
+    private Map<Entity, Float> collidingEntities = new HashMap<>();
     final MotionPath path;
 
     public PhysicsComponent(final Entity entity, final BulletAppState bullet) {

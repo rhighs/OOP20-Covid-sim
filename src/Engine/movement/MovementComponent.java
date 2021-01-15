@@ -1,6 +1,7 @@
 package Engine.movement;
 
 import com.jme3.ai.navmesh.NavMesh;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.cinematic.MotionPath;
 import java.util.function.Function;
 import com.jme3.math.Vector3f;
@@ -23,72 +24,134 @@ import com.jme3.scene.Spatial;
  * It must implement Function<Vector3f, Vector3f>.
  * Too many nested classes? We'll care about that later.
  */
-public class MovementComponent extends MotionEvent{
-    
+public class MovementComponent extends MotionEvent {
+
     /*
         Giving this class a Rectangle as such -> this(pos, --new Rectangle(50, 50)--) means that,
         whenever we generate a new point, that point is choosen inside a 100x100 "rectangle".
         As for now we only use rectangles to find new points given a point 'pos'.
         In future implementations we'll see them in use for walls detection and stuff...
-    */
+     */
     static private final Rectangle DEFAULT_AREA = new Rectangle(50, 50);
     private Vector3f position;
     private final Rectangle area;
     private PollingArea pArea;
     private int old = 0;
+    private BetterCharacterControl spatialControl;
+    private Vector3f spatialScale;
+    private Vector3f target;
+    private PathFinder pathFinder;
+    private Spatial scene;
+    private Thread t;
+    private static boolean first_call = true;
     
-    public MovementComponent(final Spatial spatial, final Vector3f position, final Rectangle area){
+    class PathFollower extends Thread{
+
+        @Override
+        public void run() {
+            pathFinder.SetStartingPoint(spatial.getLocalTranslation());
+            var wayPoints = pathFinder.computePath(target);
+            Vector3f v;
+
+            //skipping first point since its the player position
+            for(int i = 1; i<wayPoints.size(); i++){
+                var w = wayPoints.get(i).getPosition();
+                
+                while(spatial.getLocalTranslation().distance(w) >= 1){
+                    v = w.subtract(spatial.getLocalTranslation());
+                    spatialControl.setWalkDirection(v.normalize().mult(10));
+                    spatialControl.setViewDirection(v.negate());
+                    
+                    try{
+                        Thread.sleep(20);
+                    }catch(Exception e){
+                        
+                    }
+                }
+            }
+            
+            stopWalking();
+            System.out.println("finish");
+        }
+        
+    }
+
+    public MovementComponent(final Spatial spatial, final Spatial scene, final Vector3f position, final Rectangle area) {
         super(spatial, new MotionPath());
         this.position = position;
         this.area = area;
         this.spatial = spatial;
-        
-        
-        this.setDirectionType(MotionEvent.Direction.PathAndRotation);
+
+        this.scene = scene;
+        this.pathFinder = new PathFinder(scene);
+        this.spatialControl = spatial.getControl(BetterCharacterControl.class);
+
+        //this.setDirectionType(MotionEvent.Direction.PathAndRotation);
         this.setRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, Vector3f.UNIT_Y));
-        path.addWayPoint(new Vector3f(getNextPoint()));
-        path.addWayPoint(new Vector3f(getNextPoint()));
-        path.addWayPoint(new Vector3f(getNextPoint()));
-                                        
-        this.setSpeed(300/path.getLength());
+
+        this.setSpeed(300 / path.getLength());
     }
-    
-    public MovementComponent(final Spatial spatial, final Vector3f position){
-        this(spatial, position, DEFAULT_AREA);
+
+    public MovementComponent(final Spatial spatial, final Spatial scene, final Vector3f position) {
+        this(spatial, scene, position, DEFAULT_AREA);
     }
-    
-    public Vector3f getPosition(){
+
+    public Vector3f getPosition() {
         return position;
     }
-    
-    public Vector3f getNextPoint(){
-        //haha
+
+    public Vector3f getNextPoint() {
         this.pArea = new PollingArea(area, 10);
         System.out.println(pArea.getRandomOffset() + " skumonti");
         this.position = this.position.add(pArea.getRandomOffset());
         return this.position;
     }
-    
-    public void moveToNextPoint(){ 
+
+    public void moveToNextPointInPath() {
         this.play();
     }
-    
+
     @Override
-    public void onStop(){
+    public void onStop() {
         path = null;
         path = new MotionPath();
         path.addWayPoint(this.position);
         path.addWayPoint(new Vector3f(getNextPoint()));
         path.addWayPoint(new Vector3f(getNextPoint()));
         path.addWayPoint(new Vector3f(getNextPoint()));
-        this.setPath(path);        
-        this.setSpeed(300/path.getLength());
+        this.setPath(path);
+        this.setSpeed(300 / path.getLength());
         this.play();
     }
-    
-    
-    public MotionPath getPath(){
+
+    public MotionPath getPath() {
         return this.path;
     }
-    
+
+    public void moveToTarget(final Vector3f target) {
+        this.target = target;
+        
+        t = new PathFollower();
+        
+        t.start();
+        
+        
+        first_call = false;
+    }
+
+    public void moveDirection(final Vector3f direction) {
+        Vector3f v = direction.subtract(spatial.getLocalTranslation());
+        spatialControl.setViewDirection(v.negate());
+        spatialControl.setWalkDirection(v.normalize().mult(50));
+    }
+
+    private boolean stopWalking() {
+        if (spatialControl.getWalkDirection() != Vector3f.ZERO) {
+            spatialControl.setWalkDirection(Vector3f.ZERO);
+            return true;
+        }
+
+        return false;
+    }
+
 }

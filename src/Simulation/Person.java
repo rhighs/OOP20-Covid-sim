@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.*;
 import Engine.Assets;
+import Engine.physics.PhysicsComponent_new;
+import com.jme3.app.SimpleApplication;
 
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -27,14 +29,17 @@ public class Person implements Entity, IPerson {
     private Function<Vector3f, Vector3f> movementAlg = null;
     // boolean f(Person);
     private Function<Person, Boolean> infectionAlg = null;
-    Vector3f pos;
+        Vector3f pos;
 
-    public Person(Node parent, AssetManager assetManager, BulletAppState bState) {
+    public Person(Node parent, Spatial scene, AssetManager assetManager, BulletAppState bState, SimpleApplication app) {
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
+        this.getSpatial().setLocalTranslation(10, 50, 10);
+                
         //gfx.scale(0.3f, 0.3f, 0.3f);
-        phyc = new PhysicsComponent(this, bState);
-        phyc.setPosition(new Vector3f(1, -10, 1));
-        mov = new MovementComponent(this.getSpatial(), phyc.getPhysicsLocation(), new Rectangle(20, 20));
+        //phyc = new PhysicsComponent(this, bState);
+        //phyc.setPosition(new Vector3f(1, -10, 1));
+        var pn = new PhysicsComponent_new(this.getSpatial(), bState);
+        mov = new MovementComponent(this.getSpatial(), scene, this.getSpatial().getLocalTranslation());
     }
     
     public MovementComponent getM(){
@@ -66,6 +71,10 @@ public class Person implements Entity, IPerson {
     public boolean isInfected() {
         return infected;
     }
+    
+    public void moveToTarget(final Vector3f t){
+        mov.moveToTarget(t);
+    }
 
     @Override
     public void infect() {
@@ -82,7 +91,7 @@ public class Person implements Entity, IPerson {
     public void update(float tpf) {
         //Vector3f offset = movementAlg.apply(phyc.getPosition());
         //phyc.move(offset.mult(tpf));
-        mov.moveToNextPoint();
+        //mov.moveToNextPoint();
         // Vector3f newPos = movementAlg.apply(phyc.getPosition());
         // phyc.setPosition(movementAlg.apply(phyc.getPosition()));
     }
