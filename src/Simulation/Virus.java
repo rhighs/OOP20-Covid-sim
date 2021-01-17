@@ -10,13 +10,13 @@ package Simulation;
  * @author rob
  */
 public class Virus {
+
     private float strenght;
-    
-    public Virus(final float strenght){
+
+    public Virus(final float strenght) {
         this.strenght = strenght;
     }
-    
+
     //public boolean tryInfection(Person p1, Person p2){
-        
     //}
 }

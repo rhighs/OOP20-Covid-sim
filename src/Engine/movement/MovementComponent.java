@@ -18,6 +18,9 @@ import com.jme3.math.Quaternion;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /* This class is a container for many classes which implement some kind of
  * movement algorithm. (think of it as a namespace containing many free functions.
  * To add a new movement algorithm, simply create a new nested class here.
@@ -36,45 +39,14 @@ public class MovementComponent extends MotionEvent {
     private Vector3f position;
     private final Rectangle area;
     private PollingArea pArea;
-    private int old = 0;
     private BetterCharacterControl spatialControl;
-    private Vector3f spatialScale;
-    private Vector3f target;
     private PathFinder pathFinder;
-    private Spatial scene;
-    private Thread t;
-    private static boolean first_call = true;
     
-    class PathFollower extends Thread{
+    private PathFollower t;
 
-        @Override
-        public void run() {
-            pathFinder.SetStartingPoint(spatial.getLocalTranslation());
-            var wayPoints = pathFinder.computePath(target);
-            Vector3f v;
+    private Spatial scene;
 
-            //skipping first point since its the player position
-            for(int i = 1; i<wayPoints.size(); i++){
-                var w = wayPoints.get(i).getPosition();
-                
-                while(spatial.getLocalTranslation().distance(w) >= 1){
-                    v = w.subtract(spatial.getLocalTranslation());
-                    spatialControl.setWalkDirection(v.normalize().mult(10));
-                    spatialControl.setViewDirection(v.negate());
-                    
-                    try{
-                        Thread.sleep(20);
-                    }catch(Exception e){
-                        
-                    }
-                }
-            }
-            
-            stopWalking();
-            System.out.println("finish");
-        }
-        
-    }
+    private boolean isWaiting = true;
 
     public MovementComponent(final Spatial spatial, final Spatial scene, final Vector3f position, final Rectangle area) {
         super(spatial, new MotionPath());
@@ -84,6 +56,8 @@ public class MovementComponent extends MotionEvent {
 
         this.scene = scene;
         this.pathFinder = new PathFinder(scene);
+        t = new PathFollower(spatial, pathFinder, getPointInScene());
+
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
         //this.setDirectionType(MotionEvent.Direction.PathAndRotation);
@@ -102,7 +76,6 @@ public class MovementComponent extends MotionEvent {
 
     public Vector3f getNextPoint() {
         this.pArea = new PollingArea(area, 10);
-        System.out.println(pArea.getRandomOffset() + " skumonti");
         this.position = this.position.add(pArea.getRandomOffset());
         return this.position;
     }
@@ -128,15 +101,8 @@ public class MovementComponent extends MotionEvent {
         return this.path;
     }
 
-    public void moveToTarget(final Vector3f target) {
-        this.target = target;
-        
-        t = new PathFollower();
-        
+    public void moveToTarget(Vector3f target) {
         t.start();
-        
-        
-        first_call = false;
     }
 
     public void moveDirection(final Vector3f direction) {
@@ -152,6 +118,10 @@ public class MovementComponent extends MotionEvent {
         }
 
         return false;
+    }
+
+    public Vector3f getPointInScene() {
+        return pathFinder.getRandomPoint();
     }
 
 }

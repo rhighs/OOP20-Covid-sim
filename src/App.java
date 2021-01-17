@@ -60,7 +60,7 @@ public class App extends SimpleApplication implements ActionListener {
     Node player;
     BetterCharacterControl pControl;
     MotionPath mp;
-    Person p;
+    List<Person> crowd;
     PathFinder pf;
 
     NavMeshPathfinder navi;
@@ -83,7 +83,6 @@ public class App extends SimpleApplication implements ActionListener {
         stateManager.attach(bState);
         Assets.loadAssets(assetManager);
 
-
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
         initSceneAndPlayer();
@@ -100,15 +99,21 @@ public class App extends SimpleApplication implements ActionListener {
 
     private void initSceneAndPlayer() {
         Spatial scene = assetManager.loadModel("Models/city" + ".j3o");
-        
-        p = new Person(rootNode, scene, assetManager, bState, this);
-        
-        scene.setLocalTranslation(new Vector3f(2,-10,1));
+        crowd = new ArrayList<Person>();
+
+        for (int i = 0; i < 100; i++) {
+            crowd.add(new Person(scene, this));
+        }
+
+        for (var p : crowd) {
+            p.startMoving();
+        }
+
+        scene.setLocalTranslation(new Vector3f(2, -10, 1));
         bState.getPhysicsSpace().addAll(scene);
         bState.setDebugEnabled(false);
 
         rootNode.attachChild(scene);
-
 
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
@@ -116,14 +121,14 @@ public class App extends SimpleApplication implements ActionListener {
         rootNode.addLight(sun);
 
         Node p = (Node) assetManager.loadModel("Models/u.j3o").scale(1);
-        
+
         player = new Node("PlayerNode");
         player.setLocalTranslation(0, 10, 0);
         player.attachChild(p);
 
         pControl = new BetterCharacterControl(0.5f, 9f, 15);
         player.addControl(pControl);
-        
+
         pControl.setGravity(new Vector3f(0, -10, 0));
 
         pControl.setJumpForce(new Vector3f(0, 30, 0));
@@ -138,7 +143,7 @@ public class App extends SimpleApplication implements ActionListener {
 
         Mesh mesh = geom.getMesh();
         NavMesh navMesh = new NavMesh(mesh);
-        
+
         pf = new PathFinder(scene);
 
         navi = new NavMeshPathfinder(navMesh);
@@ -148,6 +153,7 @@ public class App extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleUpdate(float tpf) {
+
         if (naviOn) {
             Waypoint waypoint = navi.getNextWaypoint();
             if (waypoint == null) {
@@ -161,7 +167,6 @@ public class App extends SimpleApplication implements ActionListener {
                 navi.goToNextWaypoint();
             }
 
-            
             if (navi.isAtGoalWaypoint()) {
                 navi.clearPath();
                 naviOn = false;
@@ -187,9 +192,7 @@ public class App extends SimpleApplication implements ActionListener {
             if (cr.size() != 0) {
                 target = cr.getClosestCollision().getContactPoint();
                 System.out.println(target);
-                
-                p.moveToTarget(target);
-                  
+
                 navi.setPosition(player.getLocalTranslation());
                 navi.computePath(target);
 

@@ -2,13 +2,16 @@ package Simulation;
 
 import java.util.Random;
 import java.util.function.Function;
+
 /**
  *
  * @author simon
  */
 public class InfectionImpl implements Function<Person, Boolean> {
+
     //vedere uso
     private static int INF_RADIUS = 5;
+
     @Override
 
     public Boolean apply(Person p) {
@@ -16,16 +19,16 @@ public class InfectionImpl implements Function<Person, Boolean> {
     }
 
     public boolean infection(Person p) {
-        if(!p.isInfected()){
+        if (!p.isInfected()) {
             int param = checkTrasmissibility(p);
-            if(param == 100){
+            if (param == 100) {
                 return true;
-            }else{
+            } else {
                 // se trasm piu di 60 generi numero random da 0 a 100 e se num > complementare, infetti
                 //else se trasm meno di 60% generi numero random da 0 a 100 e se num > complementare, infetti
                 Random rand = new Random();
                 final int upperbound = 101;
-                if(rand.nextInt(upperbound) >= (100 - param)){
+                if (rand.nextInt(upperbound) >= (100 - param)) {
                     return true;
                 }
             }
@@ -51,10 +54,9 @@ public class InfectionImpl implements Function<Person, Boolean> {
             }
         }
     }*/
-
     //infection depends from Mask status
     // mask status 70% mask type 30%
-    private int checkTrasmissibility(Person p){
+    private int checkTrasmissibility(Person p) {
         //percentage of trasmissibility
         int perc = 0;
         //Migliorabile

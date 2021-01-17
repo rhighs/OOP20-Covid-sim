@@ -7,7 +7,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.math.ColorRGBA;
 import Engine.items.Entity;
 
-public class GraphicsComponent{
+public class GraphicsComponent {
+
     private Entity entity;
     protected Spatial sp;
     private Material mat;
@@ -39,7 +40,7 @@ public class GraphicsComponent{
     public void scale(final float x, final float y, final float z) {
         sp.scale(x, y, z);
     }
-    
+
     public void setParent(Node parent) {
         this.parent = parent;
     }
@@ -52,7 +53,7 @@ public class GraphicsComponent{
         parent.detachChild(sp);
     }
 
-    public boolean changeColor(final ColorRGBA color){
+    public boolean changeColor(final ColorRGBA color) {
         if (!this.color.equals(color)) {
             mat.setColor(color.toString(), color);
             sp.setMaterial(mat);

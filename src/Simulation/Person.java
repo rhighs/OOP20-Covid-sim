@@ -1,16 +1,12 @@
 package Simulation;
 
 import Engine.movement.MovementComponent;
-import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.asset.AssetManager;
 import Engine.items.Entity;
 import Engine.graphics.GraphicsComponent;
 import Engine.physics.PhysicsComponent;
-import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.*;
@@ -31,15 +27,20 @@ public class Person implements Entity, IPerson {
     private Function<Person, Boolean> infectionAlg = null;
         Vector3f pos;
 
-    public Person(Node parent, Spatial scene, AssetManager assetManager, BulletAppState bState, SimpleApplication app) {
+    public Person(Spatial scene, SimpleApplication app) {
+        var bState = app.getStateManager().getState(BulletAppState.class);
+        var parent = app.getRootNode();
+        
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
-        this.getSpatial().setLocalTranslation(10, 50, 10);
+        var pn = new PhysicsComponent_new(this.getSpatial(), bState);
+        mov = new MovementComponent(getSpatial(), scene, /*position*/getSpatial().getLocalTranslation());
+        
+        
+        getSpatial().setLocalTranslation(mov.getPointInScene());
                 
         //gfx.scale(0.3f, 0.3f, 0.3f);
         //phyc = new PhysicsComponent(this, bState);
         //phyc.setPosition(new Vector3f(1, -10, 1));
-        var pn = new PhysicsComponent_new(this.getSpatial(), bState);
-        mov = new MovementComponent(this.getSpatial(), scene, this.getSpatial().getLocalTranslation());
     }
     
     public MovementComponent getM(){
@@ -79,6 +80,10 @@ public class Person implements Entity, IPerson {
     @Override
     public void infect() {
         infected = true;
+    }
+    
+    public void startMoving(){
+        mov.moveToTarget(null);
     }
 
     public void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {

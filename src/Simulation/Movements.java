@@ -10,8 +10,10 @@ import com.jme3.math.Vector3f;
  * Too many nested classes? We'll care about that later.
  */
 public class Movements {
+
     /* SimpleWalk simply makes the person walk to one direction. */
     public static class SimpleWalk implements Function<Vector3f, Vector3f> {
+
         Vector3f dir;
 
         public SimpleWalk(Vector3f direction) {
@@ -23,4 +25,3 @@ public class Movements {
         }
     }
 }
-

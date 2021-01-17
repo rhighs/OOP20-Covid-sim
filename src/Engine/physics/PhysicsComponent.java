@@ -17,7 +17,8 @@ import java.util.HashMap;
  *
  * @author rob, chris
  */
-public class PhysicsComponent extends GhostControl implements PhysicsTickListener{
+public class PhysicsComponent extends GhostControl implements PhysicsTickListener {
+
     private Entity entity;
     private Spatial spatial;
     private CollisionShape collisionShape;
@@ -35,7 +36,7 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         path = new MotionPath();
         spatial.addControl(this);
     }
-    
+
     /* *** Getters and setters *** */
     public Entity getEntity() {
         return entity;
@@ -49,16 +50,16 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         spatial.setLocalTranslation(newpos);
     }
 
-    public Map<Entity, Float> getCollidingEntities(){
+    public Map<Entity, Float> getCollidingEntities() {
         return collidingEntities;
     }
 
-    public void enableCollision(boolean enabled){
+    public void enableCollision(boolean enabled) {
         isCollisionEnabled = enabled;
     }
 
     /* *** Actual member functions *** */
-    public void move(final Vector3f offset){
+    public void move(final Vector3f offset) {
         spatial.move(offset);
     }
 
@@ -72,13 +73,13 @@ public class PhysicsComponent extends GhostControl implements PhysicsTickListene
         if (!isCollisionEnabled) {
             return;
         }
-        
+
         collidingEntities.clear();
         if (getOverlappingCount() == 0) {
             return;
         }
-        
-        Vector3f v1 = entity.getSpatial().getLocalTranslation();        
+
+        Vector3f v1 = entity.getSpatial().getLocalTranslation();
         for (var collidingEntity : getOverlappingObjects()) {
             Entity e = ((PhysicsComponent) collidingEntity).getEntity();
             Vector3f v2 = e.getSpatial().getLocalTranslation();

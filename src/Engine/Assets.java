@@ -10,10 +10,11 @@ import com.jme3.asset.AssetManager;
  * (without passing assetManager everywhere
  */
 public class Assets {
+
     public static Spatial PERSON_MODEL;
     public static Material BRICK_WALL;
     public static Texture BRICK_WALL_TEXTURE;
-    
+
     private Assets() {
     }
 

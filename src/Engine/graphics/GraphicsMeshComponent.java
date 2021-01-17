@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import Engine.items.Entity;
 
 public class GraphicsMeshComponent extends GraphicsComponent {
+
     private List<Geometry> geometries;
 
     public GraphicsMeshComponent(final Entity entity, Node parent, final String name, final Mesh mesh, final Material material) {

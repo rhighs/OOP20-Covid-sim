@@ -11,6 +11,7 @@ import Engine.graphics.GraphicsMeshComponent;
 import Engine.Assets;
 
 public class Wall implements Entity {
+
     GraphicsMeshComponent gfx;
     PhysicsComponent phyc;
 

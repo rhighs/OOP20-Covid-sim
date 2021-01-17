@@ -27,7 +27,7 @@ public class PollingArea {
         sec = new ArrayList<>();
         this.area = area;
         this.sideTiles = sideTiles;
-        this.totalCells = sideTiles*sideTiles;        
+        this.totalCells = sideTiles * sideTiles;
 
         initSectors();
     }
@@ -37,14 +37,14 @@ public class PollingArea {
         final public Vector2f coordsOffset;
         final public Vector2f constantOffset;
         final public Vector2f areaIndex;
-        final public Rectangle area; 
+        final public Rectangle area;
 
         public SubArea(final Vector2f areaIndex, final Rectangle area) {
             this.area = area;
             this.areaIndex = areaIndex;
             this.constantOffset = new Vector2f();
             constantOffset.zero();
-                        coordsOffset = new Vector2f();
+            coordsOffset = new Vector2f();
             this.constantOffset.x = area.width / (float) PollingArea.this.sideTiles;
             this.constantOffset.y = area.height / (float) PollingArea.this.sideTiles;
         }
@@ -56,7 +56,7 @@ public class PollingArea {
 
             this.coordsOffset.x += (centerDistanceX) * constantOffset.x;
             this.coordsOffset.y += (centerDistanceY) * constantOffset.y;
-            
+
             return coordsOffset;
         }
 
@@ -67,14 +67,14 @@ public class PollingArea {
 
         int row = cellNumber / sideTiles;
         int column = (cellNumber) % sideTiles;
-        
+
         System.out.println(row + " -- " + column);
 
         Vector2f polled = sec.get(row).get(column).assingOffset();
         return new Vector3f(polled.x, 0, polled.y);
     }
-    
-    private void initSectors(){
+
+    private void initSectors() {
         for (int i = 0; i < sideTiles; i++) {
             sec.add(new ArrayList<>());
             for (int t = 0; t < sideTiles; t++) {
