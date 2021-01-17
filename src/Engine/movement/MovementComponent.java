@@ -1,25 +1,15 @@
 package Engine.movement;
 
-import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.cinematic.MotionPath;
-import java.util.function.Function;
 import com.jme3.math.Vector3f;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.awt.Rectangle;
 
 import com.jme3.cinematic.MotionPath;
-import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /* This class is a container for many classes which implement some kind of
  * movement algorithm. (think of it as a namespace containing many free functions.
@@ -41,10 +31,10 @@ public class MovementComponent extends MotionEvent {
     private PollingArea pArea;
     private BetterCharacterControl spatialControl;
     private PathFinder pathFinder;
+    private boolean isPathfinding, isMovementEnabled;
+    private Spatial scene;
     
     private PathFollower t;
-
-    private Spatial scene;
 
     private boolean isWaiting = true;
 
@@ -108,20 +98,22 @@ public class MovementComponent extends MotionEvent {
     public void moveDirection(final Vector3f direction) {
         Vector3f v = direction.subtract(spatial.getLocalTranslation());
         spatialControl.setViewDirection(v.negate());
-        spatialControl.setWalkDirection(v.normalize().mult(50));
+        spatialControl.setWalkDirection(v.normalize().mult(10));
     }
 
-    private boolean stopWalking() {
-        if (spatialControl.getWalkDirection() != Vector3f.ZERO) {
-            spatialControl.setWalkDirection(Vector3f.ZERO);
-            return true;
-        }
-
-        return false;
+    private void stopWalking() {
+        spatialControl.setWalkDirection(Vector3f.ZERO);
     }
 
     public Vector3f getPointInScene() {
         return pathFinder.getRandomPoint();
+    }
+    
+    public void update(float tpf){
+        
+        if(isPathfinding && isMovementEnabled){
+            
+        }
     }
 
 }

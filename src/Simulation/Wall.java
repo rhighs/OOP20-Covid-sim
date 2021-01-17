@@ -18,7 +18,7 @@ public class Wall implements Entity {
     public Wall(float x, float y, float z, Node parent, BulletAppState bState) {
         final String boxName = "Wall: " + x + ", " + y + ", " + z;
         gfx = new GraphicsMeshComponent(this, parent, boxName, new Box(x, y, z), Assets.BRICK_WALL);
-        phyc = new PhysicsComponent(this, bState);
+        phyc = new PhysicsComponent(getSpatial(), bState);
     }
 
     public void update(float tpf) {
@@ -39,6 +39,6 @@ public class Wall implements Entity {
 
     @Override
     public void setPosition(Vector3f pos) {
-        phyc.setPosition(pos);
+        //phyc.setPosition(pos);
     }
 }

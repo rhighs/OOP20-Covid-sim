@@ -42,41 +42,54 @@ class PathFollower extends Thread {
 
     @Override
     public void run() {
+        while (true) {
+
+            try {
+                Thread.sleep(300);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            movement();
+        }
+    }
+
+    public void movement() {
         var spatialPos = spatial.getLocalTranslation();
         List<Waypoint> wayPoints = new ArrayList<>();
-        while (true) {  
-            pathFinder.SetStartingPoint(spatialPos);
-            wayPoints = pathFinder.computePath(target);
-            Vector3f v;
+        Vector3f v, w;
 
-            for (int i = 1; i < wayPoints.size(); i++) {
-                var w = wayPoints.get(i).getPosition();
+        pathFinder.SetStartingPoint(spatialPos);
+        wayPoints = pathFinder.computePath(target);
 
-                //start = System.currentTimeMillis();
+        for (int i = 1; i < wayPoints.size(); i++) {
+            w = wayPoints.get(i).getPosition();
 
-                while (spatial.getLocalTranslation().distance(w) >= 1) {
-                    spatialPos = spatial.getLocalTranslation();
-                    
+            start = System.currentTimeMillis();
 
-                    try {
-                        v = w.subtract(spatialPos);
-                        
-                        spatialControl.setWalkDirection(v.normalize().mult(8));
-                        spatialControl.setViewDirection(v.negate());
-                        
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            while (spatial.getLocalTranslation().distance(w) >= 1 && elapsed < MAXIMUM_TIME) {
+                spatialPos = spatial.getLocalTranslation();
 
-                    //elapsed = start - System.currentTimeMillis();
+                v = w.subtract(spatialPos);
+                spatialControl.setWalkDirection(v.normalize().mult(8));
+                spatialControl.setViewDirection(v.negate());
+
+                try {
+                    Thread.sleep(50);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+                elapsed = start - System.currentTimeMillis();
             }
-            
-            wayPoints.clear();
+
             stopWalking();
-            target = pathFinder.getRandomPoint();
+
         }
+
+        wayPoints.clear();
+        stopWalking();
+        target = pathFinder.getRandomPoint();
     }
 
     private void stopWalking() {

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.*;
 import Engine.Assets;
-import Engine.physics.PhysicsComponent_new;
+import Engine.physics.PhysicsComponent;
 import com.jme3.app.SimpleApplication;
 
 public class Person implements Entity, IPerson {
@@ -32,12 +32,10 @@ public class Person implements Entity, IPerson {
         var parent = app.getRootNode();
         
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
-        var pn = new PhysicsComponent_new(this.getSpatial(), bState);
-        mov = new MovementComponent(getSpatial(), scene, /*position*/getSpatial().getLocalTranslation());
-        
+        var pn = new PhysicsComponent(this.getSpatial(), bState);
+        mov = new MovementComponent(getSpatial(), scene, /*position*/getSpatial().getLocalTranslation());  
         
         getSpatial().setLocalTranslation(mov.getPointInScene());
-                
         //gfx.scale(0.3f, 0.3f, 0.3f);
         //phyc = new PhysicsComponent(this, bState);
         //phyc.setPosition(new Vector3f(1, -10, 1));
@@ -103,24 +101,6 @@ public class Person implements Entity, IPerson {
 
     public void collision() {
         // only call getCollidingEntities once
-        Map<Entity, Float> colliding = phyc.getCollidingEntities();
-        if (colliding.equals(Collections.EMPTY_MAP)) {
-            return;
-        }
-        for(var e : colliding.entrySet()){
-            switch (e.getKey().getIdentificator()) {
-            case PERSON:
-                // algoritmo infezione
-                break;
-            case WALL:
-                // move back
-                break;
-            case UNKNOWN:
-                throw new UnsupportedOperationException();
-            default:
-                throw new UnsupportedOperationException();
-            }
-        }
     }
 
     @Override
@@ -130,7 +110,7 @@ public class Person implements Entity, IPerson {
 
     @Override
     public void setPosition(Vector3f pos) {
-        phyc.setPosition(pos);
+        //phyc.setPosition(pos);
     }
 }
 

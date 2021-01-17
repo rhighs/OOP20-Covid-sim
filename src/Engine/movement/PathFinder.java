@@ -37,14 +37,14 @@ public class PathFinder {
     private Vector3f startingPos;
 
     public PathFinder(Spatial scene) {
-        
+
         rand = new Random();
-        
+
         Node n = (Node) scene;
         Geometry geom = (Geometry) n.getChild("NavMesh");
         Mesh mesh = geom.getMesh();
         navMesh = new NavMesh(mesh);
-        
+
         navigation = new NavMeshPathfinder(navMesh);
     }
 
@@ -53,13 +53,12 @@ public class PathFinder {
     }
 
     public List<Waypoint> computePath(final Vector3f target) {
-        
-        navigation.clearPath();
         navigation.setPosition(startingPos);
         navigation.warpInside(target);
-        
+
+        navigation.clearPath();
         boolean success = navigation.computePath(target);
-        
+
         return success ? navigation.getPath().getWaypoints() : Collections.EMPTY_LIST;
     }
 
