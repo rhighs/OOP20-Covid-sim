@@ -2,7 +2,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */
+ *
 package Engine.movement;
 
 import com.jme3.ai.navmesh.Path.Waypoint;
@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- * @author rob
- */
 class PathFollower extends Thread {
 
     private PathFinder pathFinder;
@@ -108,3 +104,5 @@ class PathFollower extends Thread {
         this.keepMoving = cond;
     }
 }
+
+*/

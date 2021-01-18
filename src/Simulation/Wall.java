@@ -41,4 +41,8 @@ public class Wall implements Entity {
     public void setPosition(Vector3f pos) {
         //phyc.setPosition(pos);
     }
+    
+    public Vector3f getPosition(){
+        return getSpatial().getLocalTranslation();
+    }
 }

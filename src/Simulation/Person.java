@@ -12,7 +12,9 @@ import java.util.Map;
 import java.util.function.*;
 import Engine.Assets;
 import Engine.physics.PhysicsComponent;
+import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.app.SimpleApplication;
+import java.util.List;
 
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -21,27 +23,20 @@ public class Person implements Entity, IPerson {
     private boolean infected;
     private Mask mask;
     // we don't seriously need *more* interfaces...
-    // Vector3f f(Vector3f);
-    private Function<Vector3f, Vector3f> movementAlg = null;
-    // boolean f(Person);
-    private Function<Person, Boolean> infectionAlg = null;
-        Vector3f pos;
+    
+    Vector3f pos;
 
-    public Person(Spatial scene, SimpleApplication app) {
+    public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app) {
         var bState = app.getStateManager().getState(BulletAppState.class);
         var parent = app.getRootNode();
         
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
-        var pn = new PhysicsComponent(this.getSpatial(), bState);
-        mov = new MovementComponent(getSpatial(), scene, /*position*/getSpatial().getLocalTranslation());  
-        
-        getSpatial().setLocalTranslation(mov.getPointInScene());
-        //gfx.scale(0.3f, 0.3f, 0.3f);
-        //phyc = new PhysicsComponent(this, bState);
-        //phyc.setPosition(new Vector3f(1, -10, 1));
+        getSpatial().setLocalTranslation(spawnPoint);
+        phyc = new PhysicsComponent(this.getSpatial(), bState);
+        mov = new MovementComponent(getSpatial(), scene, /*position*/getSpatial().getLocalTranslation());
     }
     
-    public MovementComponent getM(){
+    public MovementComponent getMovComponents(){
         return this.mov;
     }
 
@@ -71,32 +66,18 @@ public class Person implements Entity, IPerson {
         return infected;
     }
     
-    public void moveToTarget(final Vector3f t){
-        mov.moveToTarget(t);
-    }
-
     @Override
     public void infect() {
         infected = true;
     }
-    
-    public void startMoving(){
-        mov.moveToTarget(null);
-    }
 
     public void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
-        this.movementAlg = mAlg;
-        this.infectionAlg = infAlg;
     }
 
     /* *** Actual member functions *** */
     @Override
     public void update(float tpf) {
-        //Vector3f offset = movementAlg.apply(phyc.getPosition());
-        //phyc.move(offset.mult(tpf));
-        //mov.moveToNextPoint();
-        // Vector3f newPos = movementAlg.apply(phyc.getPosition());
-        // phyc.setPosition(movementAlg.apply(phyc.getPosition()));
+        //nothing lol
     }
 
     public void collision() {
@@ -111,6 +92,11 @@ public class Person implements Entity, IPerson {
     @Override
     public void setPosition(Vector3f pos) {
         //phyc.setPosition(pos);
+    }
+
+    @Override
+    public Vector3f getPosition() {
+        return getSpatial().getLocalTranslation();
     }
 }
 

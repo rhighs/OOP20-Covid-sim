@@ -4,7 +4,6 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import Simulation.Person;
 import Simulation.Wall;
-import Simulation.Movements;
 import Simulation.InfectionImpl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
@@ -17,7 +16,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import Engine.Assets;
-import Engine.movement.PathFinder;
 
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.math.ColorRGBA;
@@ -61,7 +59,6 @@ public class App extends SimpleApplication implements ActionListener {
     BetterCharacterControl pControl;
     MotionPath mp;
     List<Person> crowd;
-    PathFinder pf;
 
     NavMeshPathfinder navi;
     boolean naviOn = false;
@@ -102,11 +99,7 @@ public class App extends SimpleApplication implements ActionListener {
         crowd = new ArrayList<Person>();
 
         for (int i = 0; i < 100; i++) {
-            crowd.add(new Person(scene, this));
-        }
-
-        for (var p : crowd) {
-            p.startMoving();
+            crowd.add(new Person(scene, new Vector3f().zero(), this));
         }
 
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
@@ -143,8 +136,6 @@ public class App extends SimpleApplication implements ActionListener {
 
         Mesh mesh = geom.getMesh();
         NavMesh navMesh = new NavMesh(mesh);
-
-        pf = new PathFinder(scene);
 
         navi = new NavMeshPathfinder(navMesh);
 

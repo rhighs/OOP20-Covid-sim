@@ -18,4 +18,6 @@ public interface Entity {
     public Identificator getIdentificator();
 
     public void setPosition(Vector3f pos);  // used for world generation
+    
+    public Vector3f getPosition();
 }
