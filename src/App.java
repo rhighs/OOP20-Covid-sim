@@ -16,6 +16,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import Engine.Assets;
+import Engine.movement.PathGenerator;
 
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.math.ColorRGBA;
@@ -84,22 +85,26 @@ public class App extends SimpleApplication implements ActionListener {
         cam.setLocation(new Vector3f(20, 20, 5));
         initSceneAndPlayer();
         initInput();
-
     }
 
     private void initInput() {
         inputManager.addMapping("Mouse", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener(this, new String[]{"Mouse", "Space"});
-
     }
 
     private void initSceneAndPlayer() {
         Spatial scene = assetManager.loadModel("Models/city" + ".j3o");
         crowd = new ArrayList<Person>();
 
+        var pg = new PathGenerator(scene);
+
         for (int i = 0; i < 100; i++) {
-            crowd.add(new Person(scene, new Vector3f().zero(), this));
+            crowd.add(new Person(scene, pg.getRandomPoint(), this));
+        }
+
+        for (var c : crowd) {
+            c.randMov();
         }
 
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
@@ -144,6 +149,12 @@ public class App extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleUpdate(float tpf) {
+        
+        System.out.println(Runtime.getRuntime().freeMemory());
+
+        for (var p : crowd) {
+            p.update(tpf);
+        }
 
         if (naviOn) {
             Waypoint waypoint = navi.getNextWaypoint();

@@ -39,6 +39,10 @@ public class Person implements Entity, IPerson {
     public MovementComponent getMovComponents(){
         return this.mov;
     }
+    
+    public void randMov(){
+        mov.randWalking();
+    }
 
     /* *** Getters and setters *** */
     @Override
@@ -77,6 +81,7 @@ public class Person implements Entity, IPerson {
     /* *** Actual member functions *** */
     @Override
     public void update(float tpf) {
+        mov.update(tpf);
         //nothing lol
     }
 

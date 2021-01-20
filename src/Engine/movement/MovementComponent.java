@@ -32,9 +32,11 @@ public class MovementComponent extends MotionEvent {
     private final Rectangle area;
     private PollingArea pArea;
     private BetterCharacterControl spatialControl;
-    private PathGenerator pathGenerator;
     private boolean isPathfinding, isMovementEnabled;
     private Spatial scene;
+    
+    private PathGenerator pg;
+    private PathFollower f;
 
     private boolean isWaiting = true;
 
@@ -44,13 +46,10 @@ public class MovementComponent extends MotionEvent {
         this.area = area;
         this.spatial = spatial;
         this.scene = scene;
-        this.pathGenerator = new PathGenerator(scene);
-        //t = new PathFollower(spatial, path, getPointInScene());
-
+        
+        pg = new PathGenerator(scene);
+        f = new PathFollower(spatial, pg, pg.getRandomPoint());
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
-
-        //this.setDirectionType(MotionEvent.Direction.PathAndRotation);
-        //this.setRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, Vector3f.UNIT_Y));
 
         this.setSpeed(300 / path.getLength());
     }
@@ -100,6 +99,10 @@ public class MovementComponent extends MotionEvent {
         spatialControl.setWalkDirection(Vector3f.ZERO);
     }
     
+    public void randWalking(){
+        f.start();
+    }
+    
     public void update(float tpf){
     }
     
@@ -109,6 +112,7 @@ public class MovementComponent extends MotionEvent {
                 var v = w.getPosition().subtract(this.spatial.getLocalTranslation());
                 this.moveDirection(v.normalize().mult(10));
             }
+            
             stopWalking();
         }
     }
