@@ -54,16 +54,15 @@ import jme3tools.optimize.GeometryBatchFactory;
  * @author chris, rob, jurismo, savi
  */
 public class App extends SimpleApplication implements ActionListener {
-
+    final int NUM_PERSON = 2;
     private BulletAppState bState;
     Node player;
     BetterCharacterControl pControl;
-    MotionPath mp;
     List<Person> crowd;
-
+    // MotionPath mp;
+    // navi stuff
     NavMeshPathfinder navi;
     boolean naviOn = false;
-
     Vector3f target = new Vector3f(10, 2, 35);
 
     public App() {
@@ -71,8 +70,7 @@ public class App extends SimpleApplication implements ActionListener {
     }
 
     public static void main(String[] args) {
-        App app = new App();
-        app.start();
+        new App().start();
     }
 
     public void simpleInitApp() {
@@ -80,7 +78,6 @@ public class App extends SimpleApplication implements ActionListener {
         bState = new BulletAppState();
         stateManager.attach(bState);
         Assets.loadAssets(assetManager);
-
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
         initSceneAndPlayer();
@@ -94,87 +91,74 @@ public class App extends SimpleApplication implements ActionListener {
     }
 
     private void initSceneAndPlayer() {
+        // init scene
         Spatial scene = assetManager.loadModel("Models/city" + ".j3o");
-        crowd = new ArrayList<Person>();
-
-        var pg = new PathGenerator(scene);
-
-        for (int i = 0; i < 100; i++) {
-            crowd.add(new Person(scene, pg.getRandomPoint(), this));
-        }
-
-        for (var c : crowd) {
-            c.randMov();
-        }
-
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
         bState.getPhysicsSpace().addAll(scene);
-        bState.setDebugEnabled(false);
-
         rootNode.attachChild(scene);
 
+        // create an array of Person and fill it with 100 Person
+        // every Person starts from a random point inside path generator
+        crowd = new ArrayList<Person>();
+        var pg = new PathGenerator(scene);
+        for (int i = 0; i < NUM_PERSON; i++) {
+            Person p = new Person(scene, pg.getRandomPoint(), this);
+            crowd.add(p);
+            p.randMov();
+        }
+
+        // create a light so we can actually see the ninjas
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
         sun.setColor(ColorRGBA.White);
         rootNode.addLight(sun);
 
+        // create a player
         Node p = (Node) assetManager.loadModel("Models/u.j3o").scale(1);
-
         player = new Node("PlayerNode");
         player.setLocalTranslation(0, 10, 0);
         player.attachChild(p);
-
         pControl = new BetterCharacterControl(0.5f, 9f, 15);
-        player.addControl(pControl);
-
         pControl.setGravity(new Vector3f(0, -10, 0));
-
         pControl.setJumpForce(new Vector3f(0, 30, 0));
-
+        player.addControl(pControl);
         bState.getPhysicsSpace().add(pControl);
         bState.getPhysicsSpace().addAll(player);
-
         rootNode.attachChild(player);
 
-        Node n = (Node) scene;
-        Geometry geom = (Geometry) n.getChild("NavMesh");
-
-        Mesh mesh = geom.getMesh();
-        NavMesh navMesh = new NavMesh(mesh);
-
-        navi = new NavMeshPathfinder(navMesh);
-
+        // create the path finder
+        navi = new NavMeshPathfinder(createNavMesh((Node) scene));
         navi.computePath(target);
+    }
+
+    public NavMesh createNavMesh(Node scene) {
+        Geometry geom = (Geometry) scene.getChild("NavMesh");
+        return new NavMesh(geom.getMesh());
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        
-        System.out.println(Runtime.getRuntime().freeMemory());
-
-        for (var p : crowd) {
+        for (var p: crowd)
             p.update(tpf);
-        }
-
-        if (naviOn) {
-            Waypoint waypoint = navi.getNextWaypoint();
-            if (waypoint == null) {
-                return;
-            }
-
-            Vector3f v = waypoint.getPosition().subtract(player.getLocalTranslation());
-            pControl.setWalkDirection(v.normalize().mult(50));
-            pControl.setViewDirection(v.negate());
-            if (player.getLocalTranslation().distance(waypoint.getPosition()) <= 1 && !navi.isAtGoalWaypoint()) {
-                navi.goToNextWaypoint();
-            }
-
-            if (navi.isAtGoalWaypoint()) {
-                navi.clearPath();
-                naviOn = false;
-                pControl.setWalkDirection(Vector3f.ZERO);
-            }
-        }
+        //System.out.println(Runtime.getRuntime().freeMemory());
+        // for (var p : crowd)
+        //     p.update(tpf);
+        // if (naviOn) {
+        //     Waypoint waypoint = navi.getNextWaypoint();
+        //     if (waypoint == null)
+        //         return;
+        //     Vector3f v = waypoint.getPosition().subtract(player.getLocalTranslation());
+        //     pControl.setWalkDirection(v.normalize().mult(50));
+        //     pControl.setViewDirection(v.negate());
+        //     if (player.getLocalTranslation().distance(waypoint.getPosition()) <= 1 && !navi.isAtGoalWaypoint()) {
+        //         navi.goToNextWaypoint();
+        //     }
+        //     if (navi.isAtGoalWaypoint()) {
+        //         navi.clearPath();
+        //         naviOn = false;
+        //         pControl.setWalkDirection(Vector3f.ZERO);
+        //     }
+        // }
     }
 
     @Override
@@ -184,9 +168,8 @@ public class App extends SimpleApplication implements ActionListener {
 
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
-        if (binding.equals("Space") && isPressed) {
+        if (binding.equals("Space") && isPressed)
             naviOn = !naviOn;
-        }
         if (binding.equals("Mouse") && isPressed) {
             CollisionResults cr = new CollisionResults();
             Ray ray = new Ray(cam.getLocation(), cam.getDirection());
@@ -194,10 +177,8 @@ public class App extends SimpleApplication implements ActionListener {
             if (cr.size() != 0) {
                 target = cr.getClosestCollision().getContactPoint();
                 System.out.println(target);
-
                 navi.setPosition(player.getLocalTranslation());
                 navi.computePath(target);
-
             }
         }
     }

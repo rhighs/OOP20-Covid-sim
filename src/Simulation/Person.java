@@ -22,26 +22,28 @@ public class Person implements Entity, IPerson {
     private MovementComponent mov;
     private boolean infected;
     private Mask mask;
-    // we don't seriously need *more* interfaces...
-    
     Vector3f pos;
 
     public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app) {
         var bState = app.getStateManager().getState(BulletAppState.class);
         var parent = app.getRootNode();
-        
+
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
         getSpatial().setLocalTranslation(spawnPoint);
         phyc = new PhysicsComponent(this.getSpatial(), bState);
-        mov = new MovementComponent(getSpatial(), scene, /*position*/getSpatial().getLocalTranslation());
+        mov = new MovementComponent(
+                getSpatial(),
+                scene
+                // getSpatial().getLocalTranslation()
+        );
     }
-    
+
     public MovementComponent getMovComponents(){
         return this.mov;
     }
-    
+
     public void randMov(){
-        mov.randWalking();
+        mov.startPathFollower();
     }
 
     /* *** Getters and setters *** */
@@ -69,7 +71,7 @@ public class Person implements Entity, IPerson {
     public boolean isInfected() {
         return infected;
     }
-    
+
     @Override
     public void infect() {
         infected = true;

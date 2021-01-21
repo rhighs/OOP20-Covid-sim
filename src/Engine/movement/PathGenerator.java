@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Engine.movement;
 
 import com.jme3.ai.navmesh.NavMesh;
@@ -25,38 +20,34 @@ import java.util.Random;
  */
 public class PathGenerator{
     public NavMesh nav;
-    public NavMeshPathfinder navigation;
+    public NavMeshPathfinder pathFinder;
     public Random rand;
-    public Path emptyPath;
-    
+    // public Path emptyPath;
+
     public PathGenerator(final Spatial scene){
-        rand = new Random();
-        Node n = (Node) scene;
-        Geometry geom = (Geometry) n.getChild("NavMesh");
-        Mesh mesh = geom.getMesh();
-        
-        emptyPath = new Path();
-        
-        nav = new NavMesh(mesh);
-        navigation = new NavMeshPathfinder(nav);
+        rand            = new Random();
+
+        // create a navmesh using the scene, then create a path finder
+        Node n          = (Node) scene;
+        Geometry geom   = (Geometry) n.getChild("NavMesh");
+        Mesh mesh       = geom.getMesh();
+        nav             = new NavMesh(mesh);
+        pathFinder      = new NavMeshPathfinder(nav);
+        // emptyPath       = new Path();
     }
-    
+
     public List<Waypoint> getPath(final Vector3f start, final Vector3f target){
-        navigation.clearPath();
-        navigation.setPosition(start);
-        boolean success = navigation.computePath(target);
-        
-        
-        if(success)
-            return navigation.getPath().getWaypoints();
-        else
-            return Collections.EMPTY_LIST;
+        pathFinder.clearPath();
+        pathFinder.setPosition(start);
+        boolean success = pathFinder.computePath(target);
+        if (success)
+            return pathFinder.getPath().getWaypoints();
+        return Collections.EMPTY_LIST;
     }
-    
+
     //returns a random 3d point inside the navmesh, so we are sure it's somehow reachable
     public Vector3f getRandomPoint(){
         var idx = rand.nextInt(nav.getNumCells());
         return nav.getCell(idx).getRandomPoint();
     }
-    
 }
