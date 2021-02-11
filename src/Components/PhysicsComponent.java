@@ -13,7 +13,6 @@ import com.jme3.scene.Spatial;
  * @author rob
  */
 public class PhysicsComponent implements PhysicsCollisionListener {
-
     private final BulletAppState bullet;
     private final Vector3f spatialScale;
     private final Spatial spatial;
@@ -36,18 +35,13 @@ public class PhysicsComponent implements PhysicsCollisionListener {
     public void setControlEnabled(final boolean value) {
         if (value) {
             spatial.addControl(spatialControl);
-
             spatialControl.setGravity(new Vector3f(0, -10, 0));
-
             spatialControl.setJumpForce(new Vector3f(0, 30, 0));
-
             bullet.getPhysicsSpace().add(spatialControl);
-            bullet.getPhysicsSpace().add(spatial);            
+            bullet.getPhysicsSpace().add(spatial);
             //bullet.getPhysicsSpace().addCollisionListener(this);
-
         } else if (spatial.getControl(BetterCharacterControl.class) != null && bullet.getPhysicsSpace().getRigidBodyList().size() != 0) {
             spatial.removeControl(spatialControl);
-
             spatialControl.getPhysicsSpace().removeCollisionListener(this);
             bullet.getPhysicsSpace().remove(spatialControl);
             bullet.getPhysicsSpace().removeAll(spatial);
@@ -62,5 +56,5 @@ public class PhysicsComponent implements PhysicsCollisionListener {
     public BetterCharacterControl getControl() {
         return this.spatialControl;
     }
-
 }
+

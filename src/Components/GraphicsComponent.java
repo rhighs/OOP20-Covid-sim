@@ -20,7 +20,7 @@ public class GraphicsComponent {
         this.sp = sp;
         this.parent = parent;
         this.sp.scale(0.03f);
-        show();
+        this.show();
     }
 
     public GraphicsComponent(final Entity entity, final Spatial sp, final Material mat, Node parent) {

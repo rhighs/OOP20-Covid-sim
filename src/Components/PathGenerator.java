@@ -1,5 +1,8 @@
 package Components;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.ai.navmesh.Path;
@@ -9,9 +12,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class PathGenerator{
     public NavMesh nav;
@@ -37,7 +37,7 @@ public class PathGenerator{
         return Collections.EMPTY_LIST;
     }
 
-    //returns a random 3d point inside the navmesh, so we are sure it's somehow reachable
+    // returns a random 3d point inside the navmesh, so we are sure it's somehow reachable
     public Vector3f getRandomPoint(){
         var idx = rand.nextInt(nav.getNumCells());
         return nav.getCell(idx).getRandomPoint();
