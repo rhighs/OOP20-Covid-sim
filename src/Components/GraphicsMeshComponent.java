@@ -1,4 +1,4 @@
-package Engine.graphics;
+package Components;
 
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
@@ -7,7 +7,7 @@ import com.jme3.scene.Node;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import Engine.items.Entity;
+import Simulation.Entity;
 
 public class GraphicsMeshComponent extends GraphicsComponent {
 

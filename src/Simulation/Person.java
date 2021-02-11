@@ -1,20 +1,12 @@
 package Simulation;
 
-import Engine.movement.MovementComponent;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import Engine.items.Entity;
-import Engine.graphics.GraphicsComponent;
-import Engine.physics.PhysicsComponent;
-import java.util.Collections;
-import java.util.Map;
-import java.util.function.*;
-import Engine.Assets;
-import Engine.physics.PhysicsComponent;
-import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.app.SimpleApplication;
-import java.util.List;
+import Components.MovementComponent;
+import Components.GraphicsComponent;
+import Components.PhysicsComponent;
 
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -36,13 +28,6 @@ public class Person implements Entity, IPerson {
                 scene
                 // getSpatial().getLocalTranslation()
         );
-    }
-
-    public MovementComponent getMovComponents(){
-        return this.mov;
-    }
-
-    public void randMov(){
         mov.startPathFollower();
     }
 
@@ -77,28 +62,22 @@ public class Person implements Entity, IPerson {
         infected = true;
     }
 
-    public void setAlgorithms(Function<Vector3f, Vector3f> mAlg, Function<Person, Boolean> infAlg) {
-    }
-
     /* *** Actual member functions *** */
     @Override
     public void update(float tpf) {
         mov.update(tpf);
-        //nothing lol
     }
 
     public void collision() {
-        // only call getCollidingEntities once
     }
 
     @Override
     public void maskDown(){
-        this.mask.maskDown();
+        mask.maskDown();
     }
 
     @Override
     public void setPosition(Vector3f pos) {
-        //phyc.setPosition(pos);
     }
 
     @Override

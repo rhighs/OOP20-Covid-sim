@@ -1,4 +1,4 @@
-package Engine.movement;
+package Components;
 
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;

@@ -1,4 +1,4 @@
-package Engine;
+package Simulation;
 
 import com.jme3.scene.Spatial;
 import com.jme3.material.Material;
@@ -7,8 +7,7 @@ import com.jme3.asset.AssetManager;
 
 /* just a bunch of constants for our models and meshes
  * this should make it easier to load some stuff
- * (without passing assetManager everywhere
- */
+ * (without passing assetManager everywhere) */
 public class Assets {
 
     public static Spatial PERSON_MODEL;

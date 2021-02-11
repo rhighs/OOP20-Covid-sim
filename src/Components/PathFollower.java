@@ -1,4 +1,4 @@
-package Engine.movement;
+package Components;
 
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.bullet.control.BetterCharacterControl;
