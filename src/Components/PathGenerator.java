@@ -4,7 +4,6 @@ import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.ai.navmesh.Path;
 import com.jme3.ai.navmesh.Path.Waypoint;
-import com.jme3.app.SimpleApplication;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -14,26 +13,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- *
- * @author rob
- */
 public class PathGenerator{
     public NavMesh nav;
     public NavMeshPathfinder pathFinder;
     public Random rand;
-    // public Path emptyPath;
 
     public PathGenerator(final Spatial scene){
         rand            = new Random();
-
         // create a navmesh using the scene, then create a path finder
         Node n          = (Node) scene;
         Geometry geom   = (Geometry) n.getChild("NavMesh");
         Mesh mesh       = geom.getMesh();
         nav             = new NavMesh(mesh);
         pathFinder      = new NavMeshPathfinder(nav);
-        // emptyPath       = new Path();
     }
 
     public List<Waypoint> getPath(final Vector3f start, final Vector3f target){
