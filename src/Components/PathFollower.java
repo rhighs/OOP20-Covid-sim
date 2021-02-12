@@ -10,8 +10,6 @@ import com.jme3.scene.Spatial;
 class PathFollower {
 
     public PathFollower(Spatial spatial, PathGenerator pathGen) {
-        this.spatial = spatial;
-        this.pathGen = pathGen;
     }
 
     public void update() {

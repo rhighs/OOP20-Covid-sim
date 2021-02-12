@@ -31,10 +31,15 @@ public class PathGenerator{
     public List<Waypoint> getPath(final Vector3f start, final Vector3f target){
         pathFinder.clearPath();
         pathFinder.setPosition(start);
-        boolean success = pathFinder.computePath(target);
-        if (success)
-            return pathFinder.getPath().getWaypoints();
-        return Collections.EMPTY_LIST;
+        boolean success;
+        
+        success = pathFinder.computePath(target);
+        
+        while(!success){
+            return getPath(start, getRandomPoint());
+        }
+        
+        return pathFinder.getPath().getWaypoints();
     }
 
     // returns a random 3d point inside the navmesh, so we are sure it's somehow reachable

@@ -28,7 +28,7 @@ public class Person implements Entity, IPerson {
                 scene
                 // getSpatial().getLocalTranslation()
         );
-        mov.startPathFollower();
+        //mov.startPathFollower();
     }
 
     /* *** Getters and setters *** */
