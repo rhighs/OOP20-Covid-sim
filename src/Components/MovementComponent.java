@@ -39,6 +39,10 @@ public class MovementComponent {
     }
 
     private void followWaypoint() {
+        if (currPoint == null) {
+            System.out.println("currPoint is null");
+            System.exit(1);
+        }
         Vector3f currPointVector = currPoint.getPosition();
         if (spatial.getLocalTranslation().distance(currPointVector) <= 1) {
             // change state
@@ -67,9 +71,5 @@ public class MovementComponent {
         case FOLLOW_WAYPOINT:   followWaypoint();    break;
         case AT_WAYPOINT:       atWaypoint();        break;
         }
-        // if (currPoint == null) {
-        //     System.out.println("currPoint is null");
-        //     System.exit(1);
-        // }
     }
 }
