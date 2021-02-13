@@ -7,6 +7,7 @@ import com.jme3.app.SimpleApplication;
 import Components.MovementComponent;
 import Components.GraphicsComponent;
 import Components.PhysicsComponent;
+import java.util.List;
 
 public class Person implements Entity, IPerson {
     private GraphicsComponent gfx;
@@ -22,7 +23,7 @@ public class Person implements Entity, IPerson {
 
         gfx = new GraphicsComponent(this, Assets.PERSON_MODEL.clone(), parent);
         getSpatial().setLocalTranslation(spawnPoint);
-        phyc = new PhysicsComponent(this.getSpatial(), bState);
+        phyc = new PhysicsComponent(this, bState);
         mov = new MovementComponent(
                 getSpatial(),
                 scene
@@ -61,6 +62,10 @@ public class Person implements Entity, IPerson {
     public void infect() {
         infected = true;
     }
+    
+    public void setInfectionDistance(float distance){
+        phyc.initProximityBox(distance);
+    }
 
     /* *** Actual member functions *** */
     @Override
@@ -83,6 +88,10 @@ public class Person implements Entity, IPerson {
     @Override
     public Vector3f getPosition() {
         return getSpatial().getLocalTranslation();
+    }
+    
+    public List<Entity> getNearEntities(){
+        return phyc.getNearEntities();
     }
 }
 
