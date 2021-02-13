@@ -39,12 +39,14 @@ public class MovementComponent {
         currIndex = 0;
         try {
             currPoint = wayPoints.get(currIndex);
-            currIndex++;
         } catch (UnsupportedOperationException e) {
             System.out.println("caught an exception here");
             System.out.println("no wayPoints: " + wayPoints.size() + ", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
             System.exit(1);
         }
+        currIndex++;
+        System.out.println("generated new waypoints");
+        state = State.FOLLOW_WAYPOINT;
         //System.out.println(", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
     }
 
@@ -56,6 +58,7 @@ public class MovementComponent {
         Vector3f currPointVector = currPoint.getPosition();
         // if we're very near to the waypoint, change state to pick a new one
         if (spatial.getLocalTranslation().distance(currPointVector) <= 1) {
+            System.out.println("got to waypoint");
             this.spatialControl.setWalkDirection(Vector3f.ZERO);
             this.state = State.AT_WAYPOINT;
         } else {
@@ -69,8 +72,10 @@ public class MovementComponent {
     private void atWaypoint() {
         // pick a new waypoint to follow if there are still some
         if (wayPoints.isEmpty() || currIndex == wayPoints.size()) {
+            System.out.println("change to no more waypoints state");
             this.state = State.NO_MORE_WAYPOINTS;
         } else {
+            System.out.println("change to follow waypoint state, currIndex: " + currIndex);
             this.currPoint = wayPoints.get(currIndex);
             currIndex++;
             this.state = State.FOLLOW_WAYPOINT;
@@ -78,13 +83,17 @@ public class MovementComponent {
     }
 
     public void update(float tpf) {
-        /*
         switch (state) {
-        case NO_MORE_WAYPOINTS: finishedWaypoints(); break;
-        case FOLLOW_WAYPOINT:   followWaypoint();    break;
-        case AT_WAYPOINT:       atWaypoint();        break;
+        case NO_MORE_WAYPOINTS:
+            finishedWaypoints();
+            break;
+        case FOLLOW_WAYPOINT:
+            followWaypoint();
+            break;
+        case AT_WAYPOINT:
+            atWaypoint();
+            break;
         }
-        */
     }
 }
 
