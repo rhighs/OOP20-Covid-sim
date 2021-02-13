@@ -3,7 +3,7 @@ package Simulation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.stream.Collectors; 
 
 /**
  *
@@ -17,11 +17,13 @@ public class Virus {
     private List<Person> infectedPeople;
     private int numPeople;
     private boolean isSpreading = false;
+    private InfectionImpl infectionAlgo;
 
     public Virus(final List<Person> crowd, final float strenght) {
         this.strenght = strenght;
         this.crowd = crowd;
         this.numPeople = crowd.size();
+        infectionAlgo = new InfectionImpl();
 
         rand = new Random();
     }
@@ -38,9 +40,12 @@ public class Virus {
     public boolean tryInfection(Person infector, Person victim) {
         //...todo attempts inf. based on certain params
 
-        victim.infect();
-        this.infectedPeople.add(victim);
-        return true;
+        if(infectionAlgo.apply(infector, victim)){
+            this.infectedPeople.add(victim);
+            return true;
+        }
+        
+        return false;
     }
 
     public void update(float tpf) {

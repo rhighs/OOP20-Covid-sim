@@ -1,19 +1,20 @@
 package Simulation;
 
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
  *
  * @author simon
  */
-public class InfectionImpl implements Function<Person, Boolean> {
+public class InfectionImpl implements BiFunction<Person, Person, Boolean> {
 
     private static int INF_RADIUS = 5;
 
     @Override
-    public Boolean apply(Person p) {
-        return infection(p);
+    public Boolean apply(Person infector, Person victim) {
+        return infection(victim);
     }
 
     private boolean infection(Person p) {
