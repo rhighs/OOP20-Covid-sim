@@ -73,6 +73,7 @@ public class App extends SimpleApplication implements ActionListener {
 
     @Override
     public void onAction(String binding, boolean isPressed, float tpf) {
+        /*
         if (binding.equals("Space") && isPressed)
             naviOn = !naviOn;
         if (binding.equals("Mouse") && isPressed) {
@@ -86,6 +87,7 @@ public class App extends SimpleApplication implements ActionListener {
                 navi.computePath(target);
             }
         }
+        */
     }
 
     private void initInput() {
