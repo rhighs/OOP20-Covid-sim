@@ -35,11 +35,7 @@ public class PathGenerator{
         
         success = pathFinder.computePath(target);
         
-        while(!success){
-            return getPath(start, getRandomPoint());
-        }
-        
-        return pathFinder.getPath().getWaypoints();
+        return success == true ? pathFinder.getPath().getWaypoints() : null;
     }
 
     // returns a random 3d point inside the navmesh, so we are sure it's somehow reachable

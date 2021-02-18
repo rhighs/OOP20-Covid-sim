@@ -43,7 +43,7 @@ public class PhysicsComponent implements PhysicsCollisionListener {
         bullet = bull;
         this.position = spatial.getLocalTranslation();
 
-        spatialControl =  new BetterCharacterControl(0.5f, 9f, 15);
+        spatialControl =  new BetterCharacterControl(0.1f, 9f, 5);
         setControlEnabled(true);
     }
 

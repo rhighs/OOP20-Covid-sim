@@ -1,3 +1,4 @@
+import Components.PathCalculator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ import Simulation.Person;
  */
 public class App extends SimpleApplication implements ActionListener {
     // constants
-    final int NUM_PERSON = 2;
+    final int NUM_PERSON = 1000;
 
     private BulletAppState bState;
     private List<Person> crowd;
@@ -98,10 +99,13 @@ public class App extends SimpleApplication implements ActionListener {
 
     private void createScene() {
         // load city
-        Node scene = (Node) assetManager.loadModel("Models/city" + ".j3o");
+        Node scene = (Node) assetManager.loadModel("Scenes/pogger"
+                + "" + ".j3o");
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
         bState.getPhysicsSpace().addAll(scene);
         rootNode.attachChild(scene);
+        
+        var pathCalc = new PathCalculator(scene);
 
         // create the path finder
         navi = new NavMeshPathfinder(createNavMesh(scene));
@@ -112,7 +116,7 @@ public class App extends SimpleApplication implements ActionListener {
         crowd = new ArrayList<Person>();
         var pg = new PathGenerator(scene);
         for (int i = 0; i < NUM_PERSON; i++) {
-            Person p = new Person(scene, pg.getRandomPoint(), this);
+            Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc);
             crowd.add(p);
         }
 

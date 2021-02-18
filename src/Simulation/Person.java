@@ -6,6 +6,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.app.SimpleApplication;
 import Components.MovementComponent;
 import Components.GraphicsComponent;
+import Components.PathCalculator;
+import Components.PathGenerator;
 import Components.PhysicsComponent;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Person implements Entity, IPerson {
     private Mask mask;
     Vector3f pos;
 
-    public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app) {
+    public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app, PathCalculator pathCalc) {
         var bState = app.getStateManager().getState(BulletAppState.class);
         var parent = app.getRootNode();
 
@@ -26,7 +28,8 @@ public class Person implements Entity, IPerson {
         phyc = new PhysicsComponent(this, bState);
         mov = new MovementComponent(
                 getSpatial(),
-                scene
+                scene,
+                pathCalc
                 // getSpatial().getLocalTranslation()
         );
         //mov.startPathFollower();
