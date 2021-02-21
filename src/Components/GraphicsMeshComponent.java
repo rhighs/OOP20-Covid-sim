@@ -14,7 +14,7 @@ public class GraphicsMeshComponent extends GraphicsComponent {
     private List<Geometry> geometries;
 
     public GraphicsMeshComponent(final Entity entity, Node parent, final String name, final Mesh mesh, final Material material) {
-        super(entity, new Node(), parent);
+        super(entity, parent);
         //this.entity = entity;
         //this.parent = parent;
         geometries = new ArrayList<>();

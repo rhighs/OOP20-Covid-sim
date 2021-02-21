@@ -1,15 +1,16 @@
 package Simulation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors; 
+import java.util.stream.Collectors;
 
 /**
  *
  * @author rob
  */
-public class Virus {
+public class Virus extends Thread{
 
     private float strenght;
     private Random rand;
@@ -37,43 +38,59 @@ public class Virus {
         isSpreading = true;
     }
 
-    public boolean tryInfection(Person infector, Person victim) {
-        //...todo attempts inf. based on certain params
+    public void stopSprading() {
+        isSpreading = false;
+    }
 
-        if(infectionAlgo.apply(infector, victim)){
-            this.infectedPeople.add(victim);
+    private void keepSpreading() {
+
+        if (!isSpreading) {
+            return;
+        }
+
+        for (var p : crowd) {
+            if (p.isInfected()) {
+                var nearPeople = p.getNearPeople();
+
+                var allNearPeople = new HashSet<>(nearPeople);
+                if (p.getLastNear() != null) {
+                    nearPeople.removeAll(p.getLastNear());
+                }
+
+                nearPeople.forEach(person -> tryInfection(p, person));
+
+                p.setLastNear(allNearPeople);
+            }
+        }
+
+    }
+
+    public boolean tryInfection(Person infector, Person victim) {
+
+        if (infectionAlgo.apply(infector, victim)) {
+            victim.infect();
+            infectedPeople.add(victim);
             return true;
         }
-        
+
         return false;
     }
 
     public void update(float tpf) {
         keepSpreading();
     }
-    
-    public void stopSprading(){
-        isSpreading = false;
-    }
 
-    private void keepSpreading() {
-
-        if (!isSpreading) return;
-
-        for (var inf : infectedPeople) {
-            var entityPeople = inf.getNearEntities()
-                    .stream()
-                    .filter(e -> e.getIdentificator() == Entity.Identificator.PERSON)
-                    .collect(Collectors.toList());
-
-            var nearPeople = crowd
-                    .stream()
-                    .filter(person -> entityPeople.contains(person))
-                    .collect(Collectors.toList());
-
-            nearPeople.forEach(p -> tryInfection(inf, p));
+    @Override
+    public void run() {
+        startSpreading();
+        while(isSpreading){
+            keepSpreading();
+            try{
+            Thread.sleep(10);}
+            catch(Exception ex){
+                
+            }
         }
-
     }
 
 }

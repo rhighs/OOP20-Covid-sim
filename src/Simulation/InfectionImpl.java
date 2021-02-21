@@ -21,7 +21,9 @@ public class InfectionImpl implements BiFunction<Person, Person, Boolean> {
         if (p.isInfected()) {
             return false;
         }
+
         int param = checkTrasmissibility(p);
+
         if (param == 100) {
             return true;
         } else {
@@ -54,7 +56,6 @@ public class InfectionImpl implements BiFunction<Person, Person, Boolean> {
             }
         }
     }*/
-
     //infection depends from Mask status
     // mask status 70% mask type 30%
     private int checkTrasmissibility(Person p) {
@@ -65,6 +66,7 @@ public class InfectionImpl implements BiFunction<Person, Person, Boolean> {
         perc += 70 - (70 * p.getMask().getProtection().ordinal() / 2);
         //check maskProtection (if FFP1 perc is 30%)
         perc += 30 - 10 * (p.getMask().getProtection().ordinal());
+
         return perc;
     }
     //calcolare indice di trasmissibilita attraverso parametri : mask, protMask, MaskStat from 0 to 10

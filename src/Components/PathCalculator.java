@@ -19,27 +19,27 @@ import java.util.concurrent.Future;
  * @author rob
  */
 public class PathCalculator {
-    
+
     private ExecutorService pool = Executors.newSingleThreadExecutor();
     private Node scene;
     PathGenerator pathGen;
-    
-    public PathCalculator(final Node scene){
+
+    public PathCalculator(final Node scene) {
         this.scene = scene;
     }
-    
-    public Future<List<Waypoint>> request(final Vector3f currentPos){
+
+    public Future<List<Waypoint>> request(final Vector3f currentPos) {
         return pool.submit(new PathGeneratorCall(new PathGenerator(scene), currentPos));
     }
-    
+
 }
 
-class PathGeneratorCall implements Callable<List<Waypoint>>{
-    
+class PathGeneratorCall implements Callable<List<Waypoint>> {
+
     final Vector3f startingPoint;
     PathGenerator pathGen;
-    
-    public PathGeneratorCall(final PathGenerator pathGen, final Vector3f pos){
+
+    public PathGeneratorCall(final PathGenerator pathGen, final Vector3f pos) {
         this.pathGen = pathGen;
         this.startingPoint = pos;
     }

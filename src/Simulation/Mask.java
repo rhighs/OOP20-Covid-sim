@@ -15,6 +15,8 @@ public interface Mask {
     }
 
     public MaskProtection getProtection();
+
     public MaskStatus getStatus();
+
     public void maskDown();
 }

@@ -1,11 +1,14 @@
 package Components;
 
+import Simulation.Assets;
 import com.jme3.math.Vector3f;
 import com.jme3.material.Material;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.math.ColorRGBA;
 import Simulation.Entity;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
 
 public class GraphicsComponent {
 
@@ -15,16 +18,30 @@ public class GraphicsComponent {
     private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
 
-    public GraphicsComponent(final Entity entity, final Spatial sp, Node parent) {
+    public GraphicsComponent(final Entity entity, Node parent) {
         this.entity = entity;
-        this.sp = sp;
+        this.setSpatial();
         this.parent = parent;
-        this.sp.scale(0.03f);
         this.show();
     }
+    
+    public void setSpatial(){
+        
+        switch(entity.getIdentificator()){
+            case PERSON:
+                sp = Assets.CUBE.clone();
+                sp.scale(0.03f);
+                sp.setShadowMode(ShadowMode.CastAndReceive);
+                break;
+                
+            default:
+                break;
+        }
+        
+    }
 
-    public GraphicsComponent(final Entity entity, final Spatial sp, final Material mat, Node parent) {
-        this(entity, sp, parent);
+    public GraphicsComponent(final Entity entity, final Material mat, Node parent) {
+        this(entity, parent);
         this.mat = mat;
         this.sp.setMaterial(mat);
     }
@@ -55,8 +72,8 @@ public class GraphicsComponent {
 
     public boolean changeColor(final ColorRGBA color) {
         if (!this.color.equals(color)) {
-            mat.setColor(color.toString(), color);
-            sp.setMaterial(mat);
+            var m = ((Geometry) sp).getMaterial();
+            m.setColor("Diffuse", color);
             return true;
         }
         return false;

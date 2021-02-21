@@ -10,17 +10,18 @@ import com.jme3.scene.Node;
 import java.util.concurrent.Future;
 
 public class MovementComponent {
+
     private Spatial scene;
     private Spatial spatial;
     private BetterCharacterControl spatialControl;
     private Waypoint currPoint;
     private int currIndex = 0;
     private List<Waypoint> wayPoints = new ArrayList<>();
-    
+
     private long start;
-    
+
     private Future<List<Waypoint>> wayPointsFuture;
-    
+
     private PathCalculator pathCalc;
 
     private enum State {
@@ -34,33 +35,35 @@ public class MovementComponent {
         this.scene = scene;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
-        
+
         this.pathCalc = pathCalc;
     }
 
     private void finishedWaypoints() {
         //create a new path
-        if(wayPointsFuture == null){
+        if (wayPointsFuture == null) {
             wayPointsFuture = pathCalc.request(spatial.getLocalTranslation());
         }
         //System.out.println(wayPoints);
         //get a new point
-        
-        if(wayPointsFuture.isDone()){
+
+        if (wayPointsFuture.isDone()) {
             currIndex = 0;
             try {
                 wayPoints = wayPointsFuture.get();
-                if(wayPoints == null) return;
+                if (wayPoints == null) {
+                    return;
+                }
                 currPoint = wayPoints.get(currIndex);
             } catch (Exception e) {
-                
+
                 System.out.println("caught an exception here");
                 //System.out.println("no wayPoints: " + wayPoints.size() + ", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
                 System.exit(1);
             }
             start = System.currentTimeMillis();
             currIndex++;
-            System.out.println("generated new waypoints");
+            //System.out.println("generated new waypoints");
             state = State.FOLLOW_WAYPOINT;
             //System.out.println(", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
         }
@@ -74,18 +77,18 @@ public class MovementComponent {
         Vector3f currPointVector = currPoint.getPosition();
         // if we're very near to the waypoint, change state to pick a new one
         if (spatial.getLocalTranslation().distance(currPointVector) <= 1) {
-            System.out.println("got to waypoint");
+            //System.out.println("got to waypoint");
             this.spatialControl.setWalkDirection(Vector3f.ZERO);
             this.state = State.AT_WAYPOINT;
             start = System.currentTimeMillis();
         } else {
             // continue getting nearer
             Vector3f v = currPointVector.subtract(spatial.getLocalTranslation());
-            spatialControl.setWalkDirection(v.normalize().mult(4));
+            spatialControl.setWalkDirection(v.normalize().mult(10));
             spatialControl.setViewDirection(v.negate());
-            
+
             //if someone gets stuck we create a new path
-            if(System.currentTimeMillis() - start > 10000){ 
+            if (System.currentTimeMillis() - start > 10000) {
                 this.state = State.NO_MORE_WAYPOINTS;
                 wayPointsFuture = null;
                 start = 0;
@@ -96,11 +99,11 @@ public class MovementComponent {
     private void atWaypoint() {
         // pick a new waypoint to follow if there are still some
         if (wayPoints.isEmpty() || currIndex == wayPoints.size()) {
-            System.out.println("change to no more waypoints state");
+            //System.out.println("change to no more waypoints state");
             this.state = State.NO_MORE_WAYPOINTS;
             wayPointsFuture = null;
         } else {
-            System.out.println("change to follow waypoint state, currIndex: " + currIndex);
+            //System.out.println("change to follow waypoint state, currIndex: " + currIndex);
             this.currPoint = wayPoints.get(currIndex);
             currIndex++;
             this.state = State.FOLLOW_WAYPOINT;
@@ -109,16 +112,15 @@ public class MovementComponent {
 
     public void update(float tpf) {
         switch (state) {
-        case NO_MORE_WAYPOINTS:
-            finishedWaypoints();
-            break;
-        case FOLLOW_WAYPOINT:
-            followWaypoint();
-            break;
-        case AT_WAYPOINT:
-            atWaypoint();
-            break;
+            case NO_MORE_WAYPOINTS:
+                finishedWaypoints();
+                break;
+            case FOLLOW_WAYPOINT:
+                followWaypoint();
+                break;
+            case AT_WAYPOINT:
+                atWaypoint();
+                break;
         }
     }
 }
-

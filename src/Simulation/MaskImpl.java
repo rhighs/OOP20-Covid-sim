@@ -9,7 +9,7 @@ public class MaskImpl implements Mask {
     private MaskProtection protection;
     private MaskStatus status;
 
-    private MaskImpl(MaskProtection p, MaskStatus s) {
+    MaskImpl(MaskProtection p, MaskStatus s) {
         this.protection = p;
         this.status = s;
     }
