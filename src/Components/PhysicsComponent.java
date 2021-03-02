@@ -17,6 +17,7 @@ import com.jme3.scene.shape.Box;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,8 @@ public class PhysicsComponent implements PhysicsCollisionListener {
     private SimpleApplication app;
     private GhostControl proximityBox;
     private Spatial touched;
+    
+    private Random randMass;
 
     private static float DIRECTION_LENGTH = 20;
 
@@ -46,7 +49,9 @@ public class PhysicsComponent implements PhysicsCollisionListener {
         bullet = bull;
         this.position = spatial.getLocalTranslation();
 
-        spatialControl = new BetterCharacterControl(0.1f, 9f, 5);
+        randMass = new Random();
+        spatialControl = new BetterCharacterControl(1f, 9f, (randMass.nextInt(10) + 1));
+        
         setControlEnabled(true);
     }
 
