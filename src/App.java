@@ -16,6 +16,8 @@ import Simulation.Assets;
 import Simulation.Person;
 import Simulation.Picker;
 import Simulation.Virus;
+import com.jme3.niftygui.NiftyJmeDisplay;
+import de.lessvoid.nifty.Nifty;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -23,7 +25,7 @@ import Simulation.Virus;
 public class App extends SimpleApplication {
     // constants
     final int NUM_PERSON = 500;
-
+     private Nifty nifty;
     private BulletAppState bState;
     private List<Person> crowd;
     Virus v;
@@ -33,6 +35,18 @@ public class App extends SimpleApplication {
     }
 
     public void simpleInitApp() {
+         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
+                assetManager,
+                inputManager,
+                audioRenderer,
+                guiViewPort);
+        
+        nifty = niftyDisplay.getNifty();
+        nifty.fromXml("Interface/screen.xml", "start");
+
+        // attach the nifty display to the gui view port as a processor
+        guiViewPort.addProcessor(niftyDisplay);
+
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState = new BulletAppState();
         bState.setDebugEnabled(true);
