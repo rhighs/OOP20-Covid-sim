@@ -9,6 +9,7 @@ import Components.GraphicsComponent;
 import Components.PathCalculator;
 import Components.PathGenerator;
 import Components.PhysicsComponent;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.math.ColorRGBA;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +38,10 @@ public class Person implements Entity, IPerson {
         phyc.initProximityBox(2);
 
         wearMask(new MaskImpl(Mask.MaskProtection.FFP3, Mask.MaskStatus.UP));
+    }
+
+    public CollisionShape getCollisionShape() {
+        return null;
     }
 
     /* *** Getters and setters *** */
