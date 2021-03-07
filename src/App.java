@@ -24,8 +24,8 @@ import de.lessvoid.nifty.Nifty;
  */
 public class App extends SimpleApplication {
     // constants
-    final int NUM_PERSON = 500;
-     private Nifty nifty;
+    final int NUM_PERSON = 100;
+    private Nifty nifty;
     private BulletAppState bState;
     private List<Person> crowd;
     Virus v;
@@ -35,6 +35,7 @@ public class App extends SimpleApplication {
     }
 
     public void simpleInitApp() {
+        //inputManager.setCursorVisible(true);
          NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
                 assetManager,
                 inputManager,
@@ -46,7 +47,6 @@ public class App extends SimpleApplication {
 
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
-
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState = new BulletAppState();
         bState.setDebugEnabled(true);
