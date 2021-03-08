@@ -19,6 +19,7 @@ public class GraphicsMeshComponent extends GraphicsComponent {
         //this.parent = parent;
         geometries = new ArrayList<>();
         addGeometry(name, mesh, material);
+        
     }
 
     public List<Mesh> getMeshes(Mesh mesh) {

@@ -38,7 +38,7 @@ public class MovementComponent {
 
         this.pathCalc = pathCalc;
     }
-
+   
     private void finishedWaypoints() {
         //create a new path
         if (wayPointsFuture == null) {

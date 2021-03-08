@@ -1,4 +1,4 @@
-import Components.Lightning;
+import Components.Lighting;
 import Components.PathCalculator;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,13 @@ import com.jme3.renderer.RenderManager;
 
 import Components.PathGenerator;
 import Simulation.Assets;
+import Simulation.Entity;
 import Simulation.Person;
 import Simulation.Picker;
 import Simulation.Virus;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
+import java.util.stream.Collectors;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -27,7 +29,7 @@ public class App extends SimpleApplication {
     final int NUM_PERSON = 100;
     private Nifty nifty;
     private BulletAppState bState;
-    private List<Person> crowd;
+    private List<Entity> crowd;
     Virus v;
 
     public App() {
@@ -46,7 +48,7 @@ public class App extends SimpleApplication {
         nifty.fromXml("Interface/screen.xml", "start");
 
         // attach the nifty display to the gui view port as a processor
-        guiViewPort.addProcessor(niftyDisplay);
+        //guiViewPort.addProcessor(niftyDisplay);
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState = new BulletAppState();
         bState.setDebugEnabled(true);
@@ -90,18 +92,22 @@ public class App extends SimpleApplication {
 
         // create an array of Person and fill it with 100 Person
         // every Person starts from a random point inside path generator
-        crowd = new ArrayList<Person>();
+        crowd = new ArrayList<Entity>();
         var pg = new PathGenerator(scene);
         for (int i = 0; i < NUM_PERSON; i++) {
             Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc);
             crowd.add(p);
         }
         
+        
+        Picker pick = new Picker(this, crowd);
+        
+        var people = crowd.stream().map( e -> (Person)e).collect(Collectors.toList());
         //v = new Virus(crowd, 2);
-        Thread t = new Virus(crowd, 2);
+        Thread t = new Virus(people, 2);
         t.start();
 
-        var a = new Lightning(this);
+        var a = new Lighting(this);
         a.setLight();
     }
 }

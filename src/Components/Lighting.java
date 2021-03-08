@@ -20,7 +20,7 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
  *
  * @author rob
  */
-public class Lightning {
+public class Lighting {
 
     final int SHADOWMAP_SIZE = 4096;
     private SimpleApplication app;
@@ -30,7 +30,7 @@ public class Lightning {
     private AssetManager assetManager;
     private ViewPort viewPort;
 
-    public Lightning(final SimpleApplication app) {
+    public Lighting(final SimpleApplication app) {
         this.app = app;
         this.rootNode = app.getRootNode();
         this.assetManager = app.getAssetManager();
