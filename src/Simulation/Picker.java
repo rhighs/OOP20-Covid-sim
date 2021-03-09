@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
         public Picker(SimpleApplication app, List<Entity> entities){
             input = app.getInputManager();
             input.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-            
+            input.setCursorVisible(true);
             this.app = app;
             this.entities = entities;
         }

@@ -35,8 +35,9 @@ public class App extends SimpleApplication {
     }
 
     public void simpleInitApp() {
-        //inputManager.setCursorVisible(true);
-         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
+       StartScreenController startScreenState = new StartScreenController();
+        stateManager.attach(startScreenState);
+            NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
                 assetManager,
                 inputManager,
                 audioRenderer,
@@ -44,9 +45,9 @@ public class App extends SimpleApplication {
         
         nifty = niftyDisplay.getNifty();
         nifty.fromXml("Interface/screen.xml", "start");
-
         // attach the nifty display to the gui view port as a processor
-        guiViewPort.addProcessor(niftyDisplay);
+        guiViewPort.addProcessor(niftyDisplay);   
+        // this is the command to switch GUI nifty.gotoScreen("hud");
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState = new BulletAppState();
         bState.setDebugEnabled(true);
@@ -55,6 +56,10 @@ public class App extends SimpleApplication {
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
         createScene();
+        //set cursor visible on init GUI
+        flyCam.setEnabled(false);
+        flyCam.setDragToRotate(true);
+        inputManager.setCursorVisible(true);
     }
 
     public static void main(String[] args) {
