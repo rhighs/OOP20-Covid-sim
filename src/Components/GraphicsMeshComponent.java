@@ -1,3 +1,4 @@
+/*
 package Components;
 
 import com.jme3.material.Material;
@@ -35,3 +36,4 @@ public class GraphicsMeshComponent extends GraphicsComponent {
         geometries.add(newGeom);
     }
 }
+*/

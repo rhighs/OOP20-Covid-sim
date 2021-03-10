@@ -83,13 +83,9 @@ public class Virus extends Thread{
     @Override
     public void run() {
         startSpreading();
-        while(isSpreading){
+        while (isSpreading){
             keepSpreading();
-            try{
-            Thread.sleep(10);}
-            catch(Exception ex){
-                
-            }
+            try { Thread.sleep(10); } catch(Exception ex) { }
         }
     }
 

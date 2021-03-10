@@ -3,41 +3,36 @@ package Simulation;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import com.jme3.app.SimpleApplication;
+import com.jme3.scene.Node;
+import com.jme3.asset.AssetManager;
 import Components.MovementComponent;
 import Components.GraphicsComponent;
 import Components.PathCalculator;
-import Components.PathGenerator;
 import Components.PhysicsComponent;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.math.ColorRGBA;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Person implements Entity, IPerson {
 
-    private GraphicsComponent gfx;
-    private PhysicsComponent phyc;
-    private MovementComponent mov;
+    final private GraphicsComponent gfx;
+    final private PhysicsComponent phyc;
+    final private MovementComponent mov;
     private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
     Vector3f pos;
 
-    public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app, PathCalculator pathCalc) {
-        var bState = app.getStateManager().getState(BulletAppState.class);
-        var parent = app.getRootNode();
-
-        gfx = new GraphicsComponent(this, parent);
-        getSpatial().setLocalTranslation(spawnPoint);
+    public Person(/*final Spatial scene,*/ final Vector3f spawnPoint, BulletAppState bState, Node rootNode, /*SimpleApplication app,*/ PathCalculator pathCalc,
+                  AssetManager assetManager) {
+        gfx = new GraphicsComponent(this, assetManager, rootNode);
+        this.getSpatial().setLocalTranslation(spawnPoint);
         phyc = new PhysicsComponent(this, bState);
-        mov = new MovementComponent(getSpatial(), scene, pathCalc);
-
+        mov = new MovementComponent(getSpatial(), /*scene,*/ pathCalc);
         phyc.initProximityBox(2);
-
-        wearMask(new MaskImpl(Mask.MaskProtection.FFP3, Mask.MaskStatus.UP));
+        this.wearMask(new MaskImpl(Mask.MaskProtection.FFP3, Mask.MaskStatus.UP));
     }
 
     public CollisionShape getCollisionShape() {

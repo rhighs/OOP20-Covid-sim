@@ -10,8 +10,7 @@ import com.jme3.scene.Node;
 import java.util.concurrent.Future;
 
 public class MovementComponent {
-
-    private Spatial scene;
+    // private Spatial scene;
     private Spatial spatial;
     private BetterCharacterControl spatialControl;
     private Waypoint currPoint;
@@ -31,8 +30,8 @@ public class MovementComponent {
     }
     State state = State.NO_MORE_WAYPOINTS;
 
-    public MovementComponent(final Spatial spatial, final Spatial scene, PathCalculator pathCalc) {
-        this.scene = scene;
+    public MovementComponent(final Spatial spatial, /*final Spatial scene,*/ PathCalculator pathCalc) {
+        // this.scene = scene;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 

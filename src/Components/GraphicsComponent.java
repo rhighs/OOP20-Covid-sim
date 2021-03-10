@@ -1,6 +1,6 @@
 package Components;
 
-import Simulation.Assets;
+import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.material.Material;
 import com.jme3.scene.Node;
@@ -9,6 +9,7 @@ import com.jme3.math.ColorRGBA;
 import Simulation.Entity;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Box;
 
 public class GraphicsComponent {
 
@@ -18,30 +19,23 @@ public class GraphicsComponent {
     private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
 
-    public GraphicsComponent(final Entity entity, Node parent) {
+    public GraphicsComponent(final Entity entity, AssetManager assetManager, Node parent) {
         this.entity = entity;
-        this.setSpatial();
         this.parent = parent;
+        Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
+        mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        mat.setBoolean("UseMaterialColors", true);
+        mat.setColor("Ambient", ColorRGBA.Blue);
+        mat.setColor("Diffuse", ColorRGBA.Red);
+        cube.setMaterial(mat);
+        cube.scale(0.03f);
+        cube.setShadowMode(ShadowMode.CastAndReceive);
+        this.sp = cube;
         this.show();
     }
-    
-    public void setSpatial(){
-        
-        switch(entity.getIdentificator()){
-            case PERSON:
-                sp = Assets.CUBE.clone();
-                sp.scale(0.03f);
-                sp.setShadowMode(ShadowMode.CastAndReceive);
-                break;
-                
-            default:
-                break;
-        }
-        
-    }
 
-    public GraphicsComponent(final Entity entity, final Material mat, Node parent) {
-        this(entity, parent);
+    public GraphicsComponent(final Entity entity, final Material mat, AssetManager assetManager, Node parent) {
+        this(entity, assetManager, parent);
         this.mat = mat;
         this.sp.setMaterial(mat);
     }
