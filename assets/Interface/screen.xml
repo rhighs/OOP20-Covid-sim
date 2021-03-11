@@ -2,7 +2,7 @@
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
     <useStyles filename="nifty-default-styles.xml"/>
     <useControls filename="nifty-default-controls.xml"/>
-    <screen id="start" controller="de.lessvoid.nifty.screen.DefaultScreenController">
+    <screen id="start" controller="StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/black-background.png"></image>
         </layer>
@@ -15,9 +15,9 @@
                       valign="center">
                     </control>
                 </panel>
-                <panel id="panel_top_right" height="50%" width="50%" valign="center"
+                <panel id="textPerson" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="textfield" maxLength="20">
+                    <control id="txtPerson" name="textfield" maxLength="3">
                         
                     </control>
                 </panel>
@@ -32,7 +32,7 @@
                 </panel>
                 <panel id="panel2_right" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="textfield" maxLength="20">
+                    <control id="txtNoMask" name="textfield" maxLength="20">
                         
                     </control>
                 </panel>
@@ -47,7 +47,7 @@
                 </panel>
                 <panel id="panel_mid_right" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control id="dropDown2" name="dropDown"align="center"
+                    <control id="dropMask" name="dropDown"align="center"
                       valign="center">
                         
                     </control>
@@ -58,14 +58,30 @@
                 <panel id="panel_bottom_left" height="50%" width="50%" valign="center"
                   childLayout="center">
                     <control name="button" label="Start" id="StartButton" align="center"
-                      valign="center">
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="startGame(hud)"></interact>
                     </control>
+                    
                 </panel>
                 <panel id="panel_bottom_right" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="label" text="Quit" id="QuitButton" align="center"
-                      valign="center">
+                    <control name="button" label="Load" id="QuitButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="load()"></interact>
                     </control>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+    <screen id="hud" controller="de.lessvoid.nifty.screen.DefaultScreenController">
+        <layer id="foreground" childLayout="horizontal">
+            <panel id="panel_left" width="80%" height="100%" childLayout="vertical">
+            </panel>
+            <panel id="panel_right" width="20%" height="100%" childLayout="vertical">
+                <panel id="panel_top_right1" width="100%" height="15%" childLayout="center">
+                    <control name="label" color="#000" text="123" width="100%" height="100%"/>
+                </panel>
+                <panel id="panel_bot_right" width="100%" height="70%" valign="center">
                 </panel>
             </panel>
         </layer>

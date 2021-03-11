@@ -1,8 +1,3 @@
-/*
-     * To change this license header, choose License Headers in Project Properties.
-     * To change this template file, choose Tools | Templates
-     * and open the template in the editor.
- */
 package Simulation;
 
 import com.jme3.app.SimpleApplication;
@@ -31,24 +26,22 @@ public class Picker implements ActionListener {
     private InputManager input;
     private CollisionResults results;
     private SimpleApplication app;
-    private List<Entity> entities;
+    private List<Person> entities;
     private Camera cam;
     private Node rootNode;
 
-    public Picker(SimpleApplication app, List<Entity> entities) {
+    public Picker(SimpleApplication app, List<Person> entities) {
         input = app.getInputManager();
         input.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        input.setCursorVisible(true);
         rootNode = app.getRootNode();
-        
         app.getInputManager().addListener(this, "Shoot");
-
         cam = app.getCamera();
-
         this.app = app;
         this.entities = entities;
     }
 
-    public Optional<Entity> pickEntity() {
+    public Optional<Person> pickPerson() {
         results = new CollisionResults();
         Spatial node;
 
@@ -57,25 +50,25 @@ public class Picker implements ActionListener {
         rootNode.collideWith(ray, results);
 
         var found = results.getClosestCollision();
-        
+
         try{
             node = found.getGeometry();
         }catch (Exception ex){
             var err = ex.toString();
             return Optional.empty();
         }
-        
+
         if (node == null) {
             return Optional.empty();
         }
-        
+
         var userData = node.getUserData("entity");
 
         if (userData == null) {
             return Optional.empty();
         }
 
-        return Optional.of((Entity) userData);
+        return Optional.of((Person) userData);
     }
 
     @Override
@@ -90,16 +83,16 @@ public class Picker implements ActionListener {
                 break;
         }
     }
-    
+
     private void moveCamToPerson(){
         Person p = null;
-        
+
         try{
-            p = (Person) pickEntity().get();
+            p = (Person) pickPerson().get();
         }catch(Exception ex){
             var err = ex.toString();
         }
-            
+
         if (p != null) {
             cam.setLocation(p.getPosition());
         }
