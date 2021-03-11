@@ -25,12 +25,14 @@ import de.lessvoid.nifty.Nifty;
  */
 public class App extends SimpleApplication {
     // constants
-    int numPerson = 100;
+    int numPerson = 0;
     private Nifty nifty;
     private BulletAppState bState;
-    private List<Person> crowd;
+    private List<Person> crowd = null;
     Virus v;
     BitmapText hudText;
+    StartScreenController startScreenState;
+    private Node scene;
     public App() {
         //super(new FlyCamAppState());
     }
@@ -50,7 +52,7 @@ public class App extends SimpleApplication {
                 guiViewPort);
         
         nifty = niftyDisplay.getNifty();
-        StartScreenController startScreenState = new StartScreenController(nifty, flyCam, inputManager, numPerson);
+        startScreenState= new StartScreenController(nifty, flyCam, inputManager, numPerson, this);
         nifty.fromXml("Interface/screen.xml", "start", startScreenState);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);   
@@ -62,8 +64,6 @@ public class App extends SimpleApplication {
         Assets.loadAssets(assetManager);
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
-        numPerson = StartScreenController.loadP();
-        
         createScene();
         
     }
@@ -74,10 +74,15 @@ public class App extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
+        
+        
         hudText.setText("Infected: " + numPerson);
-        for (var p: crowd) {
-            p.update(tpf);
+        if(crowd != null){
+            for (var p: crowd) {
+                p.update(tpf);
+            }
         }
+        
         
         
         //var pos = crowd.get(1).getPosition();
@@ -90,7 +95,7 @@ public class App extends SimpleApplication {
 
     private void createScene() {
         // load city
-        Node scene = (Node) assetManager.loadModel("Scenes/test" + ".j3o");
+        scene = (Node) assetManager.loadModel("Scenes/test" + ".j3o");
         scene.setName("Simulation_scene");
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
         //setting hudText
@@ -103,30 +108,25 @@ public class App extends SimpleApplication {
         
         bState.getPhysicsSpace().addAll(scene);
         rootNode.attachChild(scene);
+        //v = new Virus(crowd, 2);
         
+    }
+    
+    public void startApp(){
+        numPerson = startScreenState.loadP(); 
         var pathCalc = new PathCalculator((Node)rootNode.getChild("Simulation_scene"));
-
-        // create an array of Person and fill it with 100 Person
+        // create an array of Person and fill it with N Person
         // every Person starts from a random point inside path generator
         crowd = new ArrayList<Person>();
         var pg = new PathGenerator(scene);
-        if(checkCrowd()){
-            for (int i = 0; i < numPerson; i++) {
+        for (int i = 0; i < numPerson; i++) {
             Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc);
             crowd.add(p);
             }
-        }
-        
-        
-        //v = new Virus(crowd, 2);
         Thread t = new Virus(crowd, 2);
         t.start();
-
+        System.out.print(numPerson);
         var a = new Lightning(this);
         a.setLight();
-    }
-    
-    private boolean checkCrowd(){
-        return numPerson >= 0 ? true : checkCrowd();
     }
 }

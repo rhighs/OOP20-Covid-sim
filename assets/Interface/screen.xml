@@ -15,9 +15,9 @@
                       valign="center">
                     </control>
                 </panel>
-                <panel id="panel_top_right" height="50%" width="50%" valign="center"
+                <panel id="textPerson" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="textfield" maxLength="20">
+                    <control id="txtPerson" name="textfield" maxLength="3">
                         
                     </control>
                 </panel>
@@ -32,7 +32,7 @@
                 </panel>
                 <panel id="panel2_right" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="textfield" maxLength="20">
+                    <control id="txtNoMask" name="textfield" maxLength="20">
                         
                     </control>
                 </panel>
@@ -47,7 +47,7 @@
                 </panel>
                 <panel id="panel_mid_right" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control id="dropDown2" name="dropDown"align="center"
+                    <control id="dropMask" name="dropDown"align="center"
                       valign="center">
                         
                     </control>

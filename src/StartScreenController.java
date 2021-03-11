@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import Simulation.Virus;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.scene.plugins.fbx.node.FbxNode;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 /**
@@ -23,6 +25,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private FlyByCamera flyCam;
     private InputManager inputManager;
     private int numPerson;
+    private App app;
     
     StartScreenController(Nifty nifty) {
         this.nifty = nifty;
@@ -34,11 +37,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         this.inputManager = inputManager;
     }
     
-     StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, int numPerson) {
+     StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, int numPerson, App app) {
         this.nifty = nifty;
         this.flyCam = flyCam;
         this.inputManager = inputManager;
         this.numPerson = numPerson;
+        this.app = app;
      }
      
     @Override
@@ -83,7 +87,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
     @Override
     public void onStartScreen() {
+        //debug
         System.out.println("StartScreenController.onStartScreen()");
+        TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
+        textField.setText("5");
     }
 
     @Override
@@ -96,15 +103,18 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         flyCam.setDragToRotate(false);
         inputManager.setCursorVisible(false);
         // get an element 
-        //nifty.getScreen("start").findElementById("textfield");
+        TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
+        var text = textField.getRealText();
+        numPerson = Integer.parseInt(text);
+        app.startApp();
         nifty.gotoScreen(screen);
   }
   public void load(){
-      numPerson = 0;
+      
   }
   
-  static int loadP (){
-      return 0;
+  public int loadP (){
+      return numPerson;
   }
   public void quitGame() {
     getApplication().stop();
