@@ -16,6 +16,7 @@ import Simulation.Assets;
 import Simulation.Person;
 import Simulation.Picker;
 import Simulation.Virus;
+import com.jme3.font.BitmapText;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
 
@@ -24,19 +25,24 @@ import de.lessvoid.nifty.Nifty;
  */
 public class App extends SimpleApplication {
     // constants
-    final int NUM_PERSON = 100;
+    int numPerson = 100;
     private Nifty nifty;
     private BulletAppState bState;
     private List<Person> crowd;
     Virus v;
-
+    BitmapText hudText;
     public App() {
         //super(new FlyCamAppState());
     }
 
     public void simpleInitApp() {
-       StartScreenController startScreenState = new StartScreenController();
-        stateManager.attach(startScreenState);
+        
+        hudText =new BitmapText(guiFont, false);
+        //set cursor visible on init GUI
+        flyCam.setEnabled(false);
+        flyCam.setDragToRotate(true);
+        inputManager.setCursorVisible(true);
+        //stateManager.attach(startScreenState);
             NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
                 assetManager,
                 inputManager,
@@ -44,7 +50,8 @@ public class App extends SimpleApplication {
                 guiViewPort);
         
         nifty = niftyDisplay.getNifty();
-        nifty.fromXml("Interface/screen.xml", "start");
+        StartScreenController startScreenState = new StartScreenController(nifty, flyCam, inputManager, numPerson);
+        nifty.fromXml("Interface/screen.xml", "start", startScreenState);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);   
         // this is the command to switch GUI nifty.gotoScreen("hud");
@@ -55,11 +62,10 @@ public class App extends SimpleApplication {
         Assets.loadAssets(assetManager);
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
+        numPerson = StartScreenController.loadP();
+        
         createScene();
-        //set cursor visible on init GUI
-        flyCam.setEnabled(false);
-        flyCam.setDragToRotate(true);
-        inputManager.setCursorVisible(true);
+        
     }
 
     public static void main(String[] args) {
@@ -68,9 +74,11 @@ public class App extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
+        hudText.setText("Infected: " + numPerson);
         for (var p: crowd) {
             p.update(tpf);
         }
+        
         
         //var pos = crowd.get(1).getPosition();
         //cam.setLocation(new Vector3f(pos.x, pos.y + 3, pos.z));
@@ -85,7 +93,12 @@ public class App extends SimpleApplication {
         Node scene = (Node) assetManager.loadModel("Scenes/test" + ".j3o");
         scene.setName("Simulation_scene");
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
-        
+        //setting hudText
+        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
+        hudText.setColor(ColorRGBA.Blue);                             // font color
+        hudText.setText("You can write any string here");             // the text
+        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
+        guiNode.attachChild(hudText);
         
         
         bState.getPhysicsSpace().addAll(scene);
@@ -97,10 +110,13 @@ public class App extends SimpleApplication {
         // every Person starts from a random point inside path generator
         crowd = new ArrayList<Person>();
         var pg = new PathGenerator(scene);
-        for (int i = 0; i < NUM_PERSON; i++) {
+        if(checkCrowd()){
+            for (int i = 0; i < numPerson; i++) {
             Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc);
             crowd.add(p);
+            }
         }
+        
         
         //v = new Virus(crowd, 2);
         Thread t = new Virus(crowd, 2);
@@ -108,5 +124,9 @@ public class App extends SimpleApplication {
 
         var a = new Lightning(this);
         a.setLight();
+    }
+    
+    private boolean checkCrowd(){
+        return numPerson >= 0 ? true : checkCrowd();
     }
 }

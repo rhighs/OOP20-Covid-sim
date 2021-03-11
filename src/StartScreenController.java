@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.input.FlyByCamera;
+import com.jme3.input.InputManager;
+import com.jme3.scene.plugins.fbx.node.FbxNode;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -16,9 +18,29 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author json 
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
-
-    StartScreenController() {}
     
+    private Nifty nifty;
+    private FlyByCamera flyCam;
+    private InputManager inputManager;
+    private int numPerson;
+    
+    StartScreenController(Nifty nifty) {
+        this.nifty = nifty;
+    }
+
+    StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager) {
+        this.nifty = nifty;
+        this.flyCam = flyCam;
+        this.inputManager = inputManager;
+    }
+    
+     StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, int numPerson) {
+        this.nifty = nifty;
+        this.flyCam = flyCam;
+        this.inputManager = inputManager;
+        this.numPerson = numPerson;
+     }
+     
     @Override
     protected void initialize(Application app) {
         //It is technically safe to do all initialization and cleanup in the         
@@ -51,29 +73,39 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     }
     @Override
     public void update(float tpf) { 
-        //TODO: implement behavior during runtime    
+         
     } 
 
     @Override
     public void bind(Nifty arg0, Screen arg1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("StartScreenController.bind()");
     }
 
     @Override
     public void onStartScreen() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("StartScreenController.onStartScreen()");
     }
 
     @Override
     public void onEndScreen() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("StartScreenController.onEndScreen()");
     }
     
-    public void startGame() {
-        
-    // start the game and do some more stuff...
+    public void startGame(String screen) {
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        // get an element 
+        //nifty.getScreen("start").findElementById("textfield");
+        nifty.gotoScreen(screen);
   }
-
+  public void load(){
+      numPerson = 0;
+  }
+  
+  static int loadP (){
+      return 0;
+  }
   public void quitGame() {
     getApplication().stop();
   }

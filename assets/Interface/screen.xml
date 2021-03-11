@@ -59,13 +59,15 @@
                   childLayout="center">
                     <control name="button" label="Start" id="StartButton" align="center"
                       valign="center" visibleToMouse="true">
+                        <interact onClick="startGame(hud)"></interact>
                     </control>
+                    
                 </panel>
                 <panel id="panel_bottom_right" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="label" text="Quit" id="QuitButton" align="center"
+                    <control name="button" label="Load" id="QuitButton" align="center"
                       valign="center" visibleToMouse="true">
-                        <interact onClick="startGame()"></interact>
+                        <interact onClick="load()"></interact>
                     </control>
                 </panel>
             </panel>
