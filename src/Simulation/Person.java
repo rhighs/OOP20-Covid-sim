@@ -10,12 +10,16 @@ import Components.GraphicsComponent;
 import Components.PathCalculator;
 import Components.PhysicsComponent;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
 import com.jme3.math.ColorRGBA;
+import com.jme3.export.Savable;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Person implements Entity, IPerson {
+public class Person implements Entity, IPerson, Savable {
 
     final private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
@@ -118,6 +122,16 @@ public class Person implements Entity, IPerson {
 
     @Override
     public void collision() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void write(JmeExporter arg0) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void read(JmeImporter arg0) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

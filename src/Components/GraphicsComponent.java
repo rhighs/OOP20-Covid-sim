@@ -7,6 +7,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.math.ColorRGBA;
 import Simulation.Entity;
+import Simulation.Person;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
@@ -32,6 +33,9 @@ public class GraphicsComponent {
         cube.setShadowMode(ShadowMode.CastAndReceive);
         this.sp = cube;
         this.show();
+
+        //binding spatial to entity, in order to make it "pickable"
+        sp.setUserData("entity", entity);
     }
 
     public GraphicsComponent(final Entity entity, final Material mat, AssetManager assetManager, Node parent) {

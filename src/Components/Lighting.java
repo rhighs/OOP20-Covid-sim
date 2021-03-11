@@ -14,11 +14,11 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
  *
  * @author rob, chris
  */
-public class Lightning {
+public class Lighting {
     final int SHADOWMAP_SIZE = 4096;
     final private Vector3f lightDirection = new Vector3f(-0.5f, -0.5f, -0.5f);
-    
-    public Lightning(AssetManager assetManager, Node rootNode, ViewPort viewport) {
+
+    public Lighting(AssetManager assetManager, Node rootNode, ViewPort viewport) {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDirection.normalizeLocal());
         sun.setColor(ColorRGBA.White);
@@ -33,4 +33,7 @@ public class Lightning {
         //al.setColor(ColorRGBA.White.mult(1.3f));
         //rootNode.addLight(al);
     }
+
+    public void setLight() { }
 }
+

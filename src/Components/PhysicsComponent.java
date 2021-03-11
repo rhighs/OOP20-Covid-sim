@@ -118,7 +118,6 @@ public class PhysicsComponent implements PhysicsCollisionListener {
                     .map(o -> (Entity) o.getUserObject())
                     .collect(Collectors.toSet());
 
-            System.out.println("trovati: " + a.size());
             return a;
         }
 
