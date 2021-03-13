@@ -92,6 +92,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         System.out.println("StartScreenController.onEndScreen()");
     }
 
+    public void fuckthis() {
+        
+        System.exit(1);
+    }
+    
     public void startGame(String screen) {
         System.out.println("start game");
         flyCam.setEnabled(true);
@@ -103,7 +108,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         numPerson = Integer.parseInt(text);
         app.startApp();
         nifty.gotoScreen(screen);
-        System.exit(1);
     }
 
     public void load(){
