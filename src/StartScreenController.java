@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import Simulation.Virus;
+import Simulation.*;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.scene.plugins.fbx.node.FbxNode;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -26,6 +27,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private InputManager inputManager;
     private int numPerson;
     private App app;
+    private Mask.MaskProtection protection;
     
     StartScreenController(Nifty nifty) {
         this.nifty = nifty;
@@ -90,7 +92,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         //debug
         System.out.println("StartScreenController.onStartScreen()");
         TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
-        textField.setText("5");
+        textField.setText("1");
+        
+        //add items to the dropDown
+        bindDropDown();
+        
     }
 
     @Override
@@ -102,15 +108,23 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(false);
         inputManager.setCursorVisible(false);
-        // get an element 
+        // get number of person 
         TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         var text = textField.getRealText();
         numPerson = Integer.parseInt(text);
+        
+        
+        DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+        protection = (Mask.MaskProtection) dropDown.getSelection();
+        
         app.startApp();
         nifty.gotoScreen(screen);
   }
   public void load(){
       
+  }
+  public Mask.MaskProtection getMaskP(){
+      return protection;
   }
   
   public int loadP (){
@@ -118,5 +132,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
   }
   public void quitGame() {
     getApplication().stop();
+  }
+  
+  private void bindDropDown(){      
+      DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+      dropDown.addItem(Mask.MaskProtection.FFP1);
+      dropDown.addItem(Mask.MaskProtection.FFP2);
+      dropDown.addItem(Mask.MaskProtection.FFP3);
   }
 }

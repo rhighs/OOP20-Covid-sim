@@ -30,7 +30,8 @@ public class App extends SimpleApplication {
     private BulletAppState bState;
     private List<Person> crowd = null;
     Virus v;
-    BitmapText hudText;
+    BitmapText textPerson;
+    BitmapText textFlu;
     StartScreenController startScreenState;
     private Node scene;
     public App() {
@@ -39,7 +40,9 @@ public class App extends SimpleApplication {
 
     public void simpleInitApp() {
         
-        hudText =new BitmapText(guiFont, false);
+        textPerson = new BitmapText(guiFont, false);
+        textFlu = new BitmapText(guiFont, false);
+
         //set cursor visible on init GUI
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
@@ -76,7 +79,8 @@ public class App extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         
         
-        hudText.setText("Infected: " + numPerson);
+        textPerson.setText("Person: " + numPerson);
+        textFlu.setText("Infected: " + 0);
         if(crowd != null){
             for (var p: crowd) {
                 p.update(tpf);
@@ -98,14 +102,18 @@ public class App extends SimpleApplication {
         scene = (Node) assetManager.loadModel("Scenes/test" + ".j3o");
         scene.setName("Simulation_scene");
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
-        //setting hudText
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        hudText.setColor(ColorRGBA.Blue);                             // font color
-        hudText.setText("You can write any string here");             // the text
-        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
-        guiNode.attachChild(hudText);
+        //setting textPerson
+        textPerson.setSize(guiFont.getCharSet().getRenderedSize());      // font size
+        textPerson.setColor(ColorRGBA.Black);                             // font color
+        textPerson.setLocalTranslation(0,settings.getHeight(), 1); // position
+        guiNode.attachChild(textPerson);
         
-        
+        /*setting textFlu
+        textFlu.setSize(guiFont.getCharSet().getRenderedSize());      // font size
+        textFlu.setColor(ColorRGBA.Black);                      // font color
+        textFlu.setLocalTranslation(settings.getWidth(),settings.getHeight(), 1); // position
+        guiNode.attachChild(textFlu);
+        */
         bState.getPhysicsSpace().addAll(scene);
         rootNode.attachChild(scene);
         //v = new Virus(crowd, 2);
@@ -120,12 +128,13 @@ public class App extends SimpleApplication {
         crowd = new ArrayList<Person>();
         var pg = new PathGenerator(scene);
         for (int i = 0; i < numPerson; i++) {
-            Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc);
+            Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc, startScreenState.getMaskP());
             crowd.add(p);
             }
         Thread t = new Virus(crowd, 2);
         t.start();
-        System.out.print(numPerson);
+        System.out.println(numPerson);
+        System.out.println(startScreenState.getMaskP());
         var a = new Lightning(this);
         a.setLight();
     }
