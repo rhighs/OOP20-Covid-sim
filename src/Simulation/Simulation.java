@@ -41,6 +41,7 @@ public class Simulation {
         if (crowd == null) {
             return;
         }
+        
         for (var p : crowd) {
             p.update(tpf);
         }

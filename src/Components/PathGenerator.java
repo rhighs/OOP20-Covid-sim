@@ -19,14 +19,9 @@ public class PathGenerator {
     public NavMeshPathfinder pathFinder;
     public Random rand;
 
-    public PathGenerator(final Spatial scene) {
+    public PathGenerator(final NavMesh navMesh) {
         rand = new Random();
-        // create a navmesh using the scene, then create a path finder
-        Node n = (Node) scene;
-        Geometry geom = (Geometry) n.getChild("NavMesh");
-        Mesh mesh = geom.getMesh();
-        nav = new NavMesh(mesh);
-        pathFinder = new NavMeshPathfinder(nav);
+        nav = navMesh;
     }
 
     public List<Waypoint> getPath(final Vector3f start, final Vector3f target) {
