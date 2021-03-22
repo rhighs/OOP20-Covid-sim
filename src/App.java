@@ -13,12 +13,15 @@ import com.jme3.renderer.RenderManager;
 
 import Components.PathGenerator;
 import Simulation.Assets;
+import Simulation.Mask;
+import Simulation.MaskImpl;
 import Simulation.Person;
 import Simulation.Picker;
 import Simulation.Virus;
 import com.jme3.font.BitmapText;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.input.NiftyInputMapping;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -121,14 +124,22 @@ public class App extends SimpleApplication {
     }
     
     public void startApp(){
-        numPerson = startScreenState.loadP(); 
+        numPerson = startScreenState.getPerson(); 
         var pathCalc = new PathCalculator((Node)rootNode.getChild("Simulation_scene"));
         // create an array of Person and fill it with N Person
         // every Person starts from a random point inside path generator
         crowd = new ArrayList<Person>();
         var pg = new PathGenerator(scene);
+        //counter of person no mask
+        int countP = startScreenState.getNoMask();
         for (int i = 0; i < numPerson; i++) {
-            Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc, startScreenState.getMaskP());
+            Person p = new Person(scene, pg.getRandomPoint(), this, pathCalc);
+            if(countP != 0){
+                p.wearMask(new MaskImpl(startScreenState.getMaskP(), Mask.MaskStatus.DOWN));
+                countP--;
+            }else{
+                p.wearMask(new MaskImpl(startScreenState.getMaskP(), Mask.MaskStatus.UP));
+            }
             crowd.add(p);
             }
         Thread t = new Virus(crowd, 2);

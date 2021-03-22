@@ -26,6 +26,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private FlyByCamera flyCam;
     private InputManager inputManager;
     private int numPerson;
+    private int noMaskP;
     private App app;
     private Mask.MaskProtection protection;
     
@@ -113,6 +114,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         var text = textField.getRealText();
         numPerson = Integer.parseInt(text);
         
+        TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        noMaskP = Integer.parseInt(textNoM.getRealText());
+        
         
         DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
         protection = (Mask.MaskProtection) dropDown.getSelection();
@@ -127,8 +131,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
       return protection;
   }
   
-  public int loadP (){
+  public int getPerson (){
       return numPerson;
+  }
+  
+  public int getNoMask(){
+      return noMaskP;
   }
   public void quitGame() {
     getApplication().stop();

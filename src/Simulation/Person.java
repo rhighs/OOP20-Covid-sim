@@ -26,7 +26,7 @@ public class Person implements Entity, IPerson {
     private Mask mask;
     Vector3f pos;
 
-    public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app, PathCalculator pathCalc, Mask.MaskProtection mask) {
+    public Person(final Spatial scene, final Vector3f spawnPoint, SimpleApplication app, PathCalculator pathCalc) {
         var bState = app.getStateManager().getState(BulletAppState.class);
         var parent = app.getRootNode();
 
@@ -37,7 +37,7 @@ public class Person implements Entity, IPerson {
 
         phyc.initProximityBox(2);
         
-        wearMask(new MaskImpl(mask, Mask.MaskStatus.UP));
+        //wearMask(new MaskImpl(mask, Mask.MaskStatus.UP));
     }
 
     public CollisionShape getCollisionShape() {
