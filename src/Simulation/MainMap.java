@@ -24,14 +24,14 @@ public class MainMap {
     }
 
     public PathCalculator createPathCalculator() {
-        return new PathCalculator(getNavFromScene(scene));
+        return new PathCalculator(getNavFromScene());
     }
 
     public PathGenerator createPathGenerator() {
-        return new PathGenerator(getNavFromScene(scene));
+        return new PathGenerator(getNavFromScene());
     }
     
-    public NavMesh getNavFromScene(final Node scene){
+    public NavMesh getNavFromScene(){
         Node n = (Node) scene;
         Geometry geom = (Geometry) n.getChild("NavMesh");
         Mesh mesh = geom.getMesh();
