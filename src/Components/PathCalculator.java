@@ -5,6 +5,7 @@
  */
 package Components;
 
+import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -21,15 +22,15 @@ import java.util.concurrent.Future;
 public class PathCalculator {
 
     private ExecutorService pool = Executors.newSingleThreadExecutor();
-    private Node scene;
+    private NavMesh nav;
     PathGenerator pathGen;
 
-    public PathCalculator(final Node scene) {
-        this.scene = scene;
+    public PathCalculator(final NavMesh navMesh) {
+        nav = navMesh;
     }
 
     public Future<List<Waypoint>> request(final Vector3f currentPos) {
-        return pool.submit(new PathGeneratorCall(new PathGenerator(scene), currentPos));
+        return pool.submit(new PathGeneratorCall(new PathGenerator(nav), currentPos));
     }
 
 }

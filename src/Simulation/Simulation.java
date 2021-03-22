@@ -21,7 +21,7 @@ public class Simulation {
 
     public Simulation() {
     }
-    
+
     public void start(int nPerson, AssetManager assetManager, BulletAppState bState, Node rootNode, ViewPort viewport) {
         this.nPerson = nPerson;
         this.map = new MainMap(assetManager, bState, rootNode);
@@ -41,6 +41,7 @@ public class Simulation {
         if (crowd == null) {
             return;
         }
+
         for (var p : crowd) {
             p.update(tpf);
         }

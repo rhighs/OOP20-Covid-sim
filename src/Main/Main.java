@@ -34,22 +34,24 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        initNiftyGUI();
+        //initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState.setDebugEnabled(true);
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
+        simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        hudText.setText("Infected: " + simulation.getPersonCount());
+        //hudText.setText("Infected: " + simulation.getPersonCount());
         simulation.step(tpf);
     }
 
     @Override
-    public void simpleRender(RenderManager rm) {
+    public void simpleRender(RenderManager rm){
+
     }
 
     private void initNiftyGUI() {
@@ -59,12 +61,14 @@ public class Main extends SimpleApplication {
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
         //stateManager.attach(startScreenState);
+
         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
             assetManager,
             inputManager,
             audioRenderer,
             guiViewPort
         );
+
         nifty = niftyDisplay.getNifty();
         startScreenState = new StartScreenController(nifty, flyCam, inputManager, n -> startSimulation(n));
         nifty.fromXml("Interface/Screen.xml", "start", startScreenState);

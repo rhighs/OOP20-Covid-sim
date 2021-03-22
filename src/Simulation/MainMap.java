@@ -7,6 +7,10 @@ import com.jme3.scene.Node;
 import Components.PathCalculator;
 import Components.PathGenerator;
 import Components.Lighting;
+import com.jme3.ai.navmesh.NavMesh;
+import com.jme3.ai.navmesh.NavMeshPathfinder;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 
 public class MainMap {
     private Node scene;
@@ -20,11 +24,18 @@ public class MainMap {
     }
 
     public PathCalculator createPathCalculator() {
-        return new PathCalculator(scene);
+        return new PathCalculator(getNavFromScene());
     }
 
     public PathGenerator createPathGenerator() {
-        return new PathGenerator(scene);
+        return new PathGenerator(getNavFromScene());
+    }
+
+    public NavMesh getNavFromScene(){
+        Node n = (Node) scene;
+        Geometry geom = (Geometry) n.getChild("NavMesh");
+        Mesh mesh = geom.getMesh();
+        return new NavMesh(mesh);
     }
 }
 
