@@ -2,9 +2,9 @@
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
     <useStyles filename="nifty-default-styles.xml"/>
     <useControls filename="nifty-default-controls.xml"/>
-    <screen id="start" controller="Main.StartScreenController">
+    <screen id="start" controller="GUI.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/black-background.png"></image>
+            <image filename="Interface/BlackBG.png"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
             <panel id="panel1" height="25%" width="75%" align="center"
@@ -18,7 +18,7 @@
                 <panel id="textPerson" height="50%" width="50%" valign="center"
                   childLayout="center">
                     <control id="txtPerson" name="textfield" maxLength="3">
-                        
+
                     </control>
                 </panel>
             </panel>
@@ -33,7 +33,7 @@
                 <panel id="panel2_right" height="50%" width="50%" valign="center"
                   childLayout="center">
                     <control id="txtNoMask" name="textfield" maxLength="20">
-                        
+
                     </control>
                 </panel>
             </panel>
@@ -49,7 +49,7 @@
                   childLayout="center">
                     <control id="dropMask" name="dropDown"align="center"
                       valign="center">
-                        
+
                     </control>
                 </panel>
             </panel>
@@ -83,4 +83,4 @@
         </layer>
     </screen>
  </nifty>
- 
+

@@ -11,13 +11,14 @@ import de.lessvoid.nifty.Nifty;
 
 import Simulation.Simulation;
 import Simulation.Picker;
+import GUI.StartScreenController;
 
 /**
  * @author chris, rob, jurismo, savi
  */
 public class Main extends SimpleApplication {
-    private BulletAppState bState;
-    private Simulation simulation = new Simulation();
+    private final BulletAppState bState = new BulletAppState();
+    private final Simulation simulation = new Simulation();
 
     private Nifty nifty;
     private BitmapText hudText;
@@ -35,10 +36,8 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        bState = new BulletAppState();
         bState.setDebugEnabled(true);
         stateManager.attach(bState);
-        //Assets.loadAssets(assetManager);
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
     }
@@ -67,8 +66,8 @@ public class Main extends SimpleApplication {
             guiViewPort
         );
         nifty = niftyDisplay.getNifty();
-        startScreenState = new StartScreenController(nifty, flyCam, inputManager, this);
-        nifty.fromXml("Interface/screen.xml", "start", startScreenState);
+        startScreenState = new StartScreenController(nifty, flyCam, inputManager, n -> startSimulation(n));
+        nifty.fromXml("Interface/Screen.xml", "start", startScreenState);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
         // this is the command to switch GUI nifty.gotoScreen("hud");
@@ -80,10 +79,7 @@ public class Main extends SimpleApplication {
     }
 
     // this method is called by StartScreenController
-    public void startApp() {
-        System.out.println("app started");
-        int numPerson = startScreenState.loadP();
-        System.out.print(numPerson);
+    public void startSimulation(int numPerson) {
         simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
         Picker picker = new Picker(this, simulation.getPersonList());
     }
