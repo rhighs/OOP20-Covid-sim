@@ -21,31 +21,33 @@ import java.util.stream.Collectors;
  *
  * @author rob
  */
-public class Picker implements ActionListener {
+public class PersonPicker implements ActionListener {
 
     private InputManager input;
     private CollisionResults results;
     private SimpleApplication app;
-    private List<Person> entities;
-    private Camera cam;
+    
+    private SimulationCamera cam;
+    
     private Node rootNode;
 
-    public Picker(SimpleApplication app, List<Person> entities) {
+    public PersonPicker(SimpleApplication app) {
         input = app.getInputManager();
-        input.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        input.addMapping("attachToPerson", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        input.addMapping("detachFromPerson", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         input.setCursorVisible(true);
+        
         rootNode = app.getRootNode();
-        app.getInputManager().addListener(this, "Shoot");
-        cam = app.getCamera();
+        input.addListener(this, "attachToPerson");
+        
         this.app = app;
-        this.entities = entities;
     }
 
     public Optional<Person> pickPerson() {
         results = new CollisionResults();
         Spatial node;
 
-        Ray ray = new Ray(app.getCamera().getLocation(), app.getCamera().getDirection());
+        Ray ray = new Ray(cam.getLocation(), cam.getDirection());
 
         rootNode.collideWith(ray, results);
 
@@ -74,9 +76,15 @@ public class Picker implements ActionListener {
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
         switch(name){
-            case "Shoot":
+            case "attachToPerson":
                 if(!keyPressed){
-                    moveCamToPerson();
+                    attachCamToPerson();
+                }
+                break;
+                
+            case "detachFromPerson":
+                if(!keyPressed){
+                    cam.detachEntity();
                 }
                 break;
             default:
@@ -84,17 +92,14 @@ public class Picker implements ActionListener {
         }
     }
 
-    private void moveCamToPerson(){
+    private void attachCamToPerson(){
         Person p = null;
 
         try{
             p = (Person) pickPerson().get();
+            cam.attachToEntity(p);
         }catch(Exception ex){
             var err = ex.toString();
-        }
-
-        if (p != null) {
-            cam.setLocation(p.getPosition());
         }
     }
 

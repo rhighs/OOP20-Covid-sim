@@ -10,7 +10,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
 
 import Simulation.Simulation;
-import Simulation.Picker;
+import Simulation.PersonPicker;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -30,7 +30,7 @@ public class Main extends SimpleApplication {
     public Main() {
         //super(new FlyCamAppState());
     }
-
+    
     @Override
     public void simpleInitApp() {
         //initNiftyGUI();
@@ -40,6 +40,7 @@ public class Main extends SimpleApplication {
         stateManager.attach(bState);
         //Assets.loadAssets(assetManager);
         flyCam.setMoveSpeed(50);
+        
         cam.setLocation(new Vector3f(20, 20, 5));
         simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
@@ -89,6 +90,6 @@ public class Main extends SimpleApplication {
         int numPerson = startScreenState.loadP();
         System.out.print(numPerson);
         simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
-        Picker picker = new Picker(this, simulation.getPersonList());
+        PersonPicker picker = new PersonPicker(this, simulation.getPersonList());
     }
 }
