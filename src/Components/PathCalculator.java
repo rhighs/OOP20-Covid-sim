@@ -22,17 +22,22 @@ import java.util.concurrent.Future;
 public class PathCalculator {
 
     private ExecutorService pool = Executors.newSingleThreadExecutor();
+    private Node scene;
     private NavMesh nav;
     PathGenerator pathGen;
 
     public PathCalculator(final NavMesh navMesh) {
         nav = navMesh;
     }
-
-    public Future<List<Waypoint>> request(final Vector3f currentPos) {
-        return pool.submit(new PathGeneratorCall(new PathGenerator(nav), currentPos));
+    
+    public PathCalculator(final Node scene) {
+        this.scene = scene;
     }
 
+    public Future<List<Waypoint>> request(final Vector3f currentPos) {
+        return pool.submit(new PathGeneratorCall(new PathGenerator(scene), currentPos));
+        //return pool.submit(new PathGeneratorCall(new PathGenerator(nav), currentPos));
+    }
 }
 
 class PathGeneratorCall implements Callable<List<Waypoint>> {
