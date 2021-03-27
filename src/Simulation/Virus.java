@@ -75,6 +75,10 @@ public class Virus extends Thread{
 
         return false;
     }
+    
+    public int getInfectedNumb(){
+        return infectedPeople.isEmpty() ? 0 : infectedPeople.size();
+    }
 
     public void update(float tpf) {
         keepSpreading();
@@ -83,14 +87,11 @@ public class Virus extends Thread{
     @Override
     public void run() {
         startSpreading();
-        while(isSpreading){
+        while (isSpreading){
             keepSpreading();
-            try{
-            Thread.sleep(10);}
-            catch(Exception ex){
-                
-            }
+            try { Thread.sleep(10); } catch(Exception ex) { }
         }
     }
+    
 
 }

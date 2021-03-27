@@ -3,33 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Main;
 import Simulation.*;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.scene.plugins.fbx.node.FbxNode;
+//import com.jme3.scene.plugins.fbx.node.FbxNode;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.Menu;
+import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
+import org.bushe.swing.event.EventTopicSubscriber;
 /**
- *  
- *  
- *
  * @author json 
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
-    
+
     private Nifty nifty;
     private FlyByCamera flyCam;
     private InputManager inputManager;
     private int numPerson;
     private int noMaskP;
-    private App app;
+    private Main app;
     private Mask.MaskProtection protection;
     
+
     StartScreenController(Nifty nifty) {
         this.nifty = nifty;
     }
@@ -39,49 +44,49 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         this.flyCam = flyCam;
         this.inputManager = inputManager;
     }
-    
-     StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, int numPerson, App app) {
+
+     StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Main app) {
         this.nifty = nifty;
         this.flyCam = flyCam;
         this.inputManager = inputManager;
-        this.numPerson = numPerson;
+        this.numPerson = 0;
         this.app = app;
      }
-     
+
     @Override
     protected void initialize(Application app) {
-        //It is technically safe to do all initialization and cleanup in the         
-        //onEnable()/onDisable() methods. Choosing to use initialize() and         
-        //cleanup() for this is a matter of performance specifics for the         
-        //implementor.        
-        //TODO: initialize your AppState, e.g. attach spatials to rootNode    
+        //It is technically safe to do all initialization and cleanup in the        
+        //onEnable()/onDisable() methods. Choosing to use initialize() and        
+        //cleanup() for this is a matter of performance specifics for the        
+        //implementor.       
+        //TODO: initialize your AppState, e.g. attach spatials to rootNode   
     }
-    
-    @Override 
+
+    @Override
     protected void cleanup(Application app) {
-        //TODO: clean up what you initialized in the initialize method,        
-        //e.g. remove all spatials from rootNode    
+        //TODO: clean up what you initialized in the initialize method,       
+        //e.g. remove all spatials from rootNode   
     }
-    //onEnable()/onDisable() can be used for managing things that should     
-    //only exist while the state is enabled. Prime examples would be scene     
-    //graph attachment or input listener attachment.    
-    @Override 
+    //onEnable()/onDisable() can be used for managing things that should    
+    //only exist while the state is enabled. Prime examples would be scene    
+    //graph attachment or input listener attachment.   
+    @Override
     protected void onEnable() {
-        //Called when the state is fully enabled, ie: is attached and         
-        //isEnabled() is true or when the setEnabled() status changes after the         
-        //state is attached.    
+        //Called when the state is fully enabled, ie: is attached and        
+        //isEnabled() is true or when the setEnabled() status changes after the        
+        //state is attached.   
     }
-    
+
     @Override
     protected void onDisable() {
-        //Called when the state was previously enabled but is now disabled         
-        //either because setEnabled(false) was called or the state is being         
-        //cleaned up.    
+        //Called when the state was previously enabled but is now disabled        
+        //either because setEnabled(false) was called or the state is being        
+        //cleaned up.   
     }
     @Override
-    public void update(float tpf) { 
-         
-    } 
+    public void update(float tpf) {
+
+    }
 
     @Override
     public void bind(Nifty arg0, Screen arg1) {
@@ -94,7 +99,8 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         System.out.println("StartScreenController.onStartScreen()");
         TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         textField.setText("1");
-        
+        TextField textF = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        textF.setText("0");
         //add items to the dropDown
         bindDropDown();
         
@@ -104,8 +110,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void onEndScreen() {
         System.out.println("StartScreenController.onEndScreen()");
     }
-    
+
     public void startGame(String screen) {
+        System.out.println("start game");
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(false);
         inputManager.setCursorVisible(false);
@@ -123,10 +130,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         
         app.startApp();
         nifty.gotoScreen(screen);
-  }
-  public void load(){
-      
-  }
+        //System.exit(0);
+    }
+    
   public Mask.MaskProtection getMaskP(){
       return protection;
   }
@@ -134,6 +140,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
   public int getPerson (){
       return numPerson;
   }
+  
   
   public int getNoMask(){
       return noMaskP;
@@ -148,4 +155,14 @@ public class StartScreenController extends BaseAppState implements ScreenControl
       dropDown.addItem(Mask.MaskProtection.FFP2);
       dropDown.addItem(Mask.MaskProtection.FFP3);
   }
+
+    public void load(){
+        System.out.println("load");
+    }
+
+    public int loadP (){
+        return numPerson;
+    }
+   
 }
+        
