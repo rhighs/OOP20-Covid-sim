@@ -29,6 +29,7 @@ public class Person implements Entity, IPerson, Savable {
     private Mask mask;
     Vector3f pos;
 
+    //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
     public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint, BulletAppState bState, Node rootNode, /*SimpleApplication app,*/ PathCalculator pathCalc,
                   AssetManager assetManager) {
         gfx = new GraphicsComponent(this, assetManager, rootNode);

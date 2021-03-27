@@ -17,8 +17,8 @@ import Simulation.PersonPicker;
  * @author chris, rob, jurismo, savi
  */
 public class Main extends SimpleApplication {
-    private BulletAppState bState;
-    private Simulation simulation = new Simulation();
+    private final BulletAppState bState = new BulletAppState();
+    private final Simulation simulation = new Simulation();
 
     private Nifty nifty;
     private BitmapText hudText;
@@ -34,16 +34,14 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-        //initNiftyGUI();
+        initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        bState = new BulletAppState();
         bState.setDebugEnabled(true);
         stateManager.attach(bState);
-        //Assets.loadAssets(assetManager);
         flyCam.setMoveSpeed(50);
         
         cam.setLocation(new Vector3f(20, 20, 5));
-        simulation.start(100, assetManager, bState, rootNode, viewPort);
+        //simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
 
     @Override
@@ -54,7 +52,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm){
-        
+
     }
 
     private void initNiftyGUI() {
@@ -64,17 +62,18 @@ public class Main extends SimpleApplication {
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
         //stateManager.attach(startScreenState);
-        
+
         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
             assetManager,
             inputManager,
             audioRenderer,
             guiViewPort
         );
-        
+
         nifty = niftyDisplay.getNifty();
+        //startScreenState = new StartScreenController(nifty, flyCam, inputManager, n -> startSimulation(n));
         startScreenState = new StartScreenController(nifty, flyCam, inputManager, this);
-        nifty.fromXml("Interface/screen.xml", "start", startScreenState);
+        nifty.fromXml("Interface/Screen.xml", "start", startScreenState);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
         // this is the command to switch GUI nifty.gotoScreen("hud");
@@ -84,6 +83,9 @@ public class Main extends SimpleApplication {
         hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
         guiNode.attachChild(hudText);
     }
+
+    // public void startSimulation(int numPerson) {
+    //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
 
     // this method is called by StartScreenController
     public void startApp() {

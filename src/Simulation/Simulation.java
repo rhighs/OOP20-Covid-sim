@@ -23,7 +23,7 @@ public class Simulation {
 
     public Simulation() {
     }
-    
+
     public void start(int nPerson, int noMask, Mask.MaskProtection protection, AssetManager assetManager, BulletAppState bState, Node rootNode, ViewPort viewport) {
         this.nPerson = nPerson;
         this.noMask = noMask;
@@ -48,7 +48,7 @@ public class Simulation {
         if (crowd == null) {
             return;
         }
-        
+
         for (var p : crowd) {
             p.update(tpf);
         }

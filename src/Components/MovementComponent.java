@@ -37,15 +37,14 @@ public class MovementComponent {
 
         this.pathCalc = pathCalc;
     }
-   
+
     private void finishedWaypoints() {
         //create a new path
         if (wayPointsFuture == null) {
             wayPointsFuture = pathCalc.request(spatial.getLocalTranslation());
         }
-        //System.out.println(wayPoints);
-        //get a new point
 
+        //get a new point
         if (wayPointsFuture.isDone()) {
             currIndex = 0;
             try {
@@ -55,7 +54,6 @@ public class MovementComponent {
                 }
                 currPoint = wayPoints.get(currIndex);
             } catch (Exception e) {
-
                 System.out.println("caught an exception here");
                 //System.out.println("no wayPoints: " + wayPoints.size() + ", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
                 System.exit(1);
