@@ -1,4 +1,10 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Main;
+import Simulation.*;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
@@ -6,10 +12,15 @@ import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 //import com.jme3.scene.plugins.fbx.node.FbxNode;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.Menu;
+import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-
+import de.lessvoid.nifty.tools.SizeValue;
+import org.bushe.swing.event.EventTopicSubscriber;
 /**
  * @author json 
  */
@@ -19,7 +30,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private FlyByCamera flyCam;
     private InputManager inputManager;
     private int numPerson;
+    private int noMaskP;
     private Main app;
+    private Mask.MaskProtection protection;
+    
 
     StartScreenController(Nifty nifty) {
         this.nifty = nifty;
@@ -84,7 +98,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         //debug
         System.out.println("StartScreenController.onStartScreen()");
         TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
-        textField.setText("5");
+        textField.setText("1");
+        TextField textF = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        textF.setText("0");
+        //add items to the dropDown
+        bindDropDown();
+        
     }
 
     @Override
@@ -97,14 +116,45 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(false);
         inputManager.setCursorVisible(false);
-        // get an element
+        // get number of person 
         TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         var text = textField.getRealText();
         numPerson = Integer.parseInt(text);
+        
+        TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        noMaskP = Integer.parseInt(textNoM.getRealText());
+        
+        
+        DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+        protection = (Mask.MaskProtection) dropDown.getSelection();
+        
         app.startApp();
         nifty.gotoScreen(screen);
-        System.exit(1);
+        //System.exit(0);
     }
+    
+  public Mask.MaskProtection getMaskP(){
+      return protection;
+  }
+  
+  public int getPerson (){
+      return numPerson;
+  }
+  
+  
+  public int getNoMask(){
+      return noMaskP;
+  }
+  public void quitGame() {
+    getApplication().stop();
+  }
+  
+  private void bindDropDown(){      
+      DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+      dropDown.addItem(Mask.MaskProtection.FFP1);
+      dropDown.addItem(Mask.MaskProtection.FFP2);
+      dropDown.addItem(Mask.MaskProtection.FFP3);
+  }
 
     public void load(){
         System.out.println("load");
@@ -113,8 +163,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public int loadP (){
         return numPerson;
     }
-
-    public void quitGame() {
-        getApplication().stop();
-    }
+   
 }
+        

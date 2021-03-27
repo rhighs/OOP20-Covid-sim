@@ -1,5 +1,6 @@
 package Main;
 
+import Simulation.Mask;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
@@ -48,7 +49,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
-        simulation.step(tpf);
+        hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
     }
 
     @Override
@@ -88,6 +89,8 @@ public class Main extends SimpleApplication {
     public void startApp() {
         System.out.println("app started");
         int numPerson = startScreenState.loadP();
+        int noMask = startScreenState.getNoMask();
+        Mask.MaskProtection protection = startScreenState.getMaskP();
         System.out.print(numPerson);
         simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
         PersonPicker picker = new PersonPicker(this, simulation.getPersonList());
