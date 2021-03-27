@@ -29,15 +29,18 @@ public class Person implements Entity, IPerson, Savable {
     private Mask mask;
     Vector3f pos;
 
-    public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
+    //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
+    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint, BulletAppState bState, Node rootNode, /*SimpleApplication app,*/ PathCalculator pathCalc,
+                  AssetManager assetManager) {
         gfx = new GraphicsComponent(this, assetManager, rootNode);
         this.getSpatial().setLocalTranslation(spawnPoint);
         phyc = new PhysicsComponent(this, bState);
         mov = new MovementComponent(getSpatial(), /*scene,*/ pathCalc);
         phyc.initProximityBox(2);
-        this.wearMask(new MaskImpl(Mask.MaskProtection.FFP3, Mask.MaskStatus.UP));
+        //default
+        this.wearMask(new MaskImpl(protection, Mask.MaskStatus.UP));
     }
-
+       
     public CollisionShape getCollisionShape() {
         return null;
     }
