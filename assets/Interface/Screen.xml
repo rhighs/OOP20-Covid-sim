@@ -2,7 +2,7 @@
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
     <useStyles filename="nifty-default-styles.xml"/>
     <useControls filename="nifty-default-controls.xml"/>
-    <screen id="start" controller="Main.StartScreenController">
+    <screen id="start" controller="GUI.StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/BlackBG.png"></image>
         </layer>

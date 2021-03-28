@@ -12,7 +12,7 @@ import de.lessvoid.nifty.Nifty;
 
 import Simulation.Simulation;
 import Simulation.Picker;
-//import GUI.StartScreenController;
+import GUI.StartScreenController;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -71,8 +71,7 @@ public class Main extends SimpleApplication {
         );
 
         nifty = niftyDisplay.getNifty();
-        //startScreenState = new StartScreenController(nifty, flyCam, inputManager, n -> startSimulation(n));
-        startScreenState = new StartScreenController(nifty, flyCam, inputManager, this);
+        startScreenState = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
         nifty.fromXml("Interface/Screen.xml", "start", startScreenState);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
@@ -84,18 +83,12 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(hudText);
     }
 
-    // public void startSimulation(int numPerson) {
-    //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
-
-    // this method is called by StartScreenController
-    public void startApp() {
-        System.out.println("app started");
-        int numPerson = startScreenState.loadP();
-        int noMask = startScreenState.getNoMask();
-        Mask.MaskProtection protection = startScreenState.getMaskP();
-        System.out.print(numPerson);
-        simulation.start(numPerson, noMask, protection, assetManager, bState, rootNode, this.getViewPort());
+    public void startSimulation(StartScreenController.Options options) {
+        // int numPerson = startScreenState.loadP();
+        // int noMask = startScreenState.getNoMask();
+        // Mask.MaskProtection protection = startScreenState.getMaskP();
+        simulation.start(options.nPerson, options.nMasks, options.protection,
+                         assetManager, bState, rootNode, this.getViewPort());
         Picker picker = new Picker(this, simulation.getPersonList());
-        System.out.println("Main.Main.startApp()");
     }
 }

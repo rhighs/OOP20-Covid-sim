@@ -5,55 +5,50 @@ import com.jme3.app.state.BaseAppState;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.Menu;
+import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
+import org.bushe.swing.event.EventTopicSubscriber;
+import Simulation.Mask;
 
 /**
- * @author juri, chri
+ * @author json 
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
 
+    public final static class Options {
+        public final int nPerson;
+        public final int nMasks;
+        public final Mask.MaskProtection protection;
+
+        public Options(int p, int m, Mask.MaskProtection pr) {
+            nPerson = p;
+            nMasks = m;
+            protection = pr;
+        }
+    }
+    
     @FunctionalInterface
     public static interface Callback {
-        void call(int numPerson);
+        void call(Options options);
     }
 
-    private final Nifty nifty;
-    private final FlyByCamera flyCam;
-    private final InputManager inputManager;
-    private final Callback callback;
-    private TextField numPersonField = null;
+    private Nifty nifty;
+    private FlyByCamera flyCam;
+    private InputManager inputManager;
+    private Callback call;
 
     public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Callback call) {
         this.nifty = nifty;
         this.flyCam = flyCam;
         this.inputManager = inputManager;
-        this.callback = call;
+        this.call = call;
     }
-
-    @Override
-    public void onStartScreen() {
-        this.numPersonField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
-        this.numPersonField.setText("5");
-    }
-
-    public void startGame(String screen) {
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(false);
-        inputManager.setCursorVisible(false);
-        int numPerson = Integer.parseInt(numPersonField.getRealText());
-        callback.call(numPerson);
-        nifty.gotoScreen(screen);
-    }
-
-    /*
-    public void quitGame() {
-        getApplication().stop();
-    }
-    */
-
-    // Mostly useless methods ahead, ignore...
 
     @Override
     protected void initialize(Application app) {
@@ -80,6 +75,44 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     }
 
     @Override
+    public void onStartScreen() {
+        TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
+        textField.setText("1");
+        TextField textF = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        textF.setText("0");
+        //add items to the dropDown
+        DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+        dropDown.addItem(Mask.MaskProtection.FFP1);
+        dropDown.addItem(Mask.MaskProtection.FFP2);
+        dropDown.addItem(Mask.MaskProtection.FFP3);
+    }
+
+    @Override
     public void onEndScreen() {
     }
+
+    public void startGame(String screen) {
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        // get number of person
+        final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
+        final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+        final var text = textField.getRealText();
+
+        Options options = new Options(
+                Integer.parseInt(text),
+                Integer.parseInt(textNoM.getRealText()),
+                (Mask.MaskProtection) dropDown.getSelection()
+            );
+
+        call.call(options);
+        nifty.gotoScreen(screen);
+    }
+
+    public void quitGame() {
+        getApplication().stop();
+    }
 }
+
