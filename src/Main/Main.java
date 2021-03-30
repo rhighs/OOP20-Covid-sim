@@ -83,7 +83,11 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(hudText);
     }
 
-    public void startSimulation(StartScreenController.Options options) {
+// <<<<<<< HEAD
+//     public void startSimulation(StartScreenController.Options options) {
+// =======
+    public void startSimulation(GUI.StartScreenController.Options options) {
+// >>>>>>> 2f9333501ba0108520f2de614bbd9a5a08227773
         // int numPerson = startScreenState.loadP();
         // int noMask = startScreenState.getNoMask();
         // Mask.MaskProtection protection = startScreenState.getMaskP();

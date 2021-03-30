@@ -21,7 +21,11 @@ import Simulation.Mask;
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
 
-    public final static class Options {
+// <<<<<<< HEAD
+//     public final static class Options {
+// =======
+    public static class Options {
+// >>>>>>> 2f9333501ba0108520f2de614bbd9a5a08227773
         public final int nPerson;
         public final int nMasks;
         public final Mask.MaskProtection protection;
