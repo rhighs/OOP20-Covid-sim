@@ -11,7 +11,12 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
 
 import Simulation.Simulation;
+<<<<<<< HEAD
 import Simulation.PersonPicker;
+=======
+import Simulation.Picker;
+import GUI.StartScreenController;
+>>>>>>> main
 
 /**
  * @author chris, rob, jurismo, savi
@@ -84,13 +89,18 @@ public class Main extends SimpleApplication {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public void startSimulation(GUI.StartScreenController.Options options) {
+=======
+    public void startSimulation(StartScreenController.Options options) {
+>>>>>>> main
         // int numPerson = startScreenState.loadP();
         // int noMask = startScreenState.getNoMask();
         // Mask.MaskProtection protection = startScreenState.getMaskP();
         simulation.start(options.nPerson, options.nMasks, options.protection,
                          assetManager, bState, rootNode, this.getViewPort());
         Picker picker = new Picker(this, simulation.getPersonList());
+<<<<<<< HEAD
 =======
     // public void startSimulation(int numPerson) {
     //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
@@ -105,5 +115,7 @@ public class Main extends SimpleApplication {
         simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
         PersonPicker picker = new PersonPicker(this, simulation.getPersonList());
 >>>>>>> cd23fa59cc86b5caefd94fef7669e67fec22245f
+=======
+>>>>>>> main
     }
 }
