@@ -11,8 +11,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
 
 import Simulation.Simulation;
-import Simulation.Picker;
-import GUI.StartScreenController;
+import Simulation.PersonPicker;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -32,7 +31,7 @@ public class Main extends SimpleApplication {
     public Main() {
         //super(new FlyCamAppState());
     }
-
+    
     @Override
     public void simpleInitApp() {
         initNiftyGUI();
@@ -40,14 +39,15 @@ public class Main extends SimpleApplication {
         bState.setDebugEnabled(true);
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
+        
         cam.setLocation(new Vector3f(20, 20, 5));
         //simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        // hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
-        simulation.step(tpf);
+        //hudText.setText("Infected: " + simulation.getPersonCount());
+        hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
     }
 
     @Override
@@ -83,6 +83,7 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(hudText);
     }
 
+<<<<<<< HEAD
     public void startSimulation(GUI.StartScreenController.Options options) {
         // int numPerson = startScreenState.loadP();
         // int noMask = startScreenState.getNoMask();
@@ -90,5 +91,19 @@ public class Main extends SimpleApplication {
         simulation.start(options.nPerson, options.nMasks, options.protection,
                          assetManager, bState, rootNode, this.getViewPort());
         Picker picker = new Picker(this, simulation.getPersonList());
+=======
+    // public void startSimulation(int numPerson) {
+    //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
+
+    // this method is called by StartScreenController
+    public void startApp() {
+        System.out.println("app started");
+        int numPerson = startScreenState.loadP();
+        int noMask = startScreenState.getNoMask();
+        Mask.MaskProtection protection = startScreenState.getMaskP();
+        System.out.print(numPerson);
+        simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
+        PersonPicker picker = new PersonPicker(this, simulation.getPersonList());
+>>>>>>> cd23fa59cc86b5caefd94fef7669e67fec22245f
     }
 }
