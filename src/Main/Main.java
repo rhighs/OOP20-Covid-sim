@@ -49,6 +49,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
         hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
+        simulation.step(tpf);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class Main extends SimpleApplication {
         // Mask.MaskProtection protection = startScreenState.getMaskP();
         simulation.start(options.nPerson, options.nMasks, options.protection,
                          assetManager, bState, rootNode, this.getViewPort());
-        PersonPicker picker = new PersonPicker(this, simulation.getPersonList());
+        PersonPicker picker = new PersonPicker(this);
     // public void startSimulation(int numPerson) {
     //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
 
