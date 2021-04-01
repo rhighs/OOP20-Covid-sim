@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Person implements Entity, IPerson, Savable {
+public class Person implements Entity, Savable {
 
     final private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
@@ -38,7 +38,7 @@ public class Person implements Entity, IPerson, Savable {
         mov = new MovementComponent(getSpatial(), /*scene,*/ pathCalc);
         phyc.initProximityBox(2);
         //default
-        this.wearMask(new MaskImpl(protection, Mask.MaskStatus.UP));
+        this.wearMask(new Mask(protection, Mask.MaskStatus.UP));
     }
        
     public CollisionShape getCollisionShape() {

@@ -4,19 +4,32 @@ package Simulation;
  *
  * @author simon
  */
-public interface Mask {
+public class Mask{
 
-    public enum MaskProtection {
-        FFP1, FFP2, FFP3
+    private MaskProtection protection;
+    private MaskStatus status;
+
+    public Mask(MaskProtection p, MaskStatus s) {
+        this.protection = p;
+        this.status = s;
     }
 
-    public enum MaskStatus {
-        DOWN, UP
+    public static Mask create(MaskProtection p, MaskStatus s) {
+        return new Mask(p, s);
     }
 
-    public MaskProtection getProtection();
+    @Override
+    public MaskProtection getProtection() {
+        return this.protection;
+    }
 
-    public MaskStatus getStatus();
+    @Override
+    public MaskStatus getStatus() {
+        return this.status;
+    }
 
-    public void maskDown();
+    @Override
+    public void maskDown() {
+        this.status = MaskStatus.DOWN;
+    }
 }
