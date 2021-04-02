@@ -1,5 +1,16 @@
 package Simulation;
 
+enum MaskStatus {
+    UP,
+    DOWN
+}
+
+enum MaskProtection{
+    FP1,
+    FP2,
+    FP3
+}
+
 /**
  *
  * @author simon
@@ -8,6 +19,17 @@ public class Mask{
 
     private MaskProtection protection;
     private MaskStatus status;
+    
+    public enum MaskStatus {
+        UP,
+        DOWN
+    }
+
+    public enum MaskProtection{
+        FP1,
+        FP2,
+        FP3
+    }
 
     public Mask(MaskProtection p, MaskStatus s) {
         this.protection = p;
@@ -18,17 +40,14 @@ public class Mask{
         return new Mask(p, s);
     }
 
-    @Override
     public MaskProtection getProtection() {
         return this.protection;
     }
 
-    @Override
     public MaskStatus getStatus() {
         return this.status;
     }
 
-    @Override
     public void maskDown() {
         this.status = MaskStatus.DOWN;
     }

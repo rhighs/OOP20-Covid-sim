@@ -56,22 +56,18 @@ public class Person implements Entity, Savable {
         return Identificator.PERSON;
     }
 
-    @Override
     public Mask getMask() {
         return mask;
     }
-
-    @Override
+    
     public void wearMask(Mask m) {
         this.mask = m;
     }
-
-    @Override
+    
     public boolean isInfected() {
         return infected;
     }
 
-    @Override
     public void infect() {
         infected = true;
         gfx.changeColor(ColorRGBA.Red);
@@ -96,7 +92,6 @@ public class Person implements Entity, Savable {
         phyc.update();
     }
 
-    @Override
     public void maskDown() {
         mask.maskDown();
     }

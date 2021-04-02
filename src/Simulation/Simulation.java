@@ -65,7 +65,7 @@ public class Simulation {
     public int getInfectedNumb(){
         try{
             return virus.getInfectedNumb();
-        }catch(Exception NullPointerException){
+        }catch(NullPointerException ex){
             return 0;
         }
     }
