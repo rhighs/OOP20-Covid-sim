@@ -10,6 +10,8 @@ import Components.PathCalculator;
 import Components.PathGenerator;
 import Components.Lighting;
 
+import Dependency.DependencyHelper;
+
 public class Simulation {
     private MainMap map;
     private List<Person> crowd = null;
@@ -30,10 +32,12 @@ public class Simulation {
         this.protection = protection;
         this.map = new MainMap(assetManager, bState, rootNode);
         this.crowd = new ArrayList<>();
-        this.pathCalculator = map.createPathCalculator();
+        
+        DependencyHelper.setDependency("pathCalculator", map.createPathCalculator());
+        
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
-            Person p = new Person(protection, pg.getRandomPoint(), bState, rootNode, this.pathCalculator, assetManager);
+            Person p = new Person(protection, pg.getRandomPoint());
             if(noMask != 0){
                 p.maskDown();
             }

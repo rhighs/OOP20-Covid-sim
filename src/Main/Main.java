@@ -14,6 +14,8 @@ import Simulation.Simulation;
 import Simulation.PersonPicker;
 import GUI.StartScreenController;
 
+import Dependency.DependencyHelper;
+
 /**
  * @author chris, rob, jurismo, savi
  */
@@ -41,8 +43,20 @@ public class Main extends SimpleApplication {
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
         
+        setDependencies();
+        
         cam.setLocation(new Vector3f(20, 20, 5));
         //simulation.start(100, assetManager, bState, rootNode, viewPort);
+    }
+    
+    public void setDependencies(){
+        //setting dependencies
+        DependencyHelper.setDependency("rootNode", rootNode);
+        DependencyHelper.setDependency("assetManager", assetManager);
+        DependencyHelper.setDependency("stateManager", stateManager);
+        DependencyHelper.setDependency("bulletAppState", bState);
+        DependencyHelper.setDependency("viewPort", viewPort);
+        DependencyHelper.setDependency("assetManager", assetManager);
     }
 
     @Override

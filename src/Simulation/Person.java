@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import Dependency.DependencyHelper;
+
 public class Person implements Entity, Savable {
 
     final private GraphicsComponent gfx;
@@ -30,12 +32,11 @@ public class Person implements Entity, Savable {
     Vector3f pos;
 
     //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
-    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint, BulletAppState bState, Node rootNode, /*SimpleApplication app,*/ PathCalculator pathCalc,
-                  AssetManager assetManager) {
-        gfx = new GraphicsComponent(this, assetManager, rootNode);
+    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint) {
+        gfx = new GraphicsComponent(this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        phyc = new PhysicsComponent(this, bState);
-        mov = new MovementComponent(getSpatial(), /*scene,*/ pathCalc);
+        phyc = new PhysicsComponent(this);
+        mov = new MovementComponent(getSpatial());
         phyc.initProximityBox(2);
         //default
         this.wearMask(new Mask(protection, Mask.MaskStatus.UP));
