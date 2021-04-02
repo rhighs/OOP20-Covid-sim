@@ -24,9 +24,9 @@ public class GraphicsComponent {
 
     public GraphicsComponent(final Entity entity) {
         this.entity = entity;
-        this.parent = (Node) DependencyHelper.getDependency("rootNode");
+        this.parent = (Node) DependencyHelper.getDependency("rootNode", Node.class);
         Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
-        assetManager = (AssetManager) DependencyHelper.getDependency("assetManager");
+        assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
         mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         mat.setBoolean("UseMaterialColors", true);
         mat.setColor("Ambient", ColorRGBA.Blue);

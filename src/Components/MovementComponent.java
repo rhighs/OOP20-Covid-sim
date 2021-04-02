@@ -37,7 +37,7 @@ public class MovementComponent {
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
-        this.pathCalc = (PathCalculator) DependencyHelper.getDependency("pathCalculator");
+        this.pathCalc = (PathCalculator) DependencyHelper.getDependency("pathCalculator", PathCalculator.class);
     }
 
     private void finishedWaypoints() {

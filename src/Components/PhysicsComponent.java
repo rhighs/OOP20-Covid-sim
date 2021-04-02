@@ -48,7 +48,7 @@ public class PhysicsComponent implements PhysicsCollisionListener {
         this.entity = entity;
         this.spatial = entity.getSpatial();
         this.spatialScale = spatial.getLocalTransform().getScale();
-        bullet = (BulletAppState) DependencyHelper.getDependency("bulletAppState");
+        bullet = (BulletAppState) DependencyHelper.getDependency("bulletAppState", BulletAppState.class);
         this.position = spatial.getLocalTranslation();
 
         randMass = new Random();
