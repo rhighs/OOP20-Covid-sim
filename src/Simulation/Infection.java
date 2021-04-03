@@ -8,7 +8,7 @@ import java.util.function.Function;
  *
  * @author simon
  */
-public class InfectionImpl implements BiFunction<Person, Person, Boolean> {
+public class Infection implements BiFunction<Person, Person, Boolean> {
 
     private static int INF_RADIUS = 5;
 
