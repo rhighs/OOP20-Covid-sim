@@ -11,7 +11,7 @@ public class DependencyHelper {
     public static final Map<String, Object> dependencies = new HashMap<>();
     
     public static void setDependency(final String key, final Object object){
-        if(dependencies.keySet().contains(key)){
+        if(!dependencies.keySet().contains(key)){
             dependencies.put(key, object);
         }
     }
