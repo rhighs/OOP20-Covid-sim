@@ -37,14 +37,14 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
+        setDependencies();
+                
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState.setDebugEnabled(true);
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
-        
-        setDependencies();
-        
+                
         cam.setLocation(new Vector3f(20, 20, 5));
         //simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
@@ -103,8 +103,7 @@ public class Main extends SimpleApplication {
         // int numPerson = startScreenState.loadP();
         // int noMask = startScreenState.getNoMask();
         // Mask.MaskProtection protection = startScreenState.getMaskP();
-        simulation.start(options.nPerson, options.nMasks, options.protection,
-                         assetManager, bState, rootNode, this.getViewPort());
+        simulation.start(options.nPerson, options.nMasks, options.protection);
         PersonPicker picker = new PersonPicker(this);
     // public void startSimulation(int numPerson) {
     //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());

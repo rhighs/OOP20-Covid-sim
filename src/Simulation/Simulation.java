@@ -26,11 +26,11 @@ public class Simulation {
     public Simulation() {
     }
 
-    public void start(int nPerson, int noMask, Mask.MaskProtection protection, AssetManager assetManager, BulletAppState bState, Node rootNode, ViewPort viewport) {
+    public void start(int nPerson, int noMask, Mask.MaskProtection protection) {
         this.nPerson = nPerson;
         this.noMask = noMask;
         this.protection = protection;
-        this.map = new MainMap(assetManager, bState, rootNode);
+        this.map = new MainMap();
         this.crowd = new ArrayList<>();
         
         DependencyHelper.setDependency("pathCalculator", map.createPathCalculator());
@@ -45,7 +45,7 @@ public class Simulation {
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
-        this.light = new Lighting(assetManager, rootNode, viewport);
+        this.light = new Lighting();
     }
 
     public void step(float tpf) {
