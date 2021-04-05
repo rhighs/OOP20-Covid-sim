@@ -7,6 +7,8 @@ import java.util.Map;
  *
  * @author rob
  */
+
+//this is trash... gonna be replaced
 public class DependencyHelper {
     public static final Map<String, Object> dependencies = new HashMap<>();
     

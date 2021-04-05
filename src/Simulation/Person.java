@@ -1,13 +1,9 @@
 package Simulation;
 
-import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.Node;
-import com.jme3.asset.AssetManager;
 import Components.MovementComponent;
 import Components.GraphicsComponent;
-import Components.PathCalculator;
 import Components.PhysicsComponent;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.export.JmeExporter;
@@ -18,8 +14,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import Dependency.DependencyHelper;
 
 public class Person implements Entity, Savable {
 

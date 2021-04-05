@@ -2,8 +2,6 @@ package Components;
 
 import Dependency.DependencyHelper;
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
-//import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
 import com.jme3.math.ColorRGBA;

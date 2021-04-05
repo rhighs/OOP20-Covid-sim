@@ -1,11 +1,9 @@
 package Components;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
-import com.jme3.ai.navmesh.Path;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
