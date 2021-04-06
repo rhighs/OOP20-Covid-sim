@@ -15,6 +15,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import org.bushe.swing.event.EventTopicSubscriber;
 import Simulation.Mask;
+import de.lessvoid.nifty.controls.Label;
 
 /**
  * @author json 
@@ -110,7 +111,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         call.call(options);
         nifty.gotoScreen(screen);
     }
-
+    public void setLabelInf(int inf)
+    {
+        var txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
+        txtInf.setText(Integer.toString(inf));
+        txtInf.setEnabled(false);
+    }
     public void quitGame() {
         getApplication().stop();
     }
