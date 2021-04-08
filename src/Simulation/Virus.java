@@ -18,13 +18,13 @@ public class Virus extends Thread{
     private List<Person> infectedPeople;
     private int numPeople;
     private boolean isSpreading = false;
-    private InfectionImpl infectionAlgo;
+    private Infection infectionAlgo;
 
     public Virus(final List<Person> crowd, final float strenght) {
         this.strenght = strenght;
         this.crowd = crowd;
         this.numPeople = crowd.size();
-        infectionAlgo = new InfectionImpl();
+        infectionAlgo = new Infection();
 
         rand = new Random();
     }

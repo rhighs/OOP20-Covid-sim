@@ -6,9 +6,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import Components.PathCalculator;
 import Components.PathGenerator;
-import Components.Lighting;
 import com.jme3.ai.navmesh.NavMesh;
-import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh; 
 
