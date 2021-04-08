@@ -82,7 +82,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
-        hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
+        hudText.setText("Press [P] to pause");//simulation.getInfectedNumb(); //!!!!! non fa l'update
         simulation.step(tpf);
     }
 
