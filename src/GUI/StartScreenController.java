@@ -21,11 +21,7 @@ import Simulation.Mask;
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
 
-// <<<<<<< HEAD
-//     public final static class Options {
-// =======
-    public static class Options {
-// >>>>>>> 2f9333501ba0108520f2de614bbd9a5a08227773
+    public final static class Options {
         public final int nPerson;
         public final int nMasks;
         public final Mask.MaskProtection protection;
@@ -86,9 +82,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         textF.setText("0");
         //add items to the dropDown
         DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
-        dropDown.addItem(Mask.MaskProtection.FFP1);
-        dropDown.addItem(Mask.MaskProtection.FFP2);
-        dropDown.addItem(Mask.MaskProtection.FFP3);
+        dropDown.addItem(Mask.MaskProtection.FP1);
+        dropDown.addItem(Mask.MaskProtection.FP2);
+        dropDown.addItem(Mask.MaskProtection.FP3);
     }
 
     @Override

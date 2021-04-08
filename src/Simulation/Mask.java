@@ -1,22 +1,54 @@
 package Simulation;
 
+enum MaskStatus {
+    UP,
+    DOWN
+}
+
+enum MaskProtection{
+    FP1,
+    FP2,
+    FP3
+}
+
 /**
  *
  * @author simon
  */
-public interface Mask {
+public class Mask{
 
-    public enum MaskProtection {
-        FFP1, FFP2, FFP3
-    }
-
+    private MaskProtection protection;
+    private MaskStatus status;
+    
     public enum MaskStatus {
-        DOWN, UP
+        UP,
+        DOWN
     }
 
-    public MaskProtection getProtection();
+    public enum MaskProtection{
+        FP1,
+        FP2,
+        FP3
+    }
 
-    public MaskStatus getStatus();
+    public Mask(MaskProtection p, MaskStatus s) {
+        this.protection = p;
+        this.status = s;
+    }
 
-    public void maskDown();
+    public static Mask create(MaskProtection p, MaskStatus s) {
+        return new Mask(p, s);
+    }
+
+    public MaskProtection getProtection() {
+        return this.protection;
+    }
+
+    public MaskStatus getStatus() {
+        return this.status;
+    }
+
+    public void maskDown() {
+        this.status = MaskStatus.DOWN;
+    }
 }

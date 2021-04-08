@@ -9,6 +9,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import java.util.concurrent.Future;
 
+import Dependency.DependencyHelper;
+
 public class MovementComponent {
     // private Spatial scene;
     private Spatial spatial;
@@ -30,12 +32,12 @@ public class MovementComponent {
     }
     State state = State.NO_MORE_WAYPOINTS;
 
-    public MovementComponent(final Spatial spatial, /*final Spatial scene,*/ PathCalculator pathCalc) {
+    public MovementComponent(final Spatial spatial /*final Spatial scene,*/) {
         // this.scene = scene;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
-        this.pathCalc = pathCalc;
+        this.pathCalc = (PathCalculator) DependencyHelper.getDependency("pathCalculator", PathCalculator.class);
     }
 
     private void finishedWaypoints() {

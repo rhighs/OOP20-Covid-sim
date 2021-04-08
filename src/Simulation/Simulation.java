@@ -10,6 +10,8 @@ import Components.PathCalculator;
 import Components.PathGenerator;
 import Components.Lighting;
 
+import Dependency.DependencyHelper;
+
 public class Simulation {
     private MainMap map;
     private List<Person> crowd = null;
@@ -24,16 +26,18 @@ public class Simulation {
     public Simulation() {
     }
 
-    public void start(int nPerson, int noMask, Mask.MaskProtection protection, AssetManager assetManager, BulletAppState bState, Node rootNode, ViewPort viewport) {
+    public void start(int nPerson, int noMask, Mask.MaskProtection protection) {
         this.nPerson = nPerson;
         this.noMask = noMask;
         this.protection = protection;
-        this.map = new MainMap(assetManager, bState, rootNode);
+        this.map = new MainMap();
         this.crowd = new ArrayList<>();
-        this.pathCalculator = map.createPathCalculator();
+        
+        DependencyHelper.setDependency("pathCalculator", map.createPathCalculator());
+        
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
-            Person p = new Person(protection, pg.getRandomPoint(), bState, rootNode, this.pathCalculator, assetManager);
+            Person p = new Person(protection, pg.getRandomPoint());
             if(noMask != 0){
                 p.maskDown();
             }
@@ -41,7 +45,7 @@ public class Simulation {
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
-        this.light = new Lighting(assetManager, rootNode, viewport);
+        this.light = new Lighting();
     }
 
     public void step(float tpf) {
@@ -65,7 +69,7 @@ public class Simulation {
     public int getInfectedNumb(){
         try{
             return virus.getInfectedNumb();
-        }catch(Exception NullPointerException){
+        }catch(NullPointerException ex){
             return 0;
         }
     }

@@ -11,8 +11,10 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
 
 import Simulation.Simulation;
-import Simulation.Picker;
+import Simulation.PersonPicker;
 import GUI.StartScreenController;
+
+import Dependency.DependencyHelper;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -32,21 +34,35 @@ public class Main extends SimpleApplication {
     public Main() {
         //super(new FlyCamAppState());
     }
-
+    
     @Override
     public void simpleInitApp() {
+        setDependencies();
+                
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         bState.setDebugEnabled(true);
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
+                
         cam.setLocation(new Vector3f(20, 20, 5));
         //simulation.start(100, assetManager, bState, rootNode, viewPort);
+    }
+    
+    public void setDependencies(){
+        //setting dependencies
+        DependencyHelper.setDependency("rootNode", rootNode);
+        DependencyHelper.setDependency("assetManager", assetManager);
+        DependencyHelper.setDependency("stateManager", stateManager);
+        DependencyHelper.setDependency("bulletAppState", bState);
+        DependencyHelper.setDependency("viewPort", viewPort);
+        DependencyHelper.setDependency("assetManager", assetManager);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        // hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
+        //hudText.setText("Infected: " + simulation.getPersonCount());
+        hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
         simulation.step(tpf);
     }
 
@@ -83,16 +99,8 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(hudText);
     }
 
-// <<<<<<< HEAD
-//     public void startSimulation(StartScreenController.Options options) {
-// =======
-    public void startSimulation(GUI.StartScreenController.Options options) {
-// >>>>>>> 2f9333501ba0108520f2de614bbd9a5a08227773
-        // int numPerson = startScreenState.loadP();
-        // int noMask = startScreenState.getNoMask();
-        // Mask.MaskProtection protection = startScreenState.getMaskP();
-        simulation.start(options.nPerson, options.nMasks, options.protection,
-                         assetManager, bState, rootNode, this.getViewPort());
-        Picker picker = new Picker(this, simulation.getPersonList());
+    public void startSimulation(StartScreenController.Options options) {
+        simulation.start(options.nPerson, options.nMasks, options.protection);
+        PersonPicker picker = new PersonPicker(this);
     }
 }

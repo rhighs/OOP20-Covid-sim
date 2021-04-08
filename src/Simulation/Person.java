@@ -19,7 +19,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Person implements Entity, IPerson, Savable {
+import Dependency.DependencyHelper;
+
+public class Person implements Entity, Savable {
 
     final private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
@@ -30,15 +32,14 @@ public class Person implements Entity, IPerson, Savable {
     Vector3f pos;
 
     //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
-    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint, BulletAppState bState, Node rootNode, /*SimpleApplication app,*/ PathCalculator pathCalc,
-                  AssetManager assetManager) {
-        gfx = new GraphicsComponent(this, assetManager, rootNode);
+    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint) {
+        gfx = new GraphicsComponent(this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        phyc = new PhysicsComponent(this, bState);
-        mov = new MovementComponent(getSpatial(), /*scene,*/ pathCalc);
+        phyc = new PhysicsComponent(this);
+        mov = new MovementComponent(getSpatial());
         phyc.initProximityBox(2);
         //default
-        this.wearMask(new MaskImpl(protection, Mask.MaskStatus.UP));
+        this.wearMask(new Mask(protection, Mask.MaskStatus.UP));
     }
        
     public CollisionShape getCollisionShape() {
@@ -56,22 +57,18 @@ public class Person implements Entity, IPerson, Savable {
         return Identificator.PERSON;
     }
 
-    @Override
     public Mask getMask() {
         return mask;
     }
-
-    @Override
+    
     public void wearMask(Mask m) {
         this.mask = m;
     }
-
-    @Override
+    
     public boolean isInfected() {
         return infected;
     }
 
-    @Override
     public void infect() {
         infected = true;
         gfx.changeColor(ColorRGBA.Red);
@@ -96,7 +93,6 @@ public class Person implements Entity, IPerson, Savable {
         phyc.update();
     }
 
-    @Override
     public void maskDown() {
         mask.maskDown();
     }

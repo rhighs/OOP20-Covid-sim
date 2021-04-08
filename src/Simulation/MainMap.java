@@ -10,15 +10,22 @@ import Components.Lighting;
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
+import com.jme3.scene.Mesh; 
+
+import Dependency.DependencyHelper;
 
 public class MainMap {
     private Node scene;
 
-    public MainMap(AssetManager assetManager, BulletAppState bState, Node rootNode) {
+    public MainMap() {
+        var assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
+        var bState = (BulletAppState) DependencyHelper.getDependency("bulletAppState", BulletAppState.class);
+        var rootNode = (Node) DependencyHelper.getDependency("rootNode", Node.class);
+        
         scene = (Node) assetManager.loadModel("Scenes/test.j3o");
         scene.setName("SimulationScene");
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
+        
         bState.getPhysicsSpace().addAll(scene);
         rootNode.attachChild(scene);
     }

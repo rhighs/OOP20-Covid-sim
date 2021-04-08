@@ -21,6 +21,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import Dependency.DependencyHelper;
+
 /**
  *
  * @author rob
@@ -41,12 +43,12 @@ public class PhysicsComponent implements PhysicsCollisionListener {
 
     private static float DIRECTION_LENGTH = 20;
 
-    public PhysicsComponent(Entity entity, BulletAppState bull) {
+    public PhysicsComponent(Entity entity) {
         this.app = app;
         this.entity = entity;
         this.spatial = entity.getSpatial();
         this.spatialScale = spatial.getLocalTransform().getScale();
-        bullet = bull;
+        bullet = (BulletAppState) DependencyHelper.getDependency("bulletAppState", BulletAppState.class);
         this.position = spatial.getLocalTranslation();
 
         randMass = new Random();

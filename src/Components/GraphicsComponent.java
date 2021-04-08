@@ -11,6 +11,7 @@ import Simulation.Person;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import Dependency.DependencyHelper;
 
 public class GraphicsComponent {
 
@@ -19,11 +20,13 @@ public class GraphicsComponent {
     private Material mat;
     private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
+    private AssetManager assetManager;
 
-    public GraphicsComponent(final Entity entity, AssetManager assetManager, Node parent) {
+    public GraphicsComponent(final Entity entity) {
         this.entity = entity;
-        this.parent = parent;
+        this.parent = (Node) DependencyHelper.getDependency("rootNode", Node.class);
         Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
+        assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
         mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         mat.setBoolean("UseMaterialColors", true);
         mat.setColor("Ambient", ColorRGBA.Blue);
@@ -38,8 +41,8 @@ public class GraphicsComponent {
         sp.setUserData("entity", entity);
     }
 
-    public GraphicsComponent(final Entity entity, final Material mat, AssetManager assetManager, Node parent) {
-        this(entity, assetManager, parent);
+    public GraphicsComponent(final Entity entity, final Material mat) {
+        this(entity);
         this.mat = mat;
         this.sp.setMaterial(mat);
     }

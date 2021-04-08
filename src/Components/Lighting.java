@@ -1,6 +1,8 @@
 package Components;
 
+import Dependency.DependencyHelper;
 import com.jme3.asset.AssetManager;
+import com.jme3.bullet.BulletAppState;
 //import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
@@ -18,7 +20,11 @@ public class Lighting {
     final int SHADOWMAP_SIZE = 4096;
     final private Vector3f lightDirection = new Vector3f(-0.5f, -0.5f, -0.5f);
 
-    public Lighting(AssetManager assetManager, Node rootNode, ViewPort viewport) {
+    public Lighting() {
+        var assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
+        var viewPort = (ViewPort) DependencyHelper.getDependency("viewPort", ViewPort.class);
+        var rootNode = (Node) DependencyHelper.getDependency("rootNode", Node.class);
+        
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDirection.normalizeLocal());
         sun.setColor(ColorRGBA.White);
@@ -26,7 +32,7 @@ public class Lighting {
 
         var shadowRenderer = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 3);
         shadowRenderer.setLight(sun);
-        viewport.addProcessor(shadowRenderer);
+        viewPort.addProcessor(shadowRenderer);
 
         rootNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         //var al = new AmbientLight();
