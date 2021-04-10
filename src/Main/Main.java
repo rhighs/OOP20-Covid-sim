@@ -15,6 +15,7 @@ import Simulation.PersonPicker;
 import GUI.StartScreenController;
 
 import Dependency.DependencyHelper;
+import Environment.Locator;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -56,6 +57,7 @@ public class Main extends SimpleApplication {
             }
         };
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
+        Locator.provideApplication(this);
         
         setDependencies();
                 

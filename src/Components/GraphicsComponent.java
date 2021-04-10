@@ -11,28 +11,27 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import Dependency.DependencyHelper;
+import Environment.Graphics;
+import Environment.Locator;
 
 public class GraphicsComponent {
 
     private Entity entity;
     protected Spatial sp;
     private Material mat;
-    private Node parent;
     private ColorRGBA color = ColorRGBA.Green;
-    private AssetManager assetManager;
+    private Graphics graphics = Locator.getGraphics();
 
     public GraphicsComponent(final Entity entity) {
         this.entity = entity;
-        this.parent = (Node) DependencyHelper.getDependency("rootNode", Node.class);
+        
         Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
-        assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
-        mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        mat.setBoolean("UseMaterialColors", true);
-        mat.setColor("Ambient", ColorRGBA.Blue);
-        mat.setColor("Diffuse", ColorRGBA.Red);
+        mat = graphics.createShadedMaterial(ColorRGBA.Blue, ColorRGBA.Red);
+        
         cube.setMaterial(mat);
         cube.scale(0.03f);
         cube.setShadowMode(ShadowMode.CastAndReceive);
+        
         this.sp = cube;
         this.show();
 
@@ -58,25 +57,16 @@ public class GraphicsComponent {
         sp.scale(x, y, z);
     }
 
-    public void setParent(Node parent) {
-        this.parent = parent;
-    }
-
     public void show() {
-        parent.attachChild(sp);
+        graphics.addToScene(sp);
     }
 
     public void hide() {
-        parent.detachChild(sp);
+        graphics.removeFromScene(sp);
     }
 
-    public boolean changeColor(final ColorRGBA color) {
-        if (!this.color.equals(color)) {
-            var m = ((Geometry) sp).getMaterial();
-            m.setColor("Diffuse", color);
-            return true;
-        }
-        return false;
+    public void changeColor(final ColorRGBA color) {
+        graphics.changeMaterialColor(sp, color);
     }
 
     public Spatial getSpatial() {

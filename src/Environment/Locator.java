@@ -33,11 +33,11 @@ public class Locator {
         physics = new Physics(_app.getStateManager().getState(BulletAppState.class));
     }
     
-    static Graphics getGraphics(){
+    static public Graphics getGraphics(){
         return graphics;
     }
     
-    static Physics getPhysics(){
+    static public Physics getPhysics(){
         return physics;
     }
 }
