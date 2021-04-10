@@ -10,12 +10,10 @@ import Simulation.Entity;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
-import Dependency.DependencyHelper;
 import Environment.Graphics;
 import Environment.Locator;
 
 public class GraphicsComponent {
-
     private Entity entity;
     protected Spatial sp;
     private Material mat;
@@ -26,7 +24,7 @@ public class GraphicsComponent {
         this.entity = entity;
         
         Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
-        mat = graphics.createShadedMaterial(ColorRGBA.Blue, ColorRGBA.Red);
+        mat = graphics.createShadedMaterial(ColorRGBA.Red, ColorRGBA.Blue);
         
         cube.setMaterial(mat);
         cube.scale(0.03f);

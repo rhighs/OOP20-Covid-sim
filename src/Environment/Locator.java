@@ -16,10 +16,14 @@ public class Locator {
     static SimpleApplication _app;
     static Graphics graphics;
     static Physics physics;
+    static Ambient ambient;
     
     static public void provideApplication(SimpleApplication app){
         _app = app;
-        graphics = new Graphics(_app.getAssetManager(), _app.getRootNode());
+        
+        var rootNode = _app.getRootNode();
+        var assetManager = _app.getAssetManager();
+        graphics = new Graphics(assetManager, rootNode);
         /*
             here i get the bstate by extracting it from the state manager,
             since we attach attach it to the statemanager in Main/Main it is required to do so.
@@ -30,7 +34,11 @@ public class Locator {
         
             then pass it to physics...
         */
-        physics = new Physics(_app.getStateManager().getState(BulletAppState.class));
+        var bullet = new BulletAppState();
+        app.getStateManager().attach(bullet);
+        physics = new Physics(bullet);
+        
+        ambient = new Ambient(assetManager, rootNode, _app.getViewPort());
     }
     
     static public Graphics getGraphics(){
@@ -39,5 +47,9 @@ public class Locator {
     
     static public Physics getPhysics(){
         return physics;
+    }
+    
+    static public Ambient getAmbient(){
+        return ambient;
     }
 }

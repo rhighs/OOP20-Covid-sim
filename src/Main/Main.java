@@ -63,7 +63,7 @@ public class Main extends SimpleApplication {
                 
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        bState.setDebugEnabled(true);
+        //bState.setDebugEnabled(true);
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
                 
