@@ -8,22 +8,24 @@ import com.jme3.math.Vector3f;
 import Components.PathCalculator;
 
 public class PathFindingMovement implements MovementComponent {
+    private final Entity entity;
+
     private enum State {
         NO_MORE_WAYPOINTS,
         FOLLOW_WAYPOINT,
         AT_WAYPOINT,
     }
     private State state = State.NO_MORE_WAYPOINTS;
-    private Entity entity;
     private Vector3f currPoint;
     private int currIndex = 0;
     private List<Vector3f> points = new ArrayList<>();
     private long start;
     private Future<List<Vector3f>> pointsFuture;
-    private PathCalculator calc;
+    private final PathCalculator calc;
 
-    public PathFindingMovement(final Entity p) {
+    public PathFindingMovement(final Entity p, PathCalculator pc) {
         this.entity = p;
+        this.calc = pc;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class PathFindingMovement implements MovementComponent {
 
     private void finishedWaypoints() {
         if (pointsFuture == null) {
-            pointsFuture = calc.request(entity.getPos());
+            pointsFuture = calc.requestVector3f(entity.getPos());
         }
 
         if (pointsFuture.isDone()) {

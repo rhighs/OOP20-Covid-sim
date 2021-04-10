@@ -1,39 +1,65 @@
-package Simulation;
+package tmptmp;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.io.IOException;
+import java.util.Random;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Node;
 import com.jme3.asset.AssetManager;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
 import com.jme3.math.ColorRGBA;
-import com.jme3.export.Savable;
+import com.jme3.bullet.control.BetterCharacterControl;
+import Components.PathCalculator;
 
-public class Person implements Entity {
+public class Person implements tmptmp.Entity {
+    
+    public static class Mask {
+        public enum Status {
+            UP, DOWN,
+        }
+        public enum Protection {
+            FP1, FP2, FP3,
+        }
+        
+        public Status status = Status.UP;
+        public Protection protection = Protection.FP1;
+        
+        public Mask() { }
+        
+        public Mask(Status status, Protection protection) {
+            this.status = status;
+            this.protection = protection;
+        }
+    }
+    
     final private GraphicsComponent gfxComp;
     final private PhysicsComponent physComp;
     final private MovementComponent movComp;
     private Spatial spatial;
-    private Set<Person> lastNearPeople;
+    private BetterCharacterControl spatialControl;
     private boolean infected;
     private Mask mask;
-    private Vector3f pos;
+    
+    private Set<Person> lastNearPeople;
 
-    public Person(Mask.MaskProtection protection, final Vector3f spawnPoint, BulletAppState bState,
+    public Person(final Vector3f spawnPoint, BulletAppState bState,
                   Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
         this.gfxComp  = new CubeGFXComponent(this);
-        this.physComp = new PhysicsComponent(this);
+        this.physComp = new PhysicsComponent(this, bState);
         this.physComp.initProximityBox(2);
-        this.movComp  = new PathFindingMovement(this);
+        this.movComp  = new PathFindingMovement(this, pathCalc);
         this.spatial  = this.gfxComp.create("this should be an unique name", assetManager);
         this.spatial.setLocalTranslation(spawnPoint);
-        this.wearMask(new MaskImpl(protection, Mask.MaskStatus.UP));
+        Random rng = new Random();
+        this.spatialControl = new BetterCharacterControl(1f, 9f, (rng.nextInt(10) + 1));
+        this.spatial.addControl(spatialControl);
+        this.spatialControl.setGravity(new Vector3f(0, -40, 0));
+        this.spatialControl.setJumpForce(new Vector3f(0, 1, 0));
+        bState.getPhysicsSpace().add(spatialControl);
+        bState.getPhysicsSpace().add(spatial);
+        //this.wearMask(new MaskImpl(protection, Mask.MaskStatus.UP));
     }
 
     @Override
@@ -42,47 +68,9 @@ public class Person implements Entity {
     }
 
     @Override
-    public Mask getMask() {
-        return mask;
-    }
-
-    @Override
-    public void wearMask(Mask m) {
-        this.mask = m;
-    }
-
-    @Override
-    public boolean isInfected() {
-        return infected;
-    }
-
-    @Override
-    public void infect() {
-        infected = true;
-        gfx.changeColor(ColorRGBA.Red);
-    }
-
-    public void setLastNear(Set<Person> people) {
-        lastNearPeople = new HashSet<Person>(people);
-    }
-
-    public Set<Person> getLastNear() {
-        return lastNearPeople;
-    }
-
-    public void setInfectionDistance(float distance) {
-        phyc.initProximityBox(distance);
-    }
-
-    @Override
     public void update(float tpf) {
-        mov.update(tpf);
-        phyc.update();
-    }
-
-    @Override
-    public void maskDown() {
-        mask.maskDown();
+        movComp.update(tpf);
+        physComp.update();
     }
 
     @Override
@@ -90,25 +78,51 @@ public class Person implements Entity {
         return spatial.getLocalTranslation();
     }
 
+    @Override
+    public void adjustPosition(Vector3f distance) {
+        spatialControl.setWalkDirection(distance.normalize().mult(10));
+        spatialControl.setViewDirection(distance.negate());
+    }
+
+    @Override
+    public void stopMoving() {
+        this.spatialControl.setWalkDirection(Vector3f.ZERO);
+    }
+
+    public void maskDown() {
+        this.mask.status = Mask.Status.DOWN;
+    }
+
+    public boolean isInfected() {
+        return infected;
+    }
+
+    public void infect() {
+        infected = true;
+        gfxComp.setColor(ColorRGBA.Red);
+    }
+
+    public void setLastNear(Set<Person> people) {
+        lastNearPeople = new HashSet<>(people);
+    }
+
+    public Set<Person> getLastNear() {
+        return lastNearPeople;
+    }
+
+    public void setInfectionDistance(float distance) {
+        physComp.initProximityBox(distance);
+    }
+
     public Set<Entity> getNearEntities() {
-        return phyc.getNearEntities();
+        return physComp.getNearEntities();
     }
 
     public Set<Person> getNearPeople() {
         return getNearEntities()
                 .stream()
-                .filter(e -> e.getIdentificator() == Entity.Identificator.PERSON)
+                //.filter(e -> (Person) e) e.getIdentificator() == Entity.Identificator.PERSON)
                 .map(e -> (Person) e)
                 .collect(Collectors.toSet());
     }
-
-    // @Override
-    // public void write(JmeExporter arg0) throws IOException {
-    //     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    // }
-
-    // @Override
-    // public void read(JmeImporter arg0) throws IOException {
-    //     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    // }
 }

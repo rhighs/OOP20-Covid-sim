@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
-import Simulation.Entity;
+import tmptmp.Entity;
 
 /**
  *
@@ -20,26 +20,19 @@ import Simulation.Entity;
  */
 public class PhysicsComponent {
     private final Entity entity;
-    private final BulletAppState bullet;
+    private final BulletAppState bState;
     private final Spatial spatial;
-    private final BetterCharacterControl spatialControl;
     private Vector3f position;
-    private SimpleApplication app;
     private GhostControl proximityBox;
-    private Random randMass;
-    private static float DIRECTION_LENGTH = 20;
 
-    public PhysicsComponent(Entity entity, BulletAppState bull) {
-        this.app = app;
+    public PhysicsComponent(Entity entity, BulletAppState bState) {
         this.entity = entity;
         this.spatial = entity.getSpatial();
-        bullet = bull;
+        this.bState = bState;
         this.position = spatial.getLocalTranslation();
-        randMass = new Random();
-        spatialControl = new BetterCharacterControl(1f, 9f, (randMass.nextInt(10) + 1));
-        setControlEnabled(true);
     }
 
+    /*
     public void setControlEnabled(final boolean value) {
         if (value) {
             spatial.addControl(spatialControl);
@@ -57,21 +50,22 @@ public class PhysicsComponent {
             bullet.getPhysicsSpace().removeAll(spatial);
         }
     }
+    */
 
+    /*
     public BetterCharacterControl getControl() {
         return spatialControl;
     }
+    */
 
     public void initProximityBox(final float size) {
         // box size represented as a Vector3f
         var boxSize = new Vector3f(size, size, size);
         var boxCollShape = new BoxCollisionShape(boxSize);
-
         proximityBox = new GhostControl(boxCollShape);
-
         spatial.addControl(proximityBox);
         proximityBox.setUserObject(entity);
-        bullet.getPhysicsSpace().add(proximityBox);
+        bState.getPhysicsSpace().add(proximityBox);
     }
 
     public Set<Entity> getNearEntities() {
@@ -90,7 +84,7 @@ public class PhysicsComponent {
 
     public Optional<Float> getNearDistance(final Entity guest) {
         boolean isNear = getNearEntities().contains(guest);
-        var guestPos = guest.getPosition();
+        Vector3f guestPos = guest.getPos();
         if (isNear) {
             float distance = position.distance(guestPos);
             return Optional.of(distance);
