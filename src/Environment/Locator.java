@@ -20,20 +20,10 @@ public class Locator {
         var rootNode = _app.getRootNode();
         var assetManager = _app.getAssetManager();
         var bullet = new BulletAppState();
-        graphics = new Graphics(assetManager, rootNode);
-        /*
-            here i get the bstate by extracting it from the state manager,
-            since we attach attach it to the statemanager in Main/Main it is required to do so.
-            to get rid of the initialization of the bstate in main we need to perform its initialization here.
-        
-            var b = new BulletAppState();
-            _app.getStateManager().attach(b);
-        
-            then pass it to physics...
-        */
         app.getStateManager().attach(bullet);
+
+        graphics = new Graphics(assetManager, rootNode);
         physics = new Physics(bullet);
-        
         ambient = new Ambient(assetManager, rootNode, _app.getViewPort());
         map = new MainMap(assetManager, bullet, rootNode);
     }
