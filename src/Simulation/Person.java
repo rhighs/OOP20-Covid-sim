@@ -1,21 +1,17 @@
 package Simulation;
 
+import java.util.Set;
+import java.util.HashSet;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import com.jme3.math.ColorRGBA;
+import Components.PhysicsComponent;
+import java.util.stream.Collectors;
 import Components.MovementComponent;
 import Components.GraphicsComponent;
-import Components.PhysicsComponent;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.math.ColorRGBA;
-import com.jme3.export.Savable;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class Person implements Entity, Savable {
+public class Person implements Entity {
 
     final private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
@@ -114,16 +110,6 @@ public class Person implements Entity, Savable {
 
     @Override
     public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void write(JmeExporter arg0) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void read(JmeImporter arg0) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

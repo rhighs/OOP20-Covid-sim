@@ -1,15 +1,10 @@
 package Simulation;
 
-import Environment.MainMap;
 import java.util.List;
+import Environment.MainMap;
 import java.util.ArrayList;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.asset.AssetManager;
-import com.jme3.scene.Node;
-import com.jme3.renderer.ViewPort;
-import Components.PathCalculator;
-import Components.PathGenerator;
 import Components.Lighting;
+import Components.PathGenerator;
 
 import Environment.Locator;
 

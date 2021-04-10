@@ -1,24 +1,22 @@
 package Main;
 
-import Simulation.Mask;
+import com.jme3.math.Vector3f;
+import com.jme3.input.KeyInput;
+import com.jme3.math.ColorRGBA;
+import de.lessvoid.nifty.Nifty;
+import com.jme3.font.BitmapText;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.math.Vector3f;
-import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
-import com.jme3.font.BitmapText;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import de.lessvoid.nifty.Nifty;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.ActionListener;
 
 import Simulation.Simulation;
 import Simulation.PersonPicker;
 import GUI.StartScreenController;
 
 import Environment.Locator;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
-
 /**
  * @author chris, rob, jurismo, savi
  */

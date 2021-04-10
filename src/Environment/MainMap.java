@@ -1,14 +1,14 @@
 package Environment;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import Components.PathCalculator;
-import Components.PathGenerator;
-import com.jme3.ai.navmesh.NavMesh;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import Components.PathGenerator;
+import Components.PathCalculator;
+import com.jme3.asset.AssetManager;
+import com.jme3.ai.navmesh.NavMesh;
+import com.jme3.bullet.BulletAppState;
 
 public class MainMap {
     private Node scene;
