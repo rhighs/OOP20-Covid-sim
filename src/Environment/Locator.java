@@ -17,12 +17,14 @@ public class Locator {
     static Graphics graphics;
     static Physics physics;
     static Ambient ambient;
+    static MainMap map;
     
     static public void provideApplication(SimpleApplication app){
         _app = app;
         
         var rootNode = _app.getRootNode();
         var assetManager = _app.getAssetManager();
+        var bullet = new BulletAppState();
         graphics = new Graphics(assetManager, rootNode);
         /*
             here i get the bstate by extracting it from the state manager,
@@ -34,11 +36,11 @@ public class Locator {
         
             then pass it to physics...
         */
-        var bullet = new BulletAppState();
         app.getStateManager().attach(bullet);
         physics = new Physics(bullet);
         
         ambient = new Ambient(assetManager, rootNode, _app.getViewPort());
+        map = new MainMap(assetManager, bullet, rootNode);
     }
     
     static public Graphics getGraphics(){
@@ -51,5 +53,9 @@ public class Locator {
     
     static public Ambient getAmbient(){
         return ambient;
+    }
+    
+    static public MainMap getMap(){
+        return map;
     }
 }

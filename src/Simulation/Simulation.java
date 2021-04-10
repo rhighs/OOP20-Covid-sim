@@ -1,5 +1,6 @@
 package Simulation;
 
+import Environment.MainMap;
 import java.util.List;
 import java.util.ArrayList;
 import com.jme3.bullet.BulletAppState;
@@ -10,15 +11,13 @@ import Components.PathCalculator;
 import Components.PathGenerator;
 import Components.Lighting;
 
-import Dependency.DependencyHelper;
+import Environment.Locator;
 
 public class Simulation {
     private MainMap map;
     private List<Person> crowd = null;
     private Virus virus;
-    private PathCalculator pathCalculator;
     private PathGenerator pg;
-    private Lighting light;
     private int nPerson = 0;
     private int noMask = 0;
     Mask.MaskProtection protection;
@@ -30,10 +29,8 @@ public class Simulation {
         this.nPerson = nPerson;
         this.noMask = noMask;
         this.protection = protection;
-        this.map = new MainMap();
+        this.map = Locator.getMap();
         this.crowd = new ArrayList<>();
-        
-        DependencyHelper.setDependency("pathCalculator", map.createPathCalculator());
         
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
@@ -45,7 +42,7 @@ public class Simulation {
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
-        this.light = new Lighting();
+        new Lighting();
     }
 
     public void step(float tpf) {

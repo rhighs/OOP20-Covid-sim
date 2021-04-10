@@ -1,4 +1,4 @@
-package Simulation;
+package Environment;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
@@ -8,28 +8,38 @@ import Components.PathCalculator;
 import Components.PathGenerator;
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh; 
-
-import Dependency.DependencyHelper;
+import com.jme3.scene.Mesh;
 
 public class MainMap {
     private Node scene;
+    private Node rootNode;
+    private AssetManager assetManager;
+    private BulletAppState bullet;
+    
+    private PathCalculator pathCalc;
 
-    public MainMap() {
-        var assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
-        var bState = (BulletAppState) DependencyHelper.getDependency("bulletAppState", BulletAppState.class);
-        var rootNode = (Node) DependencyHelper.getDependency("rootNode", Node.class);
+    public MainMap(final AssetManager assetManager, final BulletAppState bullet, final Node rootNode) {
+        this.assetManager = assetManager;
+        this.bullet = bullet;
+        this.rootNode = rootNode;
         
         scene = (Node) assetManager.loadModel("Scenes/test.j3o");
         scene.setName("SimulationScene");
+        //this is temp, speific for the test map
         scene.setLocalTranslation(new Vector3f(2, -10, 1));
         
-        bState.getPhysicsSpace().addAll(scene);
+        bullet.getPhysicsSpace().addAll(scene);
         rootNode.attachChild(scene);
+        
+        pathCalc = new PathCalculator(scene);
     }
-
+    
     public PathCalculator createPathCalculator() {
         return new PathCalculator(scene);
+    }
+    
+    public PathCalculator getPathCalculator(){
+        return pathCalc;
     }
 
     public PathGenerator createPathGenerator() {

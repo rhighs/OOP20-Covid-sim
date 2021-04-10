@@ -35,5 +35,6 @@ public class Ambient {
         viewPort.addProcessor(shadowRenderer);
         rootNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
     }
+    
             
 }
