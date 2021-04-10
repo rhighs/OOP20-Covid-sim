@@ -15,6 +15,9 @@ import Simulation.PersonPicker;
 import GUI.StartScreenController;
 
 import Dependency.DependencyHelper;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -37,6 +40,23 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
+        inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
+        ActionListener pause = new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                nifty.gotoScreen("pause");
+                startScreenState.setLabelInf(simulation.getInfectedNumb());
+            }
+        };
+        inputManager.addListener(pause, new String[]{"Pause Game"});
+        
+        inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
+        ActionListener escPause = new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                nifty.gotoScreen("hud");
+            }
+        };
+        inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
+        
         setDependencies();
                 
         initNiftyGUI();
@@ -62,7 +82,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
-        hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
+        hudText.setText("Press [P] to pause");//simulation.getInfectedNumb(); //!!!!! non fa l'update
         simulation.step(tpf);
     }
 

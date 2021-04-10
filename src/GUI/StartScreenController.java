@@ -15,6 +15,8 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.SizeValue;
 import org.bushe.swing.event.EventTopicSubscriber;
 import Simulation.Mask;
+import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.Label;
 
 /**
  * @author json 
@@ -85,32 +87,48 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         dropDown.addItem(Mask.MaskProtection.FP1);
         dropDown.addItem(Mask.MaskProtection.FP2);
         dropDown.addItem(Mask.MaskProtection.FP3);
+        
+        nifty.getScreen("start").findNiftyControl("StartButton", Button.class).disable();
     }
 
     @Override
     public void onEndScreen() {
     }
-
-    public void startGame(String screen) {
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(false);
-        inputManager.setCursorVisible(false);
-        // get number of person
+    
+    public void load(){
         final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
         final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
         final var text = textField.getRealText();
 
-        Options options = new Options(
+        try{
+            Options options = new Options(
                 Integer.parseInt(text),
                 Integer.parseInt(textNoM.getRealText()),
                 (Mask.MaskProtection) dropDown.getSelection()
             );
+            nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
+            call.call(options);
 
-        call.call(options);
+        }catch(Exception ex){}
+        
+    }
+    public void startGame(String screen) {
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        // get number of person
+        
         nifty.gotoScreen(screen);
     }
-
+    
+    //PauseScreen
+    public void setLabelInf(int inf)
+    {
+        var txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
+        txtInf.setText(Integer.toString(inf));
+        txtInf.setEnabled(false);
+    }
     public void quitGame() {
         getApplication().stop();
     }
