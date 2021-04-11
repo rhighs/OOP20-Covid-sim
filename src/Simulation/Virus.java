@@ -91,6 +91,5 @@ public class Virus extends Thread{
             try { Thread.sleep(10); } catch(Exception ex) { }
         }
     }
-    
 
 }

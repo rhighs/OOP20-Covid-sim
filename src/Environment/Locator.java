@@ -13,6 +13,7 @@ public class Locator {
     static Physics physics;
     static Ambient ambient;
     static MainMap map;
+    static Input input;
     
     static public void provideApplication(SimpleApplication app){
         _app = app;
@@ -26,6 +27,7 @@ public class Locator {
         physics = new Physics(bullet);
         ambient = new Ambient(assetManager, rootNode, _app.getViewPort());
         map = new MainMap(assetManager, bullet, rootNode);
+        input = new Input(_app.getInputManager());
     }
     
     static public Graphics getGraphics(){
@@ -42,5 +44,9 @@ public class Locator {
     
     static public MainMap getMap(){
         return map;
+    }
+    
+    static public Input getInput(){
+        return input;
     }
 }

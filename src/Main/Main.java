@@ -107,14 +107,7 @@ public class Main extends SimpleApplication {
     }
 
     public void startSimulation(StartScreenController.Options options) {
-        // int numPerson = startScreenState.loadP();
-        // int noMask = startScreenState.getNoMask();
-        // Mask.MaskProtection protection = startScreenState.getMaskP();
         simulation.start(options.nPerson, options.nMasks, options.protection);
         PersonPicker picker = new PersonPicker(this);
-    // public void startSimulation(int numPerson) {
-    //     simulation.start(numPerson, assetManager, bState, rootNode, this.getViewPort());
-
-    // this method is called by StartScreenController
     }
 }

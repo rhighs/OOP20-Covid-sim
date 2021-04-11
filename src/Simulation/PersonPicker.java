@@ -1,11 +1,13 @@
 package Simulation;
 
+import Environment.Input;
 import com.jme3.math.Ray;
 import java.util.Optional;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import Environment.InputAction;
+import Environment.Locator;
 import com.jme3.input.MouseInput;
-import com.jme3.input.InputManager;
 import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
@@ -17,15 +19,16 @@ import com.jme3.input.controls.MouseButtonTrigger;
  */
 public class PersonPicker implements ActionListener {
 
-    private InputManager input;
+    //private InputManager input;
     private CollisionResults results;
     private SimpleApplication app;
-    
+    private Input input;
     private SimulationCamera cam;
     
     private Node rootNode;
 
     public PersonPicker(SimpleApplication app) {
+        /*
         input = app.getInputManager();
         input.addMapping("attachToPerson", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         input.addMapping("detachFromPerson", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
@@ -33,6 +36,13 @@ public class PersonPicker implements ActionListener {
         
         rootNode = app.getRootNode();
         input.addListener(this, "attachToPerson");
+        */
+        
+        this.input = Locator.getInput();
+        InputAction attachCam = () -> this.attachCamToPerson();
+        InputAction detachCam = () -> cam.detachEntity();
+        input.addAction("attachToPerson", attachCam, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        input.addAction("detachFromPerson", detachCam, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         
         this.app = app;
     }
