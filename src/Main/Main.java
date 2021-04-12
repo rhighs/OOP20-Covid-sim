@@ -18,6 +18,7 @@ import Dependency.DependencyHelper;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.Ray;
 
 /**
  * @author chris, rob, jurismo, savi
@@ -56,7 +57,7 @@ public class Main extends SimpleApplication {
             }
         };
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
-        
+        setDisplayStatView(false);
         setDependencies();
                 
         initNiftyGUI();
@@ -82,7 +83,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
-        hudText.setText("Press [P] to pause");//simulation.getInfectedNumb(); //!!!!! non fa l'update
+        //simulation.getInfectedNumb(); //!!!!! non fa l'update
         simulation.step(tpf);
     }
 
@@ -114,15 +115,30 @@ public class Main extends SimpleApplication {
         // this is the command to switch GUI nifty.gotoScreen("hud");
         hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
         hudText.setColor(ColorRGBA.Blue);                             // font color
-        hudText.setText("You can write any string here");             // the text
+        hudText.setText("Press [P] to pause");
         hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
         guiNode.attachChild(hudText);
     }
 
+    
+    private void initCrossHairs() {
+        guiNode.detachAllChildren();
+        guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
+        BitmapText ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+");        // fake crosshairs
+        ch.setLocalTranslation( // center
+        settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+        settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        guiNode.attachChild(ch);
+    }
+    
+    
     public void startSimulation(StartScreenController.Options options) {
         // int numPerson = startScreenState.loadP();
         // int noMask = startScreenState.getNoMask();
         // Mask.MaskProtection protection = startScreenState.getMaskP();
+        initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
         PersonPicker picker = new PersonPicker(this);
     // public void startSimulation(int numPerson) {

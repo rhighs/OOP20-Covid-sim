@@ -17,6 +17,7 @@ import org.bushe.swing.event.EventTopicSubscriber;
 import Simulation.Mask;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.Label;
+import de.lessvoid.nifty.tools.Color;
 
 /**
  * @author json 
@@ -44,6 +45,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private FlyByCamera flyCam;
     private InputManager inputManager;
     private Callback call;
+    
 
     public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Callback call) {
         this.nifty = nifty;
@@ -132,5 +134,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void quitGame() {
         getApplication().stop();
     }
+    
 }
 

@@ -80,10 +80,10 @@
     </screen>
     <screen id="hud" controller="GUI.StartScreenController">
         <layer id="foreground" childLayout="horizontal">
-            <panel id="panel_left" width="80%" height="100%" childLayout="vertical">
-            </panel>
-            <panel id="panel_right" width="20%" height="100%" childLayout="vertical">
-                
+            <panel id="hud_panel" width="100%" height="100%" childLayout="vertical">
+                    <control name="label" text="Press [P] to pause" style="nifty-label" id="HudLabel" align="center"
+                      valign="center" backgroundImage="Interface/black.jpg">
+                    </control>
             </panel>
         </layer>
     </screen>
