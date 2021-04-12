@@ -1,14 +1,11 @@
 package Components;
 
-import Dependency.DependencyHelper;
-import com.jme3.asset.AssetManager;
-import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
 import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Node;
-import com.jme3.shadow.DirectionalLightShadowRenderer;
+import com.jme3.light.DirectionalLight;
+
+import Environment.Ambient;
+import Environment.Locator;
 
 /**
  *
@@ -17,25 +14,14 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
 public class Lighting {
     final int SHADOWMAP_SIZE = 4096;
     final private Vector3f lightDirection = new Vector3f(-0.5f, -0.5f, -0.5f);
+    final Ambient ambient = Locator.getAmbient();
 
     public Lighting() {
-        var assetManager = (AssetManager) DependencyHelper.getDependency("assetManager", AssetManager.class);
-        var viewPort = (ViewPort) DependencyHelper.getDependency("viewPort", ViewPort.class);
-        var rootNode = (Node) DependencyHelper.getDependency("rootNode", Node.class);
-        
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDirection.normalizeLocal());
         sun.setColor(ColorRGBA.White);
-        rootNode.addLight(sun);
-
-        var shadowRenderer = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 3);
-        shadowRenderer.setLight(sun);
-        viewPort.addProcessor(shadowRenderer);
-
-        rootNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
-        //var al = new AmbientLight();
-        //al.setColor(ColorRGBA.White.mult(1.3f));
-        //rootNode.addLight(al);
+        
+        ambient.addSunLight(sun, SHADOWMAP_SIZE);
     }
 
     public void setLight() { }

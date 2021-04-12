@@ -1,23 +1,17 @@
 package GUI;
 
+import Simulation.Mask;
+import de.lessvoid.nifty.Nifty;
 import com.jme3.app.Application;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.Menu;
-import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.SizeValue;
-import org.bushe.swing.event.EventTopicSubscriber;
-import Simulation.Mask;
+import com.jme3.app.state.BaseAppState;
 import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.screen.ScreenController;
+
 
 /**
  * @author json 

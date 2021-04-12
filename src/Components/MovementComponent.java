@@ -2,27 +2,28 @@ package Components;
 
 import java.util.List;
 import java.util.ArrayList;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import java.util.concurrent.Future;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.math.Vector3f;
-import java.util.concurrent.Future;
 
-import Dependency.DependencyHelper;
+import Environment.Locator;
+import Environment.MainMap;
 
 public class MovementComponent {
-    // private Spatial scene;
     private Spatial spatial;
     private BetterCharacterControl spatialControl;
     private Waypoint currPoint;
     private int currIndex = 0;
     private List<Waypoint> wayPoints = new ArrayList<>();
+    private MainMap map = Locator.getMap();
 
     private long start;
 
     private Future<List<Waypoint>> wayPointsFuture;
 
-    private PathCalculator pathCalc;
+    private PathFinderExecutor pathCalc;
 
     private enum State {
         NO_MORE_WAYPOINTS,
@@ -35,7 +36,7 @@ public class MovementComponent {
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
-        this.pathCalc = (PathCalculator) DependencyHelper.getDependency("pathCalculator", PathCalculator.class);
+        this.pathCalc = map.createPathCalculator();
     }
 
     private void finishedWaypoints() {

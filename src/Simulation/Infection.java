@@ -14,7 +14,6 @@ public class Infection implements BiFunction<Person, Person, Boolean> {
     private static int FP1_PERC = 30;
     private static int FP2_PERC = 20;
     private static int FP3_PERC = 10;
-    
 
     @Override
     public Boolean apply(Person infector, Person victim) {

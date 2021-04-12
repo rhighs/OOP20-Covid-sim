@@ -1,41 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Components;
 
-import com.jme3.ai.navmesh.NavMesh;
-import com.jme3.ai.navmesh.Path.Waypoint;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
+
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.jme3.scene.Node;
+import com.jme3.math.Vector3f;
 import java.util.concurrent.Future;
+import com.jme3.ai.navmesh.NavMesh;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import com.jme3.ai.navmesh.Path.Waypoint;
+import java.util.concurrent.ExecutorService;
 
 /**
  *
  * @author rob
  */
-public class PathCalculator {
+public class PathFinderExecutor {
 
     private ExecutorService pool = Executors.newSingleThreadExecutor();
     private Node scene;
     private NavMesh nav;
-    PathGenerator pathGen;
+    PathFinder pathGen;
 
-    public PathCalculator(final NavMesh navMesh) {
+    public PathFinderExecutor(final NavMesh navMesh) {
         nav = navMesh;
     }
     
-    public PathCalculator(final Node scene) {
+    public PathFinderExecutor(final Node scene) {
         this.scene = scene;
     }
 
     public Future<List<Waypoint>> request(final Vector3f currentPos) {
-        return pool.submit(new PathGeneratorCall(new PathGenerator(scene), currentPos));
+        return pool.submit(new PathGeneratorCall(new PathFinder(scene), currentPos));
         //return pool.submit(new PathGeneratorCall(new PathGenerator(nav), currentPos));
     }
 }
@@ -43,9 +39,9 @@ public class PathCalculator {
 class PathGeneratorCall implements Callable<List<Waypoint>> {
 
     final Vector3f startingPoint;
-    PathGenerator pathGen;
+    PathFinder pathGen;
 
-    public PathGeneratorCall(final PathGenerator pathGen, final Vector3f pos) {
+    public PathGeneratorCall(final PathFinder pathGen, final Vector3f pos) {
         this.pathGen = pathGen;
         this.startingPoint = pos;
     }
