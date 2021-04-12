@@ -23,7 +23,7 @@ public class MovementComponent {
 
     private Future<List<Waypoint>> wayPointsFuture;
 
-    private PathCalculator pathCalc;
+    private PathFinderExecutor pathCalc;
 
     private enum State {
         NO_MORE_WAYPOINTS,

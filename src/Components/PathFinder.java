@@ -11,18 +11,18 @@ import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
 
-public class PathGenerator {
+public class PathFinder {
 
     public NavMesh nav;
     public NavMeshPathfinder pathFinder;
     public Random rand;
 
-    public PathGenerator(final NavMesh navMesh) {
+    public PathFinder(final NavMesh navMesh) {
         rand = new Random();
         nav = navMesh;
     }
     
-    public PathGenerator(final Spatial scene) {
+    public PathFinder(final Spatial scene) {
         rand = new Random();
         Node n = (Node) scene;
         Geometry geom = (Geometry) n.getChild("NavMesh");

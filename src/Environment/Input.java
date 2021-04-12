@@ -1,21 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Environment;
 
-import com.jme3.input.InputManager;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.Trigger;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import com.jme3.input.InputManager;
+import com.jme3.input.controls.Trigger;
+import com.jme3.input.controls.ActionListener;
 
 /**
  *
  * @author rob
  */
-
 public class Input implements ActionListener {
     private InputManager input;
     private Map<String, InputAction> actions;
@@ -38,5 +32,4 @@ public class Input implements ActionListener {
         input.addMapping(actionName, inputTrigger);
         actions.put(actionName, action);
     }
-    
 }

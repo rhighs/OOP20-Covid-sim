@@ -4,15 +4,16 @@ import java.util.List;
 import Environment.MainMap;
 import java.util.ArrayList;
 import Components.Lighting;
-import Components.PathGenerator;
+import Components.PathFinder;
 
 import Environment.Locator;
 
 public class Simulation {
     private MainMap map;
+    private Lighting light;
     private List<Person> crowd = null;
     private Virus virus;
-    private PathGenerator pg;
+    private PathFinder pg;
     private int nPerson = 0;
     private int noMask = 0;
     Mask.MaskProtection protection;
@@ -37,7 +38,7 @@ public class Simulation {
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
-        new Lighting();
+        this.light = new Lighting();
     }
 
     public void step(float tpf) {

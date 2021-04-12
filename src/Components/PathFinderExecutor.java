@@ -15,23 +15,23 @@ import java.util.concurrent.ExecutorService;
  *
  * @author rob
  */
-public class PathCalculator {
+public class PathFinderExecutor {
 
     private ExecutorService pool = Executors.newSingleThreadExecutor();
     private Node scene;
     private NavMesh nav;
-    PathGenerator pathGen;
+    PathFinder pathGen;
 
-    public PathCalculator(final NavMesh navMesh) {
+    public PathFinderExecutor(final NavMesh navMesh) {
         nav = navMesh;
     }
     
-    public PathCalculator(final Node scene) {
+    public PathFinderExecutor(final Node scene) {
         this.scene = scene;
     }
 
     public Future<List<Waypoint>> request(final Vector3f currentPos) {
-        return pool.submit(new PathGeneratorCall(new PathGenerator(scene), currentPos));
+        return pool.submit(new PathGeneratorCall(new PathFinder(scene), currentPos));
         //return pool.submit(new PathGeneratorCall(new PathGenerator(nav), currentPos));
     }
 }
@@ -39,9 +39,9 @@ public class PathCalculator {
 class PathGeneratorCall implements Callable<List<Waypoint>> {
 
     final Vector3f startingPoint;
-    PathGenerator pathGen;
+    PathFinder pathGen;
 
-    public PathGeneratorCall(final PathGenerator pathGen, final Vector3f pos) {
+    public PathGeneratorCall(final PathFinder pathGen, final Vector3f pos) {
         this.pathGen = pathGen;
         this.startingPoint = pos;
     }

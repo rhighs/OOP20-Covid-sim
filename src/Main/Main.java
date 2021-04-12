@@ -1,5 +1,6 @@
 package Main;
 
+import Components.Lighting;
 import com.jme3.math.Vector3f;
 import com.jme3.input.KeyInput;
 import com.jme3.math.ColorRGBA;
@@ -109,5 +110,6 @@ public class Main extends SimpleApplication {
     public void startSimulation(StartScreenController.Options options) {
         simulation.start(options.nPerson, options.nMasks, options.protection);
         PersonPicker picker = new PersonPicker(this);
+        new Lighting();
     }
 }
