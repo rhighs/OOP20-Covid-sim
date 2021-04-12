@@ -27,6 +27,7 @@ public class Main extends SimpleApplication {
     private Nifty nifty;
     private BitmapText hudText;
     private StartScreenController startScreenState;
+    BitmapText ch;
 
     public static void main(String[] args) {
         new Main().start();
@@ -42,6 +43,7 @@ public class Main extends SimpleApplication {
         ActionListener pause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 nifty.gotoScreen("pause");
+                guiNode.detachChild(ch);
                 startScreenState.setLabelInf(simulation.getInfectedNumb());
             }
         };
@@ -50,7 +52,7 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
         ActionListener escPause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
-                
+                guiNode.attachChild(ch);
                 nifty.gotoScreen("hud");
             }
         };
@@ -102,18 +104,13 @@ public class Main extends SimpleApplication {
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
         // this is the command to switch GUI nifty.gotoScreen("hud");
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        hudText.setColor(ColorRGBA.Blue);                             // font color
-        hudText.setText("Press [P] to pause");
-        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
-        guiNode.attachChild(hudText);
     }
 
     
     private void initCrossHairs() {
-        guiNode.detachAllChildren();
+        //guiNode.detachAllChildren();
         guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
+        ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");        // fake crosshairs
         ch.setLocalTranslation( // center

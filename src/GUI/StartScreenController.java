@@ -39,7 +39,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private FlyByCamera flyCam;
     private InputManager inputManager;
     private Callback call;
-    
+    private Mask.MaskProtection prot;
 
     public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Callback call) {
         this.nifty = nifty;
@@ -96,12 +96,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
         final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
         final var text = textField.getRealText();
-
+        prot = (Mask.MaskProtection) dropDown.getSelection();
         try{
             Options options = new Options(
                 Integer.parseInt(text),
                 Integer.parseInt(textNoM.getRealText()),
-                (Mask.MaskProtection) dropDown.getSelection()
+                prot
             );
             nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
             call.call(options);
@@ -124,6 +124,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         var txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
         txtInf.setText(Integer.toString(inf));
         txtInf.setEnabled(false);
+        
+        var txtInfMask = nifty.getScreen("pause").findNiftyControl("txtMaskInf", TextField.class);
+        txtInfMask.setText(prot.toString());
+        txtInfMask.setEnabled(false);
     }
     public void quitGame() {
         getApplication().stop();
