@@ -44,6 +44,7 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf){
                 nifty.gotoScreen("pause");
                 guiNode.detachChild(ch);
+                inputManager.setCursorVisible(true);
                 startScreenState.setLabelInf(simulation.getInfectedNumb());
             }
         };
@@ -53,6 +54,7 @@ public class Main extends SimpleApplication {
         ActionListener escPause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 guiNode.attachChild(ch);
+                inputManager.setCursorVisible(false);
                 nifty.gotoScreen("hud");
             }
         };
@@ -126,6 +128,7 @@ public class Main extends SimpleApplication {
         // Mask.MaskProtection protection = startScreenState.getMaskP();
         initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
+        startScreenState.loadSimulation(simulation);
         PersonPicker picker = new PersonPicker(this);
         new Lighting();
     }

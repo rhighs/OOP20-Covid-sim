@@ -7,6 +7,7 @@ import Components.Lighting;
 import Components.PathFinder;
 
 import Environment.Locator;
+import com.jme3.math.Vector3f;
 
 public class Simulation {
     private MainMap map;
@@ -73,6 +74,12 @@ public class Simulation {
             return virus.getInfectedNumb();
         }catch(NullPointerException ex){
             return 0;
+        }
+    }
+    
+    public void setCrowd(int n){
+        for (int i=0; i<n; i++){
+            this.crowd.add(new Person(protection, pg.getRandomPoint()));
         }
     }
 }

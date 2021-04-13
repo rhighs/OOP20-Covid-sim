@@ -1,12 +1,14 @@
 package GUI;
 
 import Simulation.Mask;
+import Simulation.Simulation;
 import de.lessvoid.nifty.Nifty;
 import com.jme3.app.Application;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import de.lessvoid.nifty.screen.Screen;
 import com.jme3.app.state.BaseAppState;
+import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.TextField;
@@ -40,6 +42,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private InputManager inputManager;
     private Callback call;
     private Mask.MaskProtection prot;
+    private Simulation sim;
 
     public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Callback call) {
         this.nifty = nifty;
@@ -130,7 +133,14 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         txtInfMask.setEnabled(false);
     }
     public void quitGame() {
-        getApplication().stop();
+        System.exit(0);
+    }
+    public void loadSimulation(Simulation simulation){
+        this.sim = simulation;
+    }
+    public void apply(){
+        var txtAdd = nifty.getScreen("pause").findNiftyControl("txtAdd", TextField.class);
+        sim.setCrowd(Integer.parseInt(txtAdd.getRealText()));
     }
     
 }
