@@ -1,8 +1,8 @@
 package Simulation;
 
-import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.scene.Spatial;
 import com.jme3.math.Vector3f;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 
 public interface Entity {
     public void update(float tpf);

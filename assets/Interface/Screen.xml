@@ -4,9 +4,15 @@
     <useControls filename="nifty-default-controls.xml"/>
     <screen id="start" controller="GUI.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/BlackBG.png"></image>
+            <image filename="Interface/black.jpg"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
+            <panel id="panel_title" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="COVID-19 SIMULATION" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+                    
+            </panel>
             <panel id="panel1" height="20%" width="75%" align="center"
               childLayout="horizontal">
                 <panel id="panel_top_left" height="50%" width="50%" valign="center"
@@ -72,7 +78,7 @@
             </panel>
         </layer>
     </screen>
-    <screen id="hud" controller="de.lessvoid.nifty.screen.DefaultScreenController">
+    <screen id="hud" controller="GUI.StartScreenController">
         <layer id="foreground" childLayout="horizontal">
             <panel id="panel_left" width="80%" height="100%" childLayout="vertical">
             </panel>
@@ -81,4 +87,38 @@
             </panel>
         </layer>
     </screen>
+    <screen id="pause" controller="GUI.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/black.jpg"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+           
+           <panel id="panelInf" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelInfleft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="label" text="Infected:" style="nifty-label" id="InfLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="textInfect" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                     <control id="txtInf" name="textfield" maxLength="3">
+
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelEsc" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelEsc" height="50%" width="100%" valign="center"
+                  childLayout="center">
+                    <control name="label" text="Press [E] to return to HUD" style="nifty-label" id="ReturnLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
  </nifty>
+
+

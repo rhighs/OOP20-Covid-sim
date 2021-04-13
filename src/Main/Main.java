@@ -1,21 +1,23 @@
 package Main;
 
-import Simulation.Mask;
+import Components.Lighting;
+import com.jme3.math.Vector3f;
+import com.jme3.input.KeyInput;
+import com.jme3.math.ColorRGBA;
+import de.lessvoid.nifty.Nifty;
+import com.jme3.font.BitmapText;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.math.Vector3f;
-import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
-import com.jme3.font.BitmapText;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import de.lessvoid.nifty.Nifty;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.ActionListener;
 
 import Simulation.Simulation;
 import Simulation.PersonPicker;
 import GUI.StartScreenController;
 
-import Dependency.DependencyHelper;
-
+import Environment.Locator;
 /**
  * @author chris, rob, jurismo, savi
  */
@@ -37,32 +39,38 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-        setDependencies();
+        inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
+        ActionListener pause = new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                nifty.gotoScreen("pause");
+                startScreenState.setLabelInf(simulation.getInfectedNumb());
+            }
+        };
+        inputManager.addListener(pause, new String[]{"Pause Game"});
+        
+        inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
+        ActionListener escPause = new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                nifty.gotoScreen("hud");
+            }
+        };
+        inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
+        Locator.provideApplication(this);
                 
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        bState.setDebugEnabled(true);
+        //bState.setDebugEnabled(true);
         stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
                 
         cam.setLocation(new Vector3f(20, 20, 5));
         //simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
-    
-    public void setDependencies(){
-        //setting dependencies
-        DependencyHelper.setDependency("rootNode", rootNode);
-        DependencyHelper.setDependency("assetManager", assetManager);
-        DependencyHelper.setDependency("stateManager", stateManager);
-        DependencyHelper.setDependency("bulletAppState", bState);
-        DependencyHelper.setDependency("viewPort", viewPort);
-        DependencyHelper.setDependency("assetManager", assetManager);
-    }
 
     @Override
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
-        hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
+        hudText.setText("Press [P] to pause");//simulation.getInfectedNumb(); //!!!!! non fa l'update
         simulation.step(tpf);
     }
 
@@ -102,5 +110,6 @@ public class Main extends SimpleApplication {
     public void startSimulation(StartScreenController.Options options) {
         simulation.start(options.nPerson, options.nMasks, options.protection);
         PersonPicker picker = new PersonPicker(this);
+        new Lighting();
     }
 }

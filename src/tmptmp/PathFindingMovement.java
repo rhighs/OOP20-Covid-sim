@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Future;
 import com.jme3.math.Vector3f;
 //import Simulation.Entity;
-import Components.PathCalculator;
+import Components.PathFinderExecutor;
 
 public class PathFindingMovement implements MovementComponent {
     private final Entity entity;
@@ -21,9 +21,9 @@ public class PathFindingMovement implements MovementComponent {
     private List<Vector3f> points = new ArrayList<>();
     private long start;
     private Future<List<Vector3f>> pointsFuture;
-    private final PathCalculator calc;
+    private final PathFinderExecutor calc;
 
-    public PathFindingMovement(final Entity p, PathCalculator pc) {
+    public PathFindingMovement(final Entity p, PathFinderExecutor pc) {
         this.entity = p;
         this.calc = pc;
     }

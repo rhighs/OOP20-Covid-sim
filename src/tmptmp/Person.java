@@ -11,7 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.bullet.control.BetterCharacterControl;
-import Components.PathCalculator;
+import Components.PathFinderExecutor;
 
 public class Person implements tmptmp.Entity {
     
@@ -45,7 +45,7 @@ public class Person implements tmptmp.Entity {
     private Set<Person> lastNearPeople;
 
     public Person(final Vector3f spawnPoint, BulletAppState bState,
-                  Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
+                  Node rootNode, PathFinderExecutor pathCalc, AssetManager assetManager) {
         this.gfxComp  = new CubeGFXComponent(this);
         this.physComp = new PhysicsComponent(this, bState);
         this.physComp.initProximityBox(2);
