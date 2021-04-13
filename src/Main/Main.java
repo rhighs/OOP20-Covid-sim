@@ -16,7 +16,6 @@ import com.jme3.input.controls.ActionListener;
 import Simulation.Simulation;
 import Simulation.PersonPicker;
 import GUI.StartScreenController;
-
 import Environment.Locator;
 /**
  * @author chris, rob, jurismo, savi
@@ -28,6 +27,7 @@ public class Main extends SimpleApplication {
     private Nifty nifty;
     private BitmapText hudText;
     private StartScreenController startScreenState;
+    BitmapText ch;
 
     public static void main(String[] args) {
         new Main().start();
@@ -43,6 +43,8 @@ public class Main extends SimpleApplication {
         ActionListener pause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 nifty.gotoScreen("pause");
+                guiNode.detachChild(ch);
+                inputManager.setCursorVisible(true);
                 startScreenState.setLabelInf(simulation.getInfectedNumb());
             }
         };
@@ -51,11 +53,15 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
         ActionListener escPause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
+                guiNode.attachChild(ch);
+                inputManager.setCursorVisible(false);
                 nifty.gotoScreen("hud");
             }
         };
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
+        setDisplayStatView(false);
         Locator.provideApplication(this);
+
                 
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
@@ -70,7 +76,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
-        hudText.setText("Press [P] to pause");//simulation.getInfectedNumb(); //!!!!! non fa l'update
+        //simulation.getInfectedNumb(); //!!!!! non fa l'update
         simulation.step(tpf);
     }
 
@@ -100,15 +106,29 @@ public class Main extends SimpleApplication {
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
         // this is the command to switch GUI nifty.gotoScreen("hud");
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        hudText.setColor(ColorRGBA.Blue);                             // font color
-        hudText.setText("You can write any string here");             // the text
-        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
-        guiNode.attachChild(hudText);
     }
 
+    
+    private void initCrossHairs() {
+        //guiNode.detachAllChildren();
+        guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
+        ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+");        // fake crosshairs
+        ch.setLocalTranslation( // center
+        settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+        settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        guiNode.attachChild(ch);
+    }
+    
+    
     public void startSimulation(StartScreenController.Options options) {
+        // int numPerson = startScreenState.loadP();
+        // int noMask = startScreenState.getNoMask();
+        // Mask.MaskProtection protection = startScreenState.getMaskP();
+        initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
+        startScreenState.loadSimulation(simulation);
         PersonPicker picker = new PersonPicker(this);
         new Lighting();
     }

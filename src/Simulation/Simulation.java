@@ -7,6 +7,7 @@ import Components.Lighting;
 import Components.PathFinder;
 
 import Environment.Locator;
+import com.jme3.math.Vector3f;
 
 public class Simulation {
     private MainMap map;
@@ -30,11 +31,20 @@ public class Simulation {
         
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
-            Person p = new Person(protection, pg.getRandomPoint());
-            if(noMask != 0){
-                p.maskDown();
-            }
+            try{
+                Person p = new Person(protection, pg.getRandomPoint());
+                if(noMask != 0){
+                    p.maskDown();
+                }
             crowd.add(p);
+            }catch(Exception ex){
+                Person p = new Person(Mask.MaskProtection.FP1, pg.getRandomPoint());
+                if(noMask != 0){
+                    p.maskDown();
+                }
+            crowd.add(p);
+            }
+            
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
@@ -64,6 +74,12 @@ public class Simulation {
             return virus.getInfectedNumb();
         }catch(NullPointerException ex){
             return 0;
+        }
+    }
+    
+    public void setCrowd(int n){
+        for (int i=0; i<n; i++){
+            this.crowd.add(new Person(protection, pg.getRandomPoint()));
         }
     }
 }
