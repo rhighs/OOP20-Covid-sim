@@ -26,7 +26,7 @@ public class Main extends SimpleApplication {
 
     private Nifty nifty;
     private BitmapText hudText;
-    private StartScreenController startScreenState;
+    private StartScreenController screenControl;
     BitmapText ch;
 
     public static void main(String[] args) {
@@ -45,7 +45,8 @@ public class Main extends SimpleApplication {
                 nifty.gotoScreen("pause");
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
-                startScreenState.setLabelInf(simulation.getInfectedNumb());
+                screenControl.setLabelInf(simulation.getInfectedNumb());
+                screenControl.setLabelInfMask();
             }
         };
         inputManager.addListener(pause, new String[]{"Pause Game"});
@@ -55,6 +56,7 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf){
                 guiNode.attachChild(ch);
                 inputManager.setCursorVisible(false);
+                screenControl.clean();
                 nifty.gotoScreen("hud");
             }
         };
@@ -77,6 +79,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
         //simulation.getInfectedNumb(); //!!!!! non fa l'update
+        screenControl.setLabelInf(simulation.getInfectedNumb());
         simulation.step(tpf);
     }
 
@@ -101,8 +104,8 @@ public class Main extends SimpleApplication {
         );
 
         nifty = niftyDisplay.getNifty();
-        startScreenState = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
-        nifty.fromXml("Interface/Screen.xml", "start", startScreenState);
+        screenControl = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
+        nifty.fromXml("Interface/Screen.xml", "start", screenControl);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
         // this is the command to switch GUI nifty.gotoScreen("hud");
@@ -128,7 +131,7 @@ public class Main extends SimpleApplication {
         // Mask.MaskProtection protection = startScreenState.getMaskP();
         initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
-        startScreenState.loadSimulation(simulation);
+        screenControl.loadSimulation(simulation);
         PersonPicker picker = new PersonPicker(this);
         new Lighting();
     }

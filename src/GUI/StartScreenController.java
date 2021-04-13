@@ -127,7 +127,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         var txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
         txtInf.setText(Integer.toString(inf));
         txtInf.setEnabled(false);
-        
+    }
+    
+    public void setLabelInfMask()
+    {
         var txtInfMask = nifty.getScreen("pause").findNiftyControl("txtMaskInf", TextField.class);
         txtInfMask.setText(prot.toString());
         txtInfMask.setEnabled(false);
@@ -141,6 +144,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void apply(){
         var txtAdd = nifty.getScreen("pause").findNiftyControl("txtAdd", TextField.class);
         sim.setCrowd(Integer.parseInt(txtAdd.getRealText()));
+        txtAdd.setText("");
+    }
+    public void clean(){
+        var txtAdd = nifty.getScreen("pause").findNiftyControl("txtAdd", TextField.class);
+        txtAdd.setText("");
     }
     
 }

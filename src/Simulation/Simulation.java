@@ -14,6 +14,7 @@ public class Simulation {
     private Lighting light;
     private List<Person> crowd = null;
     private Virus virus;
+    Thread virusThread;
     private PathFinder pg;
     private int nPerson = 0;
     private int noMask = 0;
@@ -46,8 +47,9 @@ public class Simulation {
             }
             
         }
-        Thread virusThread = new Virus(crowd, 2);
+        virusThread = new Virus(crowd, 2);
         virusThread.start();
+        virus = (Virus) virusThread;
         this.light = new Lighting();
     }
 
@@ -78,9 +80,11 @@ public class Simulation {
     }
     
     public void setCrowd(int n){
+        virus.stopSprading();
         for (int i=0; i<n; i++){
             this.crowd.add(new Person(protection, pg.getRandomPoint()));
         }
+        virus.startSpreading();
     }
 }
 

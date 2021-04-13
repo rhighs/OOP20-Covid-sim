@@ -109,7 +109,7 @@
                 </panel>
                 <panel id="textInfect" height="50%" width="50%" valign="center"
                   childLayout="center">
-                     <control id="txtInf" name="textfield" maxLength="3">
+                     <control id="txtInf" name="textfield"  maxLength="3">
 
                     </control>
                 </panel>

@@ -40,6 +40,9 @@ public class Virus extends Thread{
     public void stopSprading() {
         isSpreading = false;
     }
+    public void resumeSpreading(){
+        isSpreading = true;
+    }
 
     private void keepSpreading() {
 
