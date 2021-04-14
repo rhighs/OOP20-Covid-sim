@@ -8,14 +8,14 @@ import com.jme3.bullet.BulletAppState;
  * @author rob
  */
 public class Locator {
-    static SimpleApplication _app;
-    static Graphics graphics;
-    static Physics physics;
-    static Ambient ambient;
-    static MainMap map;
-    static Input input;
+    private SimpleApplication _app;
+    private Graphics graphics;
+    private Physics physics;
+    private Ambient ambient;
+    private MainMap map;
+    private Input input;
     
-    static public void provideApplication(SimpleApplication app){
+    public void provideApplication(SimpleApplication app){
         _app = app;
         
         var rootNode = _app.getRootNode();
@@ -30,23 +30,23 @@ public class Locator {
         input = new Input(_app.getInputManager());
     }
     
-    static public Graphics getGraphics(){
+    public Graphics getGraphics(){
         return graphics;
     }
     
-    static public Physics getPhysics(){
+    public Physics getPhysics(){
         return physics;
     }
     
-    static public Ambient getAmbient(){
+    public Ambient getAmbient(){
         return ambient;
     }
     
-    static public MainMap getMap(){
+    public MainMap getMap(){
         return map;
     }
     
-    static public Input getInput(){
+    public Input getInput(){
         return input;
     }
 }

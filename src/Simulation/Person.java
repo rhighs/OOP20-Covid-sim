@@ -9,6 +9,7 @@ import Components.PhysicsComponent;
 import java.util.stream.Collectors;
 import Components.MovementComponent;
 import Components.GraphicsComponent;
+import Environment.Locator;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 
 public class Person implements Entity {
@@ -19,14 +20,16 @@ public class Person implements Entity {
     private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
-    Vector3f pos;
+    final private Locator world;
+    private Vector3f pos;
 
     //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
-    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint) {
-        gfx = new GraphicsComponent(this);
+    public Person(final Locator world, Mask.MaskProtection protection, final Vector3f spawnPoint) {
+        this.world = world;
+        gfx = new GraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        phyc = new PhysicsComponent(this);
-        mov = new MovementComponent(getSpatial());
+        phyc = new PhysicsComponent(world.getPhysics(), this);
+        mov = new MovementComponent(world.getMap(), this.getSpatial());
         phyc.initProximityBox(2);
         //default
         this.wearMask(new Mask(protection, Mask.MaskStatus.UP));

@@ -27,7 +27,7 @@ public class PersonPicker implements ActionListener {
     
     private Node rootNode;
 
-    public PersonPicker(SimpleApplication app) {
+    public PersonPicker(SimpleApplication app, final Input input) {
         /*
         input = app.getInputManager();
         input.addMapping("attachToPerson", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -38,7 +38,7 @@ public class PersonPicker implements ActionListener {
         input.addListener(this, "attachToPerson");
         */
         
-        this.input = Locator.getInput();
+        this.input = input;
         InputAction attachCam = () -> this.attachCamToPerson();
         InputAction detachCam = () -> cam.detachEntity();
         input.addAction("attachToPerson", attachCam, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
