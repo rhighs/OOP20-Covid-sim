@@ -89,14 +89,15 @@ public class Person implements Entity {
     public void maskDown() {
         mask.maskDown();
     }
-
+    
     @Override
-    public void setPosition(Vector3f pos) {
+    public void setPosition(final Vector3f point){
+        phyc.setPosition(point);
     }
 
     @Override
     public Vector3f getPosition() {
-        return getSpatial().getLocalTranslation();
+        return phyc.getPosition();
     }
 
     public Set<Entity> getNearEntities() {
@@ -109,10 +110,5 @@ public class Person implements Entity {
                 .filter(e -> e.getIdentificator() == Entity.Identificator.PERSON)
                 .map(e -> (Person) e)
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

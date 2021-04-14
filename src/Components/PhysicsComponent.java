@@ -115,6 +115,14 @@ public class PhysicsComponent{
 
         return Optional.empty();
     }
+    
+    public void setPosition(final Vector3f point){
+        this.spatial.setLocalTranslation(point);
+    }
+    
+    public Vector3f getPosition(){
+        return this.position;
+    }
 
     public void update() {
         position = spatial.getLocalTranslation();
