@@ -63,6 +63,11 @@ public class Person implements Entity {
         infected = true;
         gfx.changeColor(ColorRGBA.Red);
     }
+    
+    public void heal(){
+        infected = false;
+        gfx.changeColor(ColorRGBA.Blue);
+    }
 
     public void setLastNear(Set<Person> people) {
         lastNearPeople = new HashSet<Person>(people);
@@ -86,7 +91,13 @@ public class Person implements Entity {
     public void maskDown() {
         mask.maskDown();
     }
-
+    public void switchMaskState(){
+        if(this.mask.getStatus().equals(Mask.MaskStatus.UP)){
+            mask.maskDown();
+        }else{
+            mask.maskUp();
+        }
+    }
     @Override
     public void setPosition(Vector3f pos) {
     }

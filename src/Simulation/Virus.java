@@ -37,7 +37,7 @@ public class Virus extends Thread{
         isSpreading = true;
     }
 
-    public void stopSprading() {
+    public void stopSpreading() {
         isSpreading = false;
     }
     public void resumeSpreading(){
@@ -81,7 +81,19 @@ public class Virus extends Thread{
     public int getInfectedNumb(){
         return infectedPeople.isEmpty() ? 0 : infectedPeople.size();
     }
-
+    
+    public void forceInfection(Person victim){
+        victim.infect();
+        infectedPeople.add(victim);
+    }
+    public void resumeInfected(){
+        this.infectedPeople.forEach(i -> i.heal());
+        this.infectedPeople.clear();
+    }
+    public void updateCrowd(List<Person> p){
+        this.crowd = p;
+    }
+    
     public void update(float tpf) {
         keepSpreading();
     }

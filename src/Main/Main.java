@@ -42,11 +42,12 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
         ActionListener pause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
-                nifty.gotoScreen("pause");
+                screenControl.GoTo("pause");
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
                 screenControl.setLabelInf(simulation.getInfectedNumb());
                 screenControl.setLabelInfMask();
+                screenControl.setTime();
             }
         };
         inputManager.addListener(pause, new String[]{"Pause Game"});
@@ -56,7 +57,6 @@ public class Main extends SimpleApplication {
             public void onAction(String name, boolean keyPressed, float tpf){
                 guiNode.attachChild(ch);
                 inputManager.setCursorVisible(false);
-                screenControl.clean();
                 nifty.gotoScreen("hud");
             }
         };
@@ -79,7 +79,7 @@ public class Main extends SimpleApplication {
     public void simpleUpdate(float tpf) {
         //hudText.setText("Infected: " + simulation.getPersonCount());
         //simulation.getInfectedNumb(); //!!!!! non fa l'update
-        screenControl.setLabelInf(simulation.getInfectedNumb());
+        //screenControl.setLabelInf(simulation.getInfectedNumb());
         simulation.step(tpf);
     }
 

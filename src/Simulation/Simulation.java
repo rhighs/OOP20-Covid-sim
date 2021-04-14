@@ -80,11 +80,38 @@ public class Simulation {
     }
     
     public void setCrowd(int n){
-        virus.stopSprading();
+        virus.stopSpreading();
         for (int i=0; i<n; i++){
             this.crowd.add(new Person(protection, pg.getRandomPoint()));
         }
+        virus.updateCrowd(crowd);
         virus.startSpreading();
     }
-}
+    
+    public void changeMaskState(){
+        virus.stopSpreading();
+        for (int i=0; i<crowd.size(); i++){
+            this.crowd.get(i).switchMaskState();
+        }
+        virus.startSpreading();
+    }
+    
+    public void resumeInfected(){
+        virus.stopSpreading();
+        virus.resumeInfected();
+        virus.startSpreading();
+    }
+
+    public void setInfected(int infected) {
+        virus.stopSpreading();
+        for (int i=0; i<infected; i++){
+            Person p = new Person(protection, pg.getRandomPoint());
+            this.crowd.add(p);
+            virus.forceInfection(p);
+        }
+        virus.updateCrowd(crowd);
+        virus.startSpreading();
+    }
+ }
+
 
