@@ -8,26 +8,26 @@ import com.jme3.bullet.BulletAppState;
  * @author rob
  */
 public class Locator {
-    private SimpleApplication _app;
+    private SimpleApplication app;
     private Graphics graphics;
     private Physics physics;
     private Ambient ambient;
     private MainMap map;
     private Input input;
     
-    public void provideApplication(SimpleApplication app){
-        _app = app;
+    public Locator(SimpleApplication app){
+        this.app = app;
         
-        var rootNode = _app.getRootNode();
-        var assetManager = _app.getAssetManager();
+        var rootNode = app.getRootNode();
+        var assetManager = app.getAssetManager();
         var bullet = new BulletAppState();
         app.getStateManager().attach(bullet);
 
         graphics = new Graphics(assetManager, rootNode);
         physics = new Physics(bullet);
-        ambient = new Ambient(assetManager, rootNode, _app.getViewPort());
+        ambient = new Ambient(assetManager, rootNode, app.getViewPort());
         map = new MainMap(assetManager, bullet, rootNode);
-        input = new Input(_app.getInputManager());
+        input = new Input(app.getInputManager());
     }
     
     public Graphics getGraphics(){

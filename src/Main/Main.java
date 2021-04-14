@@ -26,6 +26,7 @@ public class Main extends SimpleApplication {
     private final Simulation simulation = new Simulation();
 
     private Nifty nifty;
+    private Locator world;
     private BitmapText hudText;
     private StartScreenController startScreenState;
 
@@ -55,7 +56,7 @@ public class Main extends SimpleApplication {
             }
         };
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
-        Locator.provideApplication(this);
+        world = new Locator(this);
                 
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
@@ -108,8 +109,7 @@ public class Main extends SimpleApplication {
     }
 
     public void startSimulation(StartScreenController.Options options) {
-        simulation.start(options.nPerson, options.nMasks, options.protection);
-        PersonPicker picker = new PersonPicker(this);
-        new Lighting();
+        simulation.start(world, options.nPerson, options.nMasks, options.protection);
+        PersonPicker picker = new PersonPicker(this, world.getInput());
     }
 }
