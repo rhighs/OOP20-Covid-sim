@@ -23,7 +23,7 @@ public class MainMap {
         this.bullet = bullet;
         this.rootNode = rootNode;
         
-        scene = (Node) assetManager.loadModel("Scenes/test.j3o");
+        scene = (Node) assetManager.loadModel("Scenes/test/scene.j3o");
         scene.setName("SimulationScene");
         //this is temp, speific for the test map
         scene.setLocalTranslation(new Vector3f(2, -10, 1));

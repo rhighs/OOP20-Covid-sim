@@ -39,12 +39,10 @@ public class Simulation {
                 p.maskDown();
             }
             crowd.add(p);
-            }
             
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
-        this.light = new Lighting(world.getAmbient());
     }
 
     public void step(float tpf) {
@@ -75,7 +73,7 @@ public class Simulation {
     
     public void setCrowd(int n){
         for (int i=0; i<n; i++){
-            this.crowd.add(new Person(protection, pg.getRandomPoint()));
+            this.crowd.add(new Person(world, protection, pg.getRandomPoint()));
         }
     }
 }
