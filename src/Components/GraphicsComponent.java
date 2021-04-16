@@ -17,9 +17,10 @@ public class GraphicsComponent {
     protected Spatial sp;
     private Material mat;
     private ColorRGBA color = ColorRGBA.Green;
-    private Graphics graphics = Locator.getGraphics();
+    private Graphics graphics;
 
-    public GraphicsComponent(final Entity entity) {
+    public GraphicsComponent(final Graphics graphics, final Entity entity) {
+        this.graphics = graphics;
         this.entity = entity;
         
         Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
@@ -34,12 +35,6 @@ public class GraphicsComponent {
 
         //binding spatial to entity, in order to make it "pickable"
         //sp.setUserData("entity", entity);
-    }
-
-    public GraphicsComponent(final Entity entity, final Material mat) {
-        this(entity);
-        this.mat = mat;
-        this.sp.setMaterial(mat);
     }
 
     public void moveTo(final Vector3f pos) {

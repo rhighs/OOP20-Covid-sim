@@ -17,38 +17,34 @@ public class Simulation {
     private PathFinder pg;
     private int nPerson = 0;
     private int noMask = 0;
+    private Locator world;
     Mask.MaskProtection protection;
 
     public Simulation() {
     }
 
-    public void start(int nPerson, int noMask, Mask.MaskProtection protection) {
+    public void start(final Locator world, int nPerson, int noMask, Mask.MaskProtection protection) {
+        this.world = world;
         this.nPerson = nPerson;
         this.noMask = noMask;
         this.protection = protection;
-        this.map = Locator.getMap();
+        this.map = world.getMap();
         this.crowd = new ArrayList<>();
         
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
-            try{
-                Person p = new Person(protection, pg.getRandomPoint());
-                if(noMask != 0){
-                    p.maskDown();
-                }
-            crowd.add(p);
-            }catch(Exception ex){
-                Person p = new Person(Mask.MaskProtection.FP1, pg.getRandomPoint());
-                if(noMask != 0){
-                    p.maskDown();
-                }
+            Person p = new Person(world, protection, pg.getRandomPoint());
+
+            if(noMask != 0){
+                p.maskDown();
+            }
             crowd.add(p);
             }
             
         }
         Thread virusThread = new Virus(crowd, 2);
         virusThread.start();
-        this.light = new Lighting();
+        this.light = new Lighting(world.getAmbient());
     }
 
     public void step(float tpf) {

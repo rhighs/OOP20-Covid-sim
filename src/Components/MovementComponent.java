@@ -17,7 +17,7 @@ public class MovementComponent {
     private Waypoint currPoint;
     private int currIndex = 0;
     private List<Waypoint> wayPoints = new ArrayList<>();
-    private MainMap map = Locator.getMap();
+    private MainMap map;
 
     private long start;
 
@@ -32,7 +32,8 @@ public class MovementComponent {
     }
     State state = State.NO_MORE_WAYPOINTS;
 
-    public MovementComponent(final Spatial spatial) {
+    public MovementComponent(final MainMap map, final Spatial spatial) {
+        this.map = map;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
