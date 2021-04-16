@@ -43,6 +43,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         void call(Options options);
     }
     
+    private static int DEFAULT_PERSON = 50;
     private Nifty nifty;
     private FlyByCamera flyCam;
     private InputManager inputManager;
@@ -96,7 +97,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         dropDown.addItem(Mask.MaskProtection.FP2);
         dropDown.addItem(Mask.MaskProtection.FP3);
         
-        nifty.getScreen("start").findNiftyControl("StartButton", Button.class).disable();
+        //nifty.getScreen("start").findNiftyControl("StartButton", Button.class).disable();
         
   
     }
@@ -105,7 +106,36 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void onEndScreen() {
     }
     
+        
+    public void GoTo(String screen) {
+        nifty.gotoScreen(screen);
+    }
+   
     public void load(){
+        nifty.gotoScreen("load");
+    }
+    
+    public void loadWorst(){
+        prot = Mask.MaskProtection.FP1;
+        Options options = new Options(DEFAULT_PERSON, DEFAULT_PERSON, prot);
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        call.call(options);
+        nifty.gotoScreen("hud");
+    }
+    
+    public void loadBest(){
+        prot = Mask.MaskProtection.FP3;
+        Options options = new Options(DEFAULT_PERSON, 0, prot);
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        call.call(options);
+        nifty.gotoScreen("hud");
+    }
+     
+    public void startGame(String screen) {
         final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
         final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
@@ -119,22 +149,13 @@ public class StartScreenController extends BaseAppState implements ScreenControl
             );
             nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
             call.call(options);
+            
+            flyCam.setEnabled(true);
+            flyCam.setDragToRotate(false);
+            inputManager.setCursorVisible(false);
+            nifty.gotoScreen(screen);
 
         }catch(Exception ex){}
-        
-    }
-        
-    public void GoTo(String screen) {
-        nifty.gotoScreen(screen);
-    }
-    
-    public void startGame(String screen) {
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(false);
-        inputManager.setCursorVisible(false);
-        // get number of person
-        
-        nifty.gotoScreen(screen);
     }
     
     //PauseScreen
