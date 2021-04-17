@@ -62,6 +62,7 @@ public class Main extends SimpleApplication {
         };
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
         setDisplayStatView(false);
+        setDisplayFps(false);
         Locator.provideApplication(this);
 
                 
