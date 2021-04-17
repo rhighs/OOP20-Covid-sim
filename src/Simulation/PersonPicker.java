@@ -19,15 +19,13 @@ import com.jme3.input.controls.MouseButtonTrigger;
  */
 public class PersonPicker implements ActionListener {
 
-    //private InputManager input;
-    private CollisionResults results;
-    private SimpleApplication app;
     private Input input;
-    private SimulationCamera cam;
-    
     private Node rootNode;
+    private SimulationCamera cam;
+    private CollisionResults results;
+    
 
-    public PersonPicker(SimpleApplication app) {
+    public PersonPicker(final Input input) {
         /*
         input = app.getInputManager();
         input.addMapping("attachToPerson", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -38,18 +36,16 @@ public class PersonPicker implements ActionListener {
         input.addListener(this, "attachToPerson");
         */
         
-        this.input = Locator.getInput();
+        this.input = input;
         InputAction attachCam = () -> this.attachCamToPerson();
         InputAction detachCam = () -> cam.detachEntity();
         input.addAction("attachToPerson", attachCam, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         input.addAction("detachFromPerson", detachCam, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        
-        this.app = app;
     }
 
     public Optional<Person> pickPerson() {
-        results = new CollisionResults();
         Spatial node;
+        results = new CollisionResults();
 
         Ray ray = new Ray(cam.getLocation(), cam.getDirection());
 
@@ -60,7 +56,6 @@ public class PersonPicker implements ActionListener {
         try{
             node = found.getGeometry();
         }catch (Exception ex){
-            var err = ex.toString();
             return Optional.empty();
         }
 
@@ -68,13 +63,13 @@ public class PersonPicker implements ActionListener {
             return Optional.empty();
         }
 
-        var userData = node.getUserData("entity");
+        var personAsUserData = node.getUserData("entity");
 
-        if (userData == null) {
+        if (personAsUserData == null) {
             return Optional.empty();
         }
 
-        return Optional.of((Person) userData);
+        return Optional.of((Person) personAsUserData);
     }
 
     @Override

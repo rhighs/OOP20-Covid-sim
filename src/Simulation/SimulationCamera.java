@@ -10,7 +10,6 @@ import com.jme3.input.FlyByCamera;
  */
 public class SimulationCamera {
     private Camera cam;
-    //FlyByCamera refers to all the dynamic concepts of a camera
     private FlyByCamera flyCam;
     private Entity attachedEntity;
     

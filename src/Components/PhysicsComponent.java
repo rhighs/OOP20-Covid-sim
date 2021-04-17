@@ -28,15 +28,16 @@ public class PhysicsComponent{
     private Vector3f position;
     private SimpleApplication app;
     private GhostControl proximityBox;
-    private Physics physics = Locator.getPhysics();
+    private Physics physics;
     
     private Random randMass;
 
     private static float DIRECTION_LENGTH = 20;
 
-    public PhysicsComponent(Entity entity) {
+    public PhysicsComponent(final Physics physics, Entity entity) {
         this.app = app;
         this.entity = entity;
+        this.physics = physics;
         this.spatial = entity.getSpatial();
         this.spatialScale = spatial.getLocalTransform().getScale();
         this.position = spatial.getLocalTranslation();
@@ -113,6 +114,14 @@ public class PhysicsComponent{
         }
 
         return Optional.empty();
+    }
+    
+    public void setPosition(final Vector3f point){
+        this.spatial.setLocalTranslation(point);
+    }
+    
+    public Vector3f getPosition(){
+        return this.position;
     }
 
     public void update() {
