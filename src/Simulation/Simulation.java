@@ -76,7 +76,6 @@ public class Simulation {
         virus.stopSpreading();
         for (int i=0; i<n; i++){
             this.crowd.add(new Person(world, protection, pg.getRandomPoint()));
-<<<<<<< HEAD
         }
         virus.updateCrowd(crowd);
         virus.startSpreading();
@@ -86,8 +85,6 @@ public class Simulation {
         virus.stopSpreading();
         for (int i=0; i<crowd.size(); i++){
             this.crowd.get(i).switchMaskState();
-=======
->>>>>>> f593321e6b0a5daeae24e445d8bdbd786c116618
         }
         virus.startSpreading();
     }
