@@ -51,4 +51,8 @@ public class Mask{
     public void maskDown() {
         this.status = MaskStatus.DOWN;
     }
+    
+    public void maskUp(){
+        this.status = MaskStatus.UP;
+    }
 }

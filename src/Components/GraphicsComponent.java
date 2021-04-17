@@ -34,7 +34,7 @@ public class GraphicsComponent {
         this.show();
 
         //binding spatial to entity, in order to make it "pickable"
-        sp.setUserData("entity", entity);
+        //sp.setUserData("entity", entity);
     }
 
     public void moveTo(final Vector3f pos) {
