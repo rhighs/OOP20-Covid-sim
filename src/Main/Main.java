@@ -62,8 +62,14 @@ public class Main extends SimpleApplication {
             }
         };
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
+<<<<<<< HEAD
 
         world = new Locator(this);                
+=======
+        world = new Locator(this);
+        var light = new Lighting(world.getAmbient());
+                
+>>>>>>> f593321e6b0a5daeae24e445d8bdbd786c116618
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         //bState.setDebugEnabled(true);
