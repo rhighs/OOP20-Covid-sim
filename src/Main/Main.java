@@ -21,13 +21,11 @@ import Environment.Locator;
  * @author chris, rob, jurismo, savi
  */
 public class Main extends SimpleApplication {
-    private final BulletAppState bState = new BulletAppState();
-    private final Simulation simulation = new Simulation();
-
     private Nifty nifty;
     private Locator world;
     private BitmapText hudText;
     private StartScreenController screenControl;
+    private Simulation simulation;
     BitmapText ch;
 
     public static void main(String[] args) {
@@ -64,23 +62,17 @@ public class Main extends SimpleApplication {
         
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
         world = new Locator(this);
-        var light = new Lighting(world.getAmbient());
+        this.simulation = new Simulation(world);
                 
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        //bState.setDebugEnabled(true);
-        stateManager.attach(bState);
         flyCam.setMoveSpeed(50);
                 
         cam.setLocation(new Vector3f(20, 20, 5));
-        //simulation.start(100, assetManager, bState, rootNode, viewPort);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        //hudText.setText("Infected: " + simulation.getPersonCount());
-        //simulation.getInfectedNumb(); //!!!!! non fa l'update
-        //screenControl.setLabelInf(simulation.getInfectedNumb());
         simulation.step(tpf);
     }
 
@@ -114,7 +106,6 @@ public class Main extends SimpleApplication {
 
     
     private void initCrossHairs() {
-        //guiNode.detachAllChildren();
         guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
         ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
@@ -127,7 +118,6 @@ public class Main extends SimpleApplication {
     
     
     public void startSimulation(StartScreenController.Options options) {
-        simulation.start(world, options.nPerson, options.nMasks, options.protection);
-        PersonPicker picker = new PersonPicker(this, world.getInput());
+        simulation.start(options.nPerson, options.nMasks, options.protection);
     }
 }

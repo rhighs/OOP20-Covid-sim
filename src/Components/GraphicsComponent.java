@@ -33,7 +33,6 @@ public class GraphicsComponent {
         this.sp = cube;
         this.show();
 
-        //binding spatial to entity, in order to make it "pickable"
         //sp.setUserData("entity", entity);
     }
 

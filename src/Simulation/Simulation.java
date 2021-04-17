@@ -5,32 +5,32 @@ import Environment.MainMap;
 import java.util.ArrayList;
 import Components.Lighting;
 import Components.PathFinder;
-
 import Environment.Locator;
 import com.jme3.math.Vector3f;
 
 public class Simulation {
     private MainMap map;
-    private Lighting light;
     private List<Person> crowd = null;
     private Virus virus;
-    Thread virusThread;
+    private Thread virusThread;
     private PathFinder pg;
     private int nPerson = 0;
     private int noMask = 0;
     private Locator world;
+    private Lighting light;
     Mask.MaskProtection protection;
 
-    public Simulation() {
+    public Simulation(final Locator world) {
+        this.world = world;
     }
 
-    public void start(final Locator world, int nPerson, int noMask, Mask.MaskProtection protection) {
-        this.world = world;
+    public void start(int nPerson, int noMask, Mask.MaskProtection protection) {
         this.nPerson = nPerson;
         this.noMask = noMask;
         this.protection = protection;
         this.map = world.getMap();
         this.crowd = new ArrayList<>();
+        this.light = new Lighting(world.getAmbient());
         
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
@@ -42,6 +42,7 @@ public class Simulation {
             crowd.add(p);
             
         }
+
         virusThread = new Virus(crowd, 2);
         virusThread.start();
     }

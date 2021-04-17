@@ -37,6 +37,7 @@ public class Spawner {
         if (spawnPoints == null){
             return;
         }
+
         int numPeople = crowd.size();
         int perPoint = numPeople / numPoints;
 

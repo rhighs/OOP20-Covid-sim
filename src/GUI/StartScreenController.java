@@ -19,12 +19,10 @@ import de.lessvoid.nifty.tools.StopWatch;
 import java.time.Duration;
 import java.time.Instant;
 
-
 /**
  * @author json 
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
-
     
     public final static class Options {
         public final int nPerson;
@@ -166,6 +164,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         txtInf.setEnabled(false);
        
     }
+
     public void setTime(){
     
          var txtTime = nifty.getScreen("pause").findNiftyControl("TimeSpentLabel", TextField.class);
@@ -175,28 +174,34 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         txtTime.setText(Long.toString(timeElapsed));
         txtTime.setEnabled(false);
     }
+
     public void setLabelInfMask()
     {
         var txtInfMask = nifty.getScreen("pause").findNiftyControl("txtMaskInf", TextField.class);
         txtInfMask.setText(prot.toString());
         txtInfMask.setEnabled(false);
     }
+
     public void quitGame() {
         System.exit(0);
     }
+
     public void loadSimulation(Simulation simulation){
         this.sim = simulation;
     }
+
     public void edit(){
         nifty.gotoScreen("edit");
         setTextEdit();
     }
+
     private void setTextEdit(){
         var txtAdd = nifty.getScreen("edit").findNiftyControl("txtAdd", TextField.class);
         txtAdd.setText("0");
         var txtAddInf = nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class);
         txtAddInf.setText("0");
     }
+
     //modify screen
     public void apply(){
         try{
@@ -210,12 +215,15 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         nifty.gotoScreen("pause");
         
     }
+    
     public void stateMask(){
         sim.changeMaskState();
     }
+
     public void noInfected(){
         sim.resumeInfected();
     }
+
     public void cancel(){
         nifty.getScreen("edit").findNiftyControl("txtAdd", TextField.class).setText("");
         nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class).setText("");

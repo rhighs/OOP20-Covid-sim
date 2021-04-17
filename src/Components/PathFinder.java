@@ -41,10 +41,8 @@ public class PathFinder {
         return success == true ? pathFinder.getPath().getWaypoints() : null;
     }
 
-    // returns a random 3d point inside the navmesh, so we are sure it's somehow reachable
     public Vector3f getRandomPoint() {
         var idx = rand.nextInt(nav.getNumCells());
-        
         var v = new Vector3f(nav.getCell(idx).getRandomPoint());
         
         return v;
