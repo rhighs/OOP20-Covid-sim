@@ -10,11 +10,10 @@ import com.jme3.material.Material;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 
 import Environment.Graphics;
-import Environment.Locator;
 
 public class GraphicsComponent {
     private Entity entity;
-    protected Spatial sp;
+    private Spatial sp;
     private Material mat;
     private ColorRGBA color = ColorRGBA.Green;
     private Graphics graphics;
@@ -32,8 +31,6 @@ public class GraphicsComponent {
         
         this.sp = cube;
         this.show();
-
-        //sp.setUserData("entity", entity);
     }
 
     public void moveTo(final Vector3f pos) {

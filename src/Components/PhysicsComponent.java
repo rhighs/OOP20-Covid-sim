@@ -50,6 +50,7 @@ public class PhysicsComponent{
         randMass = new Random();
         spatialControl = new BetterCharacterControl(1f, 9f, (randMass.nextInt(10) + 1));
         
+        spatial.setUserData("entity", entity);
         setControlEnabled(true);
     }
 
@@ -79,7 +80,6 @@ public class PhysicsComponent{
         var boxCollShape = new BoxCollisionShape(boxSize);
 
         proximityBox = new GhostControl(boxCollShape);
-
         spatial.addControl(proximityBox);
         proximityBox.setUserObject(entity);
         physics.addToSpace(proximityBox);
