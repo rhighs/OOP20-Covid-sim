@@ -26,14 +26,10 @@ public class Main extends SimpleApplication {
     private BitmapText hudText;
     private StartScreenController screenControl;
     private Simulation simulation;
-    BitmapText ch;
-
+    private BitmapText ch;
+    
     public static void main(String[] args) {
         new Main().start();
-    }
-
-    public Main() {
-        //super(new FlyCamAppState());
     }
     
     @Override
@@ -78,7 +74,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm){
-
+        
     }
 
     private void initNiftyGUI() {
@@ -101,7 +97,6 @@ public class Main extends SimpleApplication {
         nifty.fromXml("Interface/Screen.xml", "start", screenControl);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
-        // this is the command to switch GUI nifty.gotoScreen("hud");
     }
 
     
@@ -111,8 +106,9 @@ public class Main extends SimpleApplication {
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");        // fake crosshairs
         ch.setLocalTranslation( // center
-        settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
-        settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+            settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+            settings.getHeight() / 2 + ch.getLineHeight() / 2, 0
+        );
         guiNode.attachChild(ch);
     }
     
