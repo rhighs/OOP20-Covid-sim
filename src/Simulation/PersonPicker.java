@@ -15,7 +15,6 @@ import com.jme3.input.controls.MouseButtonTrigger;
  * @author rob
  */
 public class PersonPicker {
-
     private Input input;
     private Node rootNode;
     private SimulationCamera cam;
@@ -65,7 +64,7 @@ public class PersonPicker {
             p = (Person) pickPerson().get();
             cam.attachToEntity(p);
         }catch(Exception ex){
-            var err = ex.toString();
+            return;
         }
     }
 

@@ -35,8 +35,12 @@ public class SimulationCamera {
     }
     
     public void detachEntity(){
-        if(this.attachedEntity != null){
-            this.attachedEntity = null;
+        try{
+            if(this.attachedEntity != null){
+                this.attachedEntity = null;
+            }
+        }catch(Exception ex){
+           return; 
         }
     }
     

@@ -89,6 +89,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         dropDown.addItem(Mask.MaskProtection.FP1);
         dropDown.addItem(Mask.MaskProtection.FP2);
         dropDown.addItem(Mask.MaskProtection.FP3);
+        
+        //default
+        prot = Mask.MaskProtection.FP1;
+        //nifty.getScreen("start").findNiftyControl("StartButton", Button.class).disable();
     }
 
     @Override
@@ -135,8 +139,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
         final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
         final var text = textField.getRealText();
-        prot = (Mask.MaskProtection) dropDown.getSelection();
-        try {
+        
+        try{
+            prot = (Mask.MaskProtection) dropDown.getSelection();
             Options options = new Options(
                 Integer.parseInt(text),
                 Integer.parseInt(textNoM.getRealText()),
@@ -168,11 +173,23 @@ public class StartScreenController extends BaseAppState implements ScreenControl
          var txtTime = nifty.getScreen("pause").findNiftyControl("TimeSpentLabel", TextField.class);
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toSeconds();
-        System.out.println(Long.toString(timeElapsed));
         txtTime.setText(Long.toString(timeElapsed));
         txtTime.setEnabled(false);
     }
 
+    public Long getTime(){
+        long timeElapsed;
+        
+        try{
+            Instant finish = Instant.now();
+            timeElapsed = Duration.between(start, finish).toSeconds(); 
+
+        }catch(NullPointerException ex){ 
+            return 0L;
+        }
+        return timeElapsed;
+    }
+    
     public void setLabelInfMask()
     {
         var txtInfMask = nifty.getScreen("pause").findNiftyControl("txtMaskInf", TextField.class);
@@ -180,8 +197,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         txtInfMask.setEnabled(false);
     }
 
-    public void quitGame() {
-        quitFn.call(true);
+    public void quit() {
+        System.exit(0);
+
     }
 
     public void loadSimulation(Simulation simulation){
