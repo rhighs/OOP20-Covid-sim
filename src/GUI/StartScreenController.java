@@ -85,10 +85,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
     @Override
     public void onStartScreen() {
-        TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
-        textField.setText("1");
-        TextField textF = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
-        textF.setText("0");
         //add items to the dropDown
         DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
         dropDown.addItem(Mask.MaskProtection.FP1);
