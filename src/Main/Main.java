@@ -1,10 +1,8 @@
 package Main;
 
-import Components.Lighting;
 import com.jme3.math.Vector3f;
 import com.jme3.input.KeyInput;
 import com.jme3.math.ColorRGBA;
-import de.lessvoid.nifty.Nifty;
 import com.jme3.font.BitmapText;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
@@ -12,30 +10,29 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.ActionListener;
+import de.lessvoid.nifty.Nifty;
 
+import Components.Lighting;
 import Simulation.Simulation;
 import Simulation.PersonPicker;
 import GUI.StartScreenController;
 import Environment.Locator;
-/**
- * @author chris, rob, jurismo, savi
- */
+
 public class Main extends SimpleApplication {
     private Nifty nifty;
     private Locator world;
     private BitmapText hudText;
     private StartScreenController screenControl;
     private Simulation simulation;
-    BitmapText ch;
+    private BitmapText ch;
 
     public static void main(String[] args) {
         new Main().start();
     }
 
     public Main() {
-        //super(new FlyCamAppState());
     }
-    
+
     @Override
     public void simpleInitApp() {
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
@@ -50,7 +47,7 @@ public class Main extends SimpleApplication {
             }
         };
         inputManager.addListener(pause, new String[]{"Pause Game"});
-        
+
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
         ActionListener escPause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
@@ -59,15 +56,15 @@ public class Main extends SimpleApplication {
                 nifty.gotoScreen("hud");
             }
         };
-        
+
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
         world = new Locator(this);
         this.simulation = new Simulation(world);
-                
+
         initNiftyGUI();
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         flyCam.setMoveSpeed(50);
-                
+
         cam.setLocation(new Vector3f(20, 20, 5));
     }
 
@@ -97,14 +94,14 @@ public class Main extends SimpleApplication {
         );
 
         nifty = niftyDisplay.getNifty();
-        screenControl = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
+        screenControl = new StartScreenController(nifty, flyCam, inputManager);
+        screenControl.onStartButtonClicked(o -> startSimulation(o));
+        screenControl.onQuitButtonClicked(from -> finish(from));
         nifty.fromXml("Interface/Screen.xml", "start", screenControl);
-        // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
-        // this is the command to switch GUI nifty.gotoScreen("hud");
     }
 
-    
+
     private void initCrossHairs() {
         guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
         ch = new BitmapText(guiFont, false);
@@ -115,9 +112,23 @@ public class Main extends SimpleApplication {
         settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
     }
-    
-    
+
+
     public void startSimulation(StartScreenController.Options options) {
         simulation.start(options.nPerson, options.nMasks, options.protection);
     }
+
+    /* This function is called both when the user closes the window and when the user
+     * presses the quit button on the GUI.
+     * @fromQuitButton indicates if it came from the GUI. */
+    public void finish(Boolean fromQuitButton) {
+        System.err.println("exiting...");
+        System.exit(0);
+    }
+
+    @Override
+    public void destroy() {
+        finish(false);
+    }
 }
+
