@@ -11,19 +11,21 @@ import Components.MovementComponent;
 import Components.GraphicsComponent;
 import Environment.Locator;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
+import com.jme3.export.Savable;
+import java.io.IOException;
 
-public class Person implements Entity {
-
+public class Person implements Entity, Savable {
     final private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
     final private MovementComponent mov;
+    final private Locator world;
     private Set<Person> lastNearPeople;
     private boolean infected;
-    private Mask mask;
-    final private Locator world;
     private Vector3f pos;
-
-    //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
+    private Mask mask;
+    
     public Person(final Locator world, Mask.MaskProtection protection, final Vector3f spawnPoint) {
         this.world = world;
         gfx = new GraphicsComponent(world.getGraphics(), this);
@@ -31,6 +33,7 @@ public class Person implements Entity {
         phyc = new PhysicsComponent(world.getPhysics(), this);
         mov = new MovementComponent(world.getMap(), this.getSpatial());
         phyc.initProximityBox(2);
+        
         //default
         this.wearMask(new Mask(protection, Mask.MaskStatus.UP));
     }
@@ -123,5 +126,13 @@ public class Person implements Entity {
                 .filter(e -> e.getIdentificator() == Entity.Identificator.PERSON)
                 .map(e -> (Person) e)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void write(JmeExporter arg0) throws IOException {
+    }
+
+    @Override
+    public void read(JmeImporter arg0) throws IOException {
     }
 }

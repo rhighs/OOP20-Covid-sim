@@ -1,5 +1,6 @@
 package Simulation;
 
+import Environment.SimulationCamera;
 import java.util.List;
 import Environment.MainMap;
 import java.util.ArrayList;
@@ -18,10 +19,14 @@ public class Simulation {
     private int noMask = 0;
     private Locator world;
     private Lighting light;
+    private SimulationCamera cam;
+    private PersonPicker picker;
+    
     Mask.MaskProtection protection;
 
     public Simulation(final Locator world) {
         this.world = world;
+        cam = world.getSimulationCamera();
     }
 
     public void start(int nPerson, int noMask, Mask.MaskProtection protection){
@@ -43,17 +48,19 @@ public class Simulation {
             crowd.add(p);
         }
         
-        var picker = new PersonPicker(world.getInput());
+        picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
 
         virusThread = new Virus(crowd, 2);
         virusThread.start();
     }
 
     public void step(float tpf) {
+        cam.update(tpf);
+        
         if (crowd == null) {
             return;
         }
-
+        
         for (var p : crowd) {
             p.update(tpf);
         }

@@ -54,8 +54,7 @@ public class MovementComponent {
                 }
                 currPoint = wayPoints.get(currIndex);
             } catch (Exception e) {
-                System.out.println("caught an exception here");
-                System.exit(1);
+                return;
             }
             start = System.currentTimeMillis();
             currIndex++;
@@ -65,7 +64,6 @@ public class MovementComponent {
 
     private void followWaypoint() {
         if (currPoint == null) {
-            System.out.println("currPoint is null");
             System.exit(1);
         }
         Vector3f currPointVector = currPoint.getPosition();

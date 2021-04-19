@@ -26,7 +26,13 @@ public class Input implements ActionListener {
         actions.entrySet()
                 .stream()
                 .filter(e -> e.getKey().equals(actionName) && !isPressed)
-                .forEach(e -> e.getValue().run());
+                .forEach(e -> {
+                    try{
+                        e.getValue().run();
+                    }catch(Exception ex){
+                        return;
+                    }
+                 });
     }
     
     public void addAction(String actionName, InputAction action, Trigger inputTrigger){

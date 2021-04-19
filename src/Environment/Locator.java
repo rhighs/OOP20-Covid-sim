@@ -14,6 +14,7 @@ public class Locator {
     private Ambient ambient;
     private MainMap map;
     private Input input;
+    private SimulationCamera cam;
     
     public Locator(SimpleApplication app){
         this.app = app;
@@ -28,6 +29,7 @@ public class Locator {
         ambient = new Ambient(assetManager, rootNode, app.getViewPort());
         map = new MainMap(assetManager, bullet, rootNode);
         input = new Input(app.getInputManager());
+        cam = new SimulationCamera(app.getCamera(), app.getFlyByCamera());
     }
     
     public Graphics getGraphics(){
@@ -48,5 +50,9 @@ public class Locator {
     
     public Input getInput(){
         return input;
+    }
+    
+    public SimulationCamera getSimulationCamera(){
+        return cam;
     }
 }
