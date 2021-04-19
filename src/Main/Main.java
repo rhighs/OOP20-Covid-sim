@@ -30,9 +30,6 @@ public class Main extends SimpleApplication {
         new Main().start();
     }
 
-    public Main() {
-    }
-
     @Override
     public void simpleInitApp() {
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
@@ -75,7 +72,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm){
-
+        
     }
 
     private void initNiftyGUI() {
@@ -108,13 +105,15 @@ public class Main extends SimpleApplication {
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");        // fake crosshairs
         ch.setLocalTranslation( // center
-        settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
-        settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+            settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+            settings.getHeight() / 2 + ch.getLineHeight() / 2, 0
+        );
         guiNode.attachChild(ch);
     }
 
 
     public void startSimulation(StartScreenController.Options options) {
+        initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
     }
 

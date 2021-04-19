@@ -6,36 +6,22 @@ import java.util.Optional;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import Environment.InputAction;
-import Environment.Locator;
 import com.jme3.input.MouseInput;
-import com.jme3.app.SimpleApplication;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 
 /**
  *
  * @author rob
  */
-public class PersonPicker implements ActionListener {
+public class PersonPicker {
 
     private Input input;
     private Node rootNode;
     private SimulationCamera cam;
     private CollisionResults results;
-    
 
     public PersonPicker(final Input input) {
-        /*
-        input = app.getInputManager();
-        input.addMapping("attachToPerson", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        input.addMapping("detachFromPerson", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        input.setCursorVisible(true);
-        
-        rootNode = app.getRootNode();
-        input.addListener(this, "attachToPerson");
-        */
-        
         this.input = input;
         InputAction attachCam = () -> this.attachCamToPerson();
         InputAction detachCam = () -> cam.detachEntity();
@@ -70,25 +56,6 @@ public class PersonPicker implements ActionListener {
         }
 
         return Optional.of((Person) personAsUserData);
-    }
-
-    @Override
-    public void onAction(String name, boolean keyPressed, float tpf) {
-        switch(name){
-            case "attachToPerson":
-                if(!keyPressed){
-                    attachCamToPerson();
-                }
-                break;
-                
-            case "detachFromPerson":
-                if(!keyPressed){
-                    cam.detachEntity();
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     private void attachCamToPerson(){

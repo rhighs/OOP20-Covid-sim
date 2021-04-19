@@ -24,7 +24,7 @@ public class Simulation {
         this.world = world;
     }
 
-    public void start(int nPerson, int noMask, Mask.MaskProtection protection) {
+    public void start(int nPerson, int noMask, Mask.MaskProtection protection){
         this.nPerson = nPerson;
         this.noMask = noMask;
         this.protection = protection;
@@ -39,9 +39,11 @@ public class Simulation {
             if(noMask != 0){
                 p.maskDown();
             }
-            crowd.add(p);
             
+            crowd.add(p);
         }
+        
+        var picker = new PersonPicker(world.getInput());
 
         virusThread = new Virus(crowd, 2);
         virusThread.start();
@@ -75,18 +77,22 @@ public class Simulation {
     
     public void setCrowd(int n){
         virus.stopSpreading();
-        for (int i=0; i<n; i++){
+        
+        for (int i = 0; i < n; i++){
             this.crowd.add(new Person(world, protection, pg.getRandomPoint()));
         }
+        
         virus.updateCrowd(crowd);
         virus.startSpreading();
     }
     
     public void changeMaskState(){
         virus.stopSpreading();
-        for (int i=0; i<crowd.size(); i++){
+        
+        for (int i = 0; i < crowd.size(); i++){
             this.crowd.get(i).switchMaskState();
         }
+        
         virus.startSpreading();
     }
     
@@ -98,11 +104,13 @@ public class Simulation {
 
     public void setInfected(int infected) {
         virus.stopSpreading();
-        for (int i=0; i<infected; i++){
+        
+        for (int i = 0; i < infected; i++){
             Person p = new Person(world, protection, pg.getRandomPoint());
             this.crowd.add(p);
             virus.forceInfection(p);
         }
+        
         virus.updateCrowd(crowd);
         virus.startSpreading();
     }

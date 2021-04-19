@@ -30,10 +30,6 @@ public class SimulationCamera {
         return cam.getDirection();
     }
     
-    /*
-        this method sets the cam position as the
-        same given by the entity.
-    */
     public void attachToEntity(final Entity entity){
         this.attachedEntity = entity;
     }
