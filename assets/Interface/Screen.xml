@@ -80,11 +80,12 @@
     </screen>
     <screen id="hud" controller="GUI.StartScreenController">
         <layer id="foreground" childLayout="horizontal">
-            <panel id="hud_panel" width="100%" height="100%" childLayout="vertical">
+            <panel id="hud_panel" width="100%" height="80%" childLayout="vertical">
                     <control name="label" text="Press [P] to pause" style="nifty-label" id="HudLabel" align="center"
                       valign="center" backgroundImage="Interface/black.jpg">
                     </control>
             </panel>
+           
         </layer>
     </screen>
     
@@ -146,7 +147,7 @@
            
             <panel id="panelTitle" height="20%" width="100%" align="center"
                    childLayout="center">
-                <text text="Pause game" font="Interface/Fonts/PhetsarathOT.fnt">
+                <text text="Stats" font="Interface/Fonts/PhetsarathOT.fnt">
                     </text>
             </panel>
            
@@ -207,9 +208,9 @@
                 </panel>
                 <panel id="panelQuit" height="50%" width="50%" valign="center"
                   childLayout="center">
-                    <control name="button" label="Quit game" id="QuitButton" align="center"
+                    <control name="button" label="Quit" id="QuitButton" align="center"
                       valign="center" visibleToMouse="true">
-                        <interact onClick="quitGame()"></interact>
+                        <interact onClick="quit()"></interact>
                     </control>
                 </panel>
             </panel>

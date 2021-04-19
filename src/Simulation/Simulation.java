@@ -65,16 +65,22 @@ public class Simulation {
 
     public List<Person> getPersonList() {
         return this.crowd;
+        
     }
 
     public int getPersonCount() {
-        return nPerson;
+        
+        try{
+            return crowd.size();
+        }catch(Exception ex){
+            return 0;
+        }
     }
     
     public int getInfectedNumb(){
         try{
             return virus.getInfectedNumb();
-        }catch(NullPointerException ex){
+        }catch(Exception ex){
             return 0;
         }
     }
