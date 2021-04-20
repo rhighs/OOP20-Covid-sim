@@ -12,27 +12,26 @@ import Environment.Locator;
 import Environment.MainMap;
 
 public class MovementComponent {
-    private Spatial spatial;
-    private BetterCharacterControl spatialControl;
-    private Waypoint currPoint;
-    private int currIndex = 0;
-    private List<Waypoint> wayPoints = new ArrayList<>();
-    private MainMap map = Locator.getMap();
-
     private long start;
-
-    private Future<List<Waypoint>> wayPointsFuture;
-
+    private MainMap map;
+    private Spatial spatial;
+    private int currIndex = 0;
+    private Waypoint currPoint;
     private PathFinderExecutor pathCalc;
+    private BetterCharacterControl spatialControl;
+    private Future<List<Waypoint>> wayPointsFuture;
+    private List<Waypoint> wayPoints = new ArrayList<>();
 
     private enum State {
         NO_MORE_WAYPOINTS,
         FOLLOW_WAYPOINT,
         AT_WAYPOINT,
     }
-    State state = State.NO_MORE_WAYPOINTS;
 
-    public MovementComponent(final Spatial spatial) {
+    private State state = State.NO_MORE_WAYPOINTS;
+
+    public MovementComponent(final MainMap map, final Spatial spatial) {
+        this.map = map;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
@@ -55,8 +54,7 @@ public class MovementComponent {
                 }
                 currPoint = wayPoints.get(currIndex);
             } catch (Exception e) {
-                System.out.println("caught an exception here");
-                System.exit(1);
+                return;
             }
             start = System.currentTimeMillis();
             currIndex++;
@@ -66,7 +64,6 @@ public class MovementComponent {
 
     private void followWaypoint() {
         if (currPoint == null) {
-            System.out.println("currPoint is null");
             System.exit(1);
         }
         Vector3f currPointVector = currPoint.getPosition();

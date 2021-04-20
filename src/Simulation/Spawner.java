@@ -25,7 +25,7 @@ public class Spawner {
     public void setRandomSpawnPoints(int numPoints){
         this.numPoints = numPoints;
         var nav = map.getNavFromScene();
-        Random rng = new Random();
+        var rng = new Random();
         for(int i = 0; i < numPoints; i++){
             int randIdx = rng.nextInt(nav.getNumCells());
             var randomPoint = nav.getCell(randIdx).getRandomPoint();
@@ -37,6 +37,7 @@ public class Spawner {
         if (spawnPoints == null){
             return;
         }
+
         int numPeople = crowd.size();
         int perPoint = numPeople / numPoints;
 

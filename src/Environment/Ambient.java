@@ -30,5 +30,8 @@ public class Ambient {
         rootNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
     }
     
-            
+    public Node getRootNode(){
+        return rootNode;
+    }
+    
 }

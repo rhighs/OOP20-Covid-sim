@@ -14,9 +14,10 @@ import Environment.Locator;
 public class Lighting {
     final int SHADOWMAP_SIZE = 4096;
     final private Vector3f lightDirection = new Vector3f(-0.5f, -0.5f, -0.5f);
-    final Ambient ambient = Locator.getAmbient();
+    final private Ambient ambient;
 
-    public Lighting() {
+    public Lighting(final Ambient ambient) {
+        this.ambient = ambient;
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDirection.normalizeLocal());
         sun.setColor(ColorRGBA.White);

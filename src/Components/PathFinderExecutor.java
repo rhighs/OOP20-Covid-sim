@@ -32,7 +32,6 @@ public class PathFinderExecutor {
 
     public Future<List<Waypoint>> request(final Vector3f currentPos) {
         return pool.submit(new PathGeneratorCall(new PathFinder(scene), currentPos));
-        //return pool.submit(new PathGeneratorCall(new PathGenerator(nav), currentPos));
     }
 }
 
@@ -48,7 +47,7 @@ class PathGeneratorCall implements Callable<List<Waypoint>> {
 
     public List<Waypoint> call() throws Exception {
         var r = pathGen.getRandomPoint();
-        System.out.println(startingPoint + " " + r);
         return pathGen.getPath(startingPoint, pathGen.getRandomPoint());
     }
 }
+
