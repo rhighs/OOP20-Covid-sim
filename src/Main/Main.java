@@ -27,13 +27,10 @@ import java.util.List;
 public class Main extends SimpleApplication {
     private final BulletAppState bState = new BulletAppState();
     private final Simulation simulation = new Simulation();
-
+    private boolean start=false;
     private Nifty nifty;
-    private BitmapText personText;
-    BitmapText infText;
-    BitmapText timeText;
     private StartScreenController screenControl;
-    BitmapText ch;
+    private BitmapText ch;
 
     public static void main(String[] args) {
         new Main().start();
@@ -45,15 +42,14 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
+        
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
         ActionListener pause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 screenControl.GoTo("pause");
+                screenControl.hideHudComp();
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
-                screenControl.setLabelInf(simulation.getInfectedNumb());
-                screenControl.setLabelInfMask();
-                screenControl.setTime();
             }
         };
         inputManager.addListener(pause, new String[]{"Pause Game"});
@@ -62,6 +58,7 @@ public class Main extends SimpleApplication {
         ActionListener escPause = new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 guiNode.attachChild(ch);
+                screenControl.showHudComp();
                 inputManager.setCursorVisible(false);
                 nifty.gotoScreen("hud");
             }
@@ -73,6 +70,8 @@ public class Main extends SimpleApplication {
 
                 
         initNiftyGUI();
+        screenControl.setHudImage(assetManager, settings);
+        screenControl.setHudText(settings,guiFont);
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         //bState.setDebugEnabled(true);
         stateManager.attach(bState);
@@ -84,19 +83,8 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-       
-            personText.setText("Person: " + simulation.getPersonCount());
-            infText.setText("Infected: " + simulation.getInfectedNumb());
-            
-            try{
-                timeText.setText("Time: " + screenControl.getTime());
-            }catch(Exception ex){
-                timeText.setText("0");
-            }
-            
-        //simulation.getInfectedNumb(); //!!!!! non fa l'update
-        //screenControl.setLabelInf(simulation.getInfectedNumb());
-        
+
+        if(start){screenControl.updateText();}
         simulation.step(tpf);
     }
 
@@ -106,9 +94,7 @@ public class Main extends SimpleApplication {
     }
 
     private void initNiftyGUI() {
-        personText = new BitmapText(guiFont, false);
-        timeText = new BitmapText(guiFont, false);
-        infText = new BitmapText(guiFont,false);
+        
         //set cursor visible on init GUI
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
@@ -123,49 +109,17 @@ public class Main extends SimpleApplication {
         );
 
         nifty = niftyDisplay.getNifty();
-        screenControl = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
+        screenControl = new StartScreenController(nifty, flyCam, inputManager, guiNode, o -> startSimulation(o));
         nifty.fromXml("Interface/Screen.xml", "start", screenControl);
         // attach the nifty display to the gui view port as a processor
         guiViewPort.addProcessor(niftyDisplay);
         // this is the command to switch GUI nifty.gotoScreen("hud");
         
-        setHudImage();
-        setHudText();
+        screenControl.initHudText(guiFont);
+       
     
     }
 
-    private void setHudImage(){
-        Picture pic = new Picture("HUD Picture");
-        pic.setImage(assetManager, "Interface/black.jpg", true);
-        pic.setWidth(settings.getWidth()/4);
-        pic.setHeight(settings.getHeight()/4);
-        pic.setPosition(0, 0);
-        pic.move(0f, 0f, -1);
-        guiNode.attachChild(pic);
-    }
-    private void setHudText(){
-        
-        personText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        personText.setColor(ColorRGBA.White);                             // font color
-        personText.setText("People: ");
-        personText.setLocalTranslation(0, settings.getHeight()/4, 0); // position
-        guiNode.attachChild(personText);
-        
-        infText.setSize(guiFont.getCharSet().getRenderedSize());
-        infText.setColor(ColorRGBA.White);                             // font color
-        infText.setText("Infected: ");
-        infText.setLocalTranslation(0, settings.getHeight()/6, 0); // position
-        guiNode.attachChild(infText);
-    
-        timeText.setSize(guiFont.getCharSet().getRenderedSize());
-        timeText.setColor(ColorRGBA.White);                             // font color
-        timeText.setText("Time: ");
-        timeText.setLocalTranslation(0, settings.getHeight()/11, 0); // position
-        guiNode.attachChild(timeText);
-        
-        
-    }
-    
     private void initCrossHairs() {
         //guiNode.detachAllChildren();
         guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
@@ -186,6 +140,7 @@ public class Main extends SimpleApplication {
         initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
         screenControl.loadSimulation(simulation);
+        start = true;
         PersonPicker picker = new PersonPicker(this);
         new Lighting();
     }

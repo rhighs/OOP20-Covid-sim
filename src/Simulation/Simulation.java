@@ -91,7 +91,7 @@ public class Simulation {
             this.crowd.add(new Person(protection, pg.getRandomPoint()));
         }
         virus.updateCrowd(crowd);
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
     
     public void changeMaskState(){
@@ -99,13 +99,13 @@ public class Simulation {
         for (int i=0; i<crowd.size(); i++){
             this.crowd.get(i).switchMaskState();
         }
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
     
     public void resumeInfected(){
         virus.stopSpreading();
         virus.resumeInfected();
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
 
     public void setInfected(int infected) {
@@ -113,10 +113,10 @@ public class Simulation {
         for (int i=0; i<infected; i++){
             Person p = new Person(protection, pg.getRandomPoint());
             this.crowd.add(p);
-            virus.forceInfection(p);
+            p.infect();
         }
         virus.updateCrowd(crowd);
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
  }
 
