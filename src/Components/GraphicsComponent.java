@@ -25,6 +25,8 @@ public class GraphicsComponent {
         Spatial cube = new Geometry("PersonCube", new Box(40, 40, 40));
         mat = graphics.createShadedMaterial(ColorRGBA.Red, ColorRGBA.Blue);
         
+        Spatial model = graphics.getModel("Models/person.j3o");
+        
         cube.setMaterial(mat);
         cube.scale(0.03f);
         cube.setShadowMode(ShadowMode.CastAndReceive);

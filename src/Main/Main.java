@@ -1,5 +1,6 @@
 package Main;
 
+import Components.Lighting;
 import com.jme3.math.Vector3f;
 import com.jme3.input.KeyInput;
 import com.jme3.math.ColorRGBA;
@@ -58,7 +59,8 @@ public class Main extends SimpleApplication {
         inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
         world = new Locator(this);
         this.simulation = new Simulation(world);
-
+        var light = new Lighting(world.getAmbient());
+                
         initNiftyGUI();
         screenControl.setHudImage(assetManager, settings);
         screenControl.setHudText(settings,guiFont);

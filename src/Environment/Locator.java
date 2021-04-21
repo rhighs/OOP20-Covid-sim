@@ -23,6 +23,8 @@ public class Locator {
         var assetManager = app.getAssetManager();
         var bullet = new BulletAppState();
         app.getStateManager().attach(bullet);
+        
+        bullet.setDebugEnabled(true);
 
         graphics = new Graphics(assetManager, rootNode);
         physics = new Physics(bullet);
