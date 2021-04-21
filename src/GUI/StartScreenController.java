@@ -1,6 +1,6 @@
 package GUI;
 
-import Simulation.Mask;
+import Simulation.Person.Mask;
 import Simulation.Simulation;
 import de.lessvoid.nifty.Nifty;
 import com.jme3.app.Application;
@@ -15,41 +15,23 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
-import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.StopWatch;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import Environment.Locator;
-import de.lessvoid.nifty.tools.Color;
 
 /**
  * @author json 
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
-
-    public final static class Options {
-        public final int nPerson;
-        public final int nMasks;
-        public final Mask.MaskProtection protection;
-
-        public Options(int p, int m, Mask.MaskProtection pr){
-            nPerson = p;
-            nMasks = m;
-            protection = pr;
-        }
-    }
 
     @FunctionalInterface
     public static interface Callback<T> {
@@ -60,9 +42,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private Nifty nifty;
     private FlyByCamera flyCam;
     private InputManager inputManager;
-    private Callback<Options> startSimFn;
+    private Callback<Simulation.Options> startSimFn;
     private Callback<Boolean> quitFn;
-    private Mask.MaskProtection prot;
+    private Mask.Protection prot;
     private Simulation sim;
     private Node guiNode;
     private Instant start;
@@ -72,7 +54,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private BitmapText maskTypeText;
     private List<BitmapText> hudText;
     private Locator world;
-    Picture pic;
+    private Picture pic;
 
     public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Locator world) {
         this.nifty = nifty;
@@ -80,14 +62,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         this.inputManager = inputManager;
         this.start = Instant.now();
         this.world = world;
-        loadComponents();
-        //default
-        prot = Mask.MaskProtection.FP1;
-    }
-    
-    public void loadComponents(){
         guiNode = world.getGuiNode();
+        //default
+        prot = Mask.Protection.FP1;
     }
+
     @Override
     protected void initialize(Application app) {
     }
@@ -116,101 +95,90 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void onStartScreen() {
         //add items to the dropDown
         DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
-        dropDown.addItem(Mask.MaskProtection.FP1);
-        dropDown.addItem(Mask.MaskProtection.FP2);
-        dropDown.addItem(Mask.MaskProtection.FP3);
+        dropDown.addItem(Mask.Protection.FP1);
+        dropDown.addItem(Mask.Protection.FP2);
+        dropDown.addItem(Mask.Protection.FP3);
     }
 
     @Override
     public void onEndScreen() {
     }
 
-
     public void GoTo(String screen) {
         nifty.gotoScreen(screen);
     }
 
+    // This method is called by the load button.
     public void load(){
         nifty.gotoScreen("load");
     }
 
     public void loadWorst(){
-        prot = Mask.MaskProtection.FP1;
-        Options options = new Options(DEFAULT_PERSON, DEFAULT_PERSON, prot);
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(false);
-        inputManager.setCursorVisible(false);
-        if (startSimFn == null) {
-            throw new IllegalStateException("Callback for starting simulation not set.");
-        }
-        startSimFn.call(options);
-        nifty.gotoScreen("hud");
+        prot = Mask.Protection.FP1;
+        startSimulation(new Simulation.Options(
+            DEFAULT_PERSON,
+            DEFAULT_PERSON,
+            prot
+        ));
     }
 
     public void loadBest(){
-        prot = Mask.MaskProtection.FP3;
-        Options options = new Options(DEFAULT_PERSON, 0, prot);
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(false);
-        inputManager.setCursorVisible(false);
-        if (startSimFn == null) {
-            throw new IllegalStateException("Callback for starting simulation not set.");
-        }
-        startSimFn.call(options);
-        nifty.gotoScreen("hud");
+        prot = Mask.Protection.FP3;
+        startSimulation(new Simulation.Options(
+            DEFAULT_PERSON,
+            0,
+            prot
+        ));
     }
 
     public void startGame(String screen) {
         final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
         final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
-        final var text = textField.getRealText();
-        prot = (Mask.MaskProtection) dropDown.getSelection();
-        if(Optional.ofNullable(prot).isEmpty()){
-            prot  = Mask.MaskProtection.FP1;
+
+        prot = (Mask.Protection) dropDown.getSelection();
+        if (prot == null) {
+            prot = Mask.Protection.FP1;
         }
-        
-        try{
-            Options options = new Options(
-                Integer.parseInt(text),
-                Integer.parseInt(textNoM.getRealText()),
-                prot 
-            );
-            nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
-            if (startSimFn == null) {
-                throw new IllegalStateException("Callback for starting simulation not set.");
-            }
-            startSimFn.call(options);
-            flyCam.setEnabled(true);
-            flyCam.setDragToRotate(false);
-            inputManager.setCursorVisible(false);
-            nifty.gotoScreen(screen);
-        }catch(Exception ex){}
+        // nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
+        startSimulation(new Simulation.Options(
+            Integer.parseInt(textField.getRealText()),
+            Integer.parseInt(textNoM.getRealText()),
+            prot
+        ));
     }
-    
-    
+
+    public void startSimulation(Simulation.Options options) {
+        if (startSimFn == null) {
+            throw new IllegalStateException("Callback for starting simulation not set.");
+        }
+        nifty.gotoScreen("hud");
+        startSimFn.call(options);
+    }
+
+
 
     //PauseScreen
-    
+
     private Long getTime(){
 
         long timeElapsed;
-        
+
         try{
             Instant finish = Instant.now();
-            timeElapsed = Duration.between(start, finish).toSeconds(); 
+            timeElapsed = Duration.between(start, finish).toSeconds();
 
-        }catch(NullPointerException ex){ 
+        }catch(NullPointerException ex){
             return 0L;
         }
         return timeElapsed;
     }
-    
+
     public void quit() {
         System.exit(0);
 
     }
-    
+
     public void commands(){
         nifty.gotoScreen("commands");
     }
@@ -267,7 +235,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         hudText = new ArrayList<>();
         hudText.addAll(Arrays.asList(personText,timeText,infText,maskTypeText));
     }
-    
+
     public void setHudText(AppSettings settings, BitmapFont guiFont){
         this.initHudText(guiFont);
         personText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
@@ -275,26 +243,26 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         personText.setText("People: ");
         personText.setLocalTranslation(0, settings.getHeight()/4, 0); // position
         guiNode.attachChild(personText);
-        
+
         infText.setSize(guiFont.getCharSet().getRenderedSize());
         infText.setColor(ColorRGBA.White);                             // font color
         infText.setText("Infected: ");
         infText.setLocalTranslation(0, settings.getHeight()/5, 0); // position
         guiNode.attachChild(infText);
-    
+
         timeText.setSize(guiFont.getCharSet().getRenderedSize());
         timeText.setColor(ColorRGBA.White);                             // font color
         timeText.setText("Time: ");
         timeText.setLocalTranslation(0, settings.getHeight()/12, 0); // position
         guiNode.attachChild(timeText);
-        
+
         maskTypeText.setSize(guiFont.getCharSet().getRenderedSize());
         maskTypeText.setColor(ColorRGBA.White);                             // font color
         maskTypeText.setText("Mask Type: ");
         maskTypeText.setLocalTranslation(0, settings.getHeight()/7, 0); // position
         guiNode.attachChild(maskTypeText);
     }
-    
+
     public void setHudImage(AssetManager assetManager, AppSettings settings){
         pic = new Picture("HUD Picture");
         pic.setImage(assetManager, "Interface/black.jpg", true);
@@ -304,7 +272,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         pic.move(0f, 0f, -1);
         guiNode.attachChild(pic);
     }
-    
+
     public void updateText(){
             personText.setText("Person: " + sim.getPersonCount());
             infText.setText("Infected: " + sim.getInfectedNumb());
@@ -315,23 +283,22 @@ public class StartScreenController extends BaseAppState implements ScreenControl
                 timeText.setText("0");
             }
     }
-    
+
     public void hideHudComp(){
         hudText.forEach(i -> guiNode.detachChild(i));
         guiNode.detachChild(pic);
     }
-    
+
     public void showHudComp(){
         hudText.forEach(i -> guiNode.attachChild(i));
         guiNode.attachChild(pic);
     }
-    public void onStartButtonClicked(Callback<Options> callback) {
+    public void onStartButtonClicked(Callback<Simulation.Options> callback) {
         startSimFn = callback;
     }
 
     public void onQuitButtonClicked(Callback<Boolean> callback) {
         quitFn = callback;
-
     }
 }
 

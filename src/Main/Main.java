@@ -5,7 +5,6 @@ import com.jme3.input.KeyInput;
 import com.jme3.math.ColorRGBA;
 import com.jme3.font.BitmapText;
 import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.input.controls.KeyTrigger;
@@ -129,15 +128,16 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(ch);
     }
 
-
-    public void startSimulation(StartScreenController.Options options) {
+    public void startSimulation(Simulation.Options options) {
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
         initCrossHairs();
-        simulation.start(options.nPerson, options.nMasks, options.protection);
+        simulation.start(options);
         screenControl.loadSimulation(simulation);
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));
-        //start = true;
         state = ScreenState.SIMULATION_SCREEN;
     }
 
