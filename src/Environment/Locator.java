@@ -2,6 +2,7 @@ package Environment;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.scene.Node;
 
 /**
  *
@@ -15,16 +16,15 @@ public class Locator {
     private MainMap map;
     private Input input;
     private SimulationCamera cam;
+    private Node guiNode;
     
     public Locator(SimpleApplication app){
         this.app = app;
-        
+        guiNode = app.getGuiNode();
         var rootNode = app.getRootNode();
         var assetManager = app.getAssetManager();
         var bullet = new BulletAppState();
         app.getStateManager().attach(bullet);
-        
-        bullet.setDebugEnabled(true);
 
         graphics = new Graphics(assetManager, rootNode);
         physics = new Physics(bullet);
@@ -54,6 +54,9 @@ public class Locator {
         return input;
     }
     
+    public Node getGuiNode(){
+        return guiNode;
+    }
     public SimulationCamera getSimulationCamera(){
         return cam;
     }
