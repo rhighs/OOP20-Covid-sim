@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import Components.Lighting;
 import Components.PathFinder;
 import Environment.Locator;
-import com.jme3.math.Vector3f;
 
 public class Simulation {
     private MainMap map;
@@ -23,6 +22,18 @@ public class Simulation {
     private PersonPicker picker;
     
     Mask.MaskProtection protection;
+    
+    public final static class Options {
+        public final int nPerson;
+        public final int nMasks;
+        public final Mask.MaskProtection protection;
+
+        public Options(int p, int m, Mask.MaskProtection pr){
+            nPerson = p;
+            nMasks = m;
+            protection = pr;
+        }
+    }
 
     public Simulation(final Locator world) {
         this.world = world;
@@ -35,7 +46,6 @@ public class Simulation {
         this.protection = protection;
         this.map = world.getMap();
         this.crowd = new ArrayList<>();
-        this.light = new Lighting(world.getAmbient());
         
         this.pg = map.createPathGenerator();
         for (int i = 0; i < this.nPerson; i++) {
@@ -49,6 +59,7 @@ public class Simulation {
         }
         
         picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
+        this.light = new Lighting(world.getAmbient());
 
         virusThread = new Virus(crowd, 2);
         virusThread.start();
@@ -96,7 +107,7 @@ public class Simulation {
         }
         
         virus.updateCrowd(crowd);
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
     
     public void changeMaskState(){
@@ -105,14 +116,14 @@ public class Simulation {
         for (int i = 0; i < crowd.size(); i++){
             this.crowd.get(i).switchMaskState();
         }
-        
-        virus.startSpreading();
+
+        virus.resumeSpreading();
     }
     
     public void resumeInfected(){
         virus.stopSpreading();
         virus.resumeInfected();
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
 
     public void setInfected(int infected) {
@@ -121,11 +132,11 @@ public class Simulation {
         for (int i = 0; i < infected; i++){
             Person p = new Person(world, protection, pg.getRandomPoint());
             this.crowd.add(p);
-            virus.forceInfection(p);
+            p.infect();
         }
         
         virus.updateCrowd(crowd);
-        virus.startSpreading();
+        virus.resumeSpreading();
     }
  }
 

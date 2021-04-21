@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.Trigger;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.scene.Node;
 import java.util.List;
 
 /**
@@ -14,8 +15,9 @@ import java.util.List;
 public class Input implements ActionListener {
     private InputManager input;
     private Map<String, InputAction> actions;
+    private Node guiNode;
     
-    public Input(InputManager input){
+    public Input(final InputManager input, final Node guiNode){
         this.input = input;
         this.actions = new HashMap<>();
         input.addListener(this);

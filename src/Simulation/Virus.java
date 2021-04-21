@@ -83,12 +83,13 @@ public class Virus extends Thread{
     }
     
     public void forceInfection(Person victim){
-        victim.infect();
         infectedPeople.add(victim);
     }
     public void resumeInfected(){
         this.infectedPeople.forEach(i -> i.heal());
         this.infectedPeople.clear();
+        //resume to 1 infected
+        this.forceInfection(crowd.get(0));
     }
     public void updateCrowd(List<Person> p){
         this.crowd = p;

@@ -28,7 +28,7 @@ public class Locator {
         physics = new Physics(bullet);
         ambient = new Ambient(assetManager, rootNode, app.getViewPort());
         map = new MainMap(assetManager, bullet, rootNode);
-        input = new Input(app.getInputManager());
+        input = new Input(app.getInputManager(), app.getGuiNode());
         cam = new SimulationCamera(app.getCamera(), app.getFlyByCamera());
     }
     

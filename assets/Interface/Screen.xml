@@ -78,6 +78,8 @@
             </panel>
         </layer>
     </screen>
+    
+    
     <screen id="hud" controller="GUI.StartScreenController">
         <layer id="foreground" childLayout="horizontal">
             <panel id="hud_panel" width="100%" height="80%" childLayout="vertical">
@@ -138,6 +140,61 @@
         </layer>
     </screen>
     
+    <screen id="commands" controller="GUI.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/back.jpg"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+            <panel id="panel_title" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="Commands" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+                    
+            </panel>
+            <panel id="panelCommandsGlobal" height="80%" width="100%" align="center"
+                   childLayout="horizontal">
+                   <panel id="panelCommands" height="80%" width="50%" align="center"
+                   childLayout="vertical">
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="WASD">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="[E]">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="Right Click">
+                </text>    
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="Left Click">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="Key Arrows">
+                </text>
+            </panel>
+            <panel id="panelDescr" height="80%" width="50%" align="center"
+                   childLayout="vertical">
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="To move">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="To HUD">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="Switch to person visual">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="Switch to global visual">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="Move camera">
+                </text>
+            </panel>
+
+            </panel>
+            
+        </layer>
+    </screen>
+    
     
     <screen id="pause" controller="GUI.StartScreenController">
         <layer id="background" childLayout="center">
@@ -147,66 +204,28 @@
            
             <panel id="panelTitle" height="20%" width="100%" align="center"
                    childLayout="center">
-                <text text="Stats" font="Interface/Fonts/PhetsarathOT.fnt">
+                <text text="Menu" font="Interface/Fonts/PhetsarathOT.fnt">
                     </text>
             </panel>
            
-            <panel id="panelInf" height="20%" width="75%" align="center"
-              childLayout="horizontal">
-                <panel id="panelInfleft" height="50%" width="50%" valign="center"
+            <panel id="panelButtons" height="80%" width="100%" align="center"
+              childLayout="vertical">
+               
+                <panel id="panelCommand" height="33%" width="100%" valign="center"
                   childLayout="center">
-                   <control name="label" text="Infected:" style="nifty-label" id="InfLabel" align="center"
-                      valign="center">
+                    <control name="button" label="Commands" id="CommandButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="commands()"></interact>
                     </control>
                 </panel>
-                <panel id="textInfect" height="50%" width="50%" valign="center"
-                  childLayout="center">
-                     <control id="txtInf" name="textfield"  maxLength="3">
-
-                    </control>
-                </panel>
-            </panel>
-             <panel id="panelMask" height="20%" width="75%" align="center"
-              childLayout="horizontal">
-                <panel id="panelMaskleft" height="50%" width="50%" valign="center"
-                  childLayout="center">
-                   <control name="label" text="Mask type:" style="nifty-label" id="InfLabel" align="center"
-                      valign="center">
-                    </control>
-                </panel>
-                <panel id="panelMaskright" height="50%" width="50%" valign="center"
-                  childLayout="center">
-                     <control id="txtMaskInf" name="textfield" maxLength="3">
-
-                    </control>
-                </panel>
-            </panel>
-            <panel id="panelTime" height="10%" width="75%" align="center"
-              childLayout="horizontal">
-                <panel id="panelMaskleft" height="50%" width="50%" valign="center"
-                  childLayout="center">
-                   <control name="label" text="Time [s]:" style="nifty-label" id="TimeLabel" align="center"
-                      valign="center">
-                    </control>
-                </panel>
-                <panel id="panelTime" height="50%" width="50%" valign="center"
-                  childLayout="center">
-                     
-                    <control id="TimeSpentLabel" name="textfield">
-
-                    </control>
-                </panel>
-            </panel>
-            <panel id="panelButtons" height="10%" width="75%" align="center"
-              childLayout="horizontal">
-               <panel id="panelApply" height="50%" width="50%" valign="center"
+                <panel id="panelEdit" height="33%" width="100%" valign="center"
                   childLayout="center">
                     <control name="button" label="Edit" id="ApplyButton" align="center"
                       valign="center" visibleToMouse="true">
                         <interact onClick="edit()"></interact>
                     </control>
                 </panel>
-                <panel id="panelQuit" height="50%" width="50%" valign="center"
+                <panel id="panelQuit" height="33%" width="100%" valign="center"
                   childLayout="center">
                     <control name="button" label="Quit" id="QuitButton" align="center"
                       valign="center" visibleToMouse="true">
@@ -239,7 +258,7 @@
                 <text text="Edit parameters" font="Interface/Fonts/PhetsarathOT.fnt">
                     </text>
             </panel>
-           <panel id="panelAddPerson" height="20%" width="75%" align="center"
+           <panel id="panelAddPerson" height="15%" width="75%" align="center"
               childLayout="horizontal">
                 <panel id="panelAddleft" height="50%" width="50%" valign="center"
                   childLayout="center">
@@ -254,7 +273,7 @@
                     </control>
                 </panel>
             </panel>
-            <panel id="panelAddInfPerson" height="20%" width="75%" align="center"
+            <panel id="panelAddInfPerson" height="15%" width="75%" align="center"
               childLayout="horizontal">
                 <panel id="panelAddInfleft" height="50%" width="50%" valign="center"
                   childLayout="center">
@@ -269,11 +288,11 @@
                     </control>
                 </panel>
             </panel>
-            <panel id="panelEdit1" height="20%" width="75%" align="center"
+            <panel id="panelEdit1" height="15%" width="75%" align="center"
               childLayout="horizontal">
                 <panel id="panelEditleft" height="50%" width="50%" valign="center"
                   childLayout="center">
-                   <control name="button" height="40%" width="40%" label="Change mask state" id="StateMButton" align="center"
+                   <control name="button" height="50%" width="50%" label="Change mask state" id="StateMButton" align="center"
                       valign="center" visibleToMouse="true">
                         <interact onClick="stateMask()"></interact>
                     </control>
@@ -286,7 +305,22 @@
                     </control>
                 </panel>
             </panel>
-            <panel id="panelButton" height="10%" width="75%" align="center"
+            <panel id="panelReport" height="15%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelReportLeft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="label" height="40%" width="40%" text="Report: " id="ReportLabel" align="center"
+                      valign="center" visibleToMouse="true">
+                    </control>
+                </panel>
+                <panel id="panelReportRight" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                     <control id="txtReport" name="textfield" maxLength="3">
+
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelButton" height="5%" width="75%" align="center"
               childLayout="horizontal">
                <panel id="panelApply" height="50%" width="50%" valign="center"
                   childLayout="center">
