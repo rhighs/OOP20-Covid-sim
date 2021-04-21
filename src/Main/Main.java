@@ -14,23 +14,30 @@ import de.lessvoid.nifty.Nifty;
 import Environment.Locator;
 import Simulation.Simulation;
 import GUI.StartScreenController;
+
 /**
  * @author chris, rob, jurismo, savi
  */
 public class Main extends SimpleApplication {
-    private final BulletAppState bState = new BulletAppState();
+    enum ScreenState {
+        START_SCREEN,
+        SIMULATION_SCREEN,
+        PAUSE_SCREEN,
+    }
+    ScreenState state = ScreenState.START_SCREEN;
 
-    private Nifty nifty;
     private Locator world;
+    private StartScreenController screenControl;
+    private Simulation simulation;
+    private BitmapText ch;
+    private Nifty nifty;
+
+    /*
     private BitmapText hudText;
     private BitmapText personText;
     private BitmapText infText;
     private BitmapText timeText;
-    private StartScreenController screenControl;
-    private BitmapText ch;
-    private Simulation simulation;
-    private boolean start;
-    private boolean update = true;
+    */
 
     public static void main(String[] args) {
         new Main().start();
@@ -38,70 +45,60 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        
+        // keep this at the top or else we'll get exceptions.
+        world = new Locator(this);
+        this.simulation = new Simulation(world);
+        setDisplayStatView(false);
+        setDisplayFps(false);
+        setupGUI();
+        setupKeyMappings();
+    }
+
+    @Override
+    public void simpleUpdate(float tpf) {
+        switch (state) {
+        case START_SCREEN: break;
+        case SIMULATION_SCREEN:
+            screenControl.updateText();
+            simulation.step(tpf);
+            break;
+        case PAUSE_SCREEN: break;
+        }
+    }
+
+    @Override
+    public void simpleRender(RenderManager rm){
+    }
+
+    private void setupKeyMappings() {
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
-        ActionListener pause = new ActionListener() {
+        inputManager.addListener(new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 screenControl.GoTo("pause");
                 screenControl.hideHudComp();
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
-                update = false;
+                state = ScreenState.PAUSE_SCREEN;
             }
-        };
-        inputManager.addListener(pause, new String[]{"Pause Game"});
+        }, "Pause Game");
 
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
-        ActionListener escPause = new ActionListener() {
+        inputManager.addListener(new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf){
                 guiNode.attachChild(ch);
                 screenControl.showHudComp();
                 inputManager.setCursorVisible(false);
                 nifty.gotoScreen("hud");
-                update = true;
+                state = ScreenState.SIMULATION_SCREEN;
             }
-        };
-
-        inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
-        setDisplayStatView(false);
-        setDisplayFps(false);
-        world = new Locator(this);
-        this.simulation = new Simulation(world);
-
-        initNiftyGUI();
-        screenControl.setHudImage(assetManager, settings);
-        screenControl.setHudText(settings,guiFont);
-        viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        flyCam.setMoveSpeed(50);
-
-        cam.setLocation(new Vector3f(20, 20, 5));
+        }, "Esc Pause Game");
     }
 
-    @Override
-    public void simpleUpdate(float tpf) {
-
-        if(start){
-            screenControl.updateText();
-        }
-        if(update){
-            simulation.step(tpf);
-        }
-        
-    }
-
-    @Override
-    public void simpleRender(RenderManager rm){
-        
-    }
-
-    private void initNiftyGUI() {
-        
-        //set cursor visible on init GUI
+    private void setupGUI() {
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
-        //stateManager.attach(startScreenState);
-        
+
         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
             assetManager,
             inputManager,
@@ -115,10 +112,9 @@ public class Main extends SimpleApplication {
         screenControl.onQuitButtonClicked(from -> finish(from));
         nifty.fromXml("Interface/Screen.xml", "start", screenControl);
         guiViewPort.addProcessor(niftyDisplay);
-        
         screenControl.initHudText(guiFont);
-       
-    
+        screenControl.setHudImage(assetManager, settings);
+        screenControl.setHudText(settings,guiFont);
     }
 
     private void initCrossHairs() {
@@ -138,7 +134,11 @@ public class Main extends SimpleApplication {
         initCrossHairs();
         simulation.start(options.nPerson, options.nMasks, options.protection);
         screenControl.loadSimulation(simulation);
-        start = true;
+        viewPort.setBackgroundColor(ColorRGBA.Cyan);
+        flyCam.setMoveSpeed(50);
+        cam.setLocation(new Vector3f(20, 20, 5));
+        //start = true;
+        state = ScreenState.SIMULATION_SCREEN;
     }
 
     /* This function is called both when the user closes the window and when the user
