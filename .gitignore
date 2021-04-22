@@ -10,6 +10,36 @@ nbproject/private/*
 .gradle
 
 
+### Java ###
+*.class
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+### Gradle ###
+.gradle
+/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
 # eclipse
 .metadata
 bin/
@@ -44,6 +74,9 @@ local.properties
 
 # Log file
 *.log
+
+# Generated dlls
+*.dll
 
 # Package Files #
 *.jar
