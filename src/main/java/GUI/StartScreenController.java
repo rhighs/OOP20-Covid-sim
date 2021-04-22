@@ -14,11 +14,13 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.ScreenController;
+import com.jme3.app.SimpleApplication;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ import java.util.List;
 import java.util.Optional;
 import Environment.Locator;
 import Simulation.Person;
-
 
 /**
  * @author json 
@@ -57,14 +58,21 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private Locator world;
     private Picture pic;
 
-    public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Locator world) {
-        this.nifty = nifty;
-        this.flyCam = flyCam;
-        this.inputManager = inputManager;
-        this.start = Instant.now();
+    public StartScreenController(SimpleApplication app, Locator world) {
+        this.flyCam = app.getFlyByCamera();
+        this.inputManager = app.getInputManager();
         this.world = world;
+        NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
+            app.getAssetManager(),
+            app.getInputManager(),
+            app.getAudioRenderer(),
+            app.getGuiViewPort()
+        );
+        this.nifty = niftyDisplay.getNifty();
+        app.getGuiViewPort().addProcessor(niftyDisplay);
+        this.start = Instant.now();
         guiNode = world.getGuiNode();
-        //default
+        nifty.fromXml("Interface/Screen.xml", "start", this);
         prot = Person.Mask.Protection.FP1;
     }
 
@@ -103,10 +111,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
     @Override
     public void onEndScreen() {
-    }
-
-    public void GoTo(String screen) {
-        nifty.gotoScreen(screen);
     }
 
     // This method is called by the load button.
@@ -157,29 +161,25 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         startSimFn.call(options);
     }
 
-
-
-    //PauseScreen
-
     private Long getTime(){
-
         long timeElapsed;
-
-        try{
+        try {
             Instant finish = Instant.now();
             timeElapsed = Duration.between(start, finish).toSeconds();
-
-        }catch(NullPointerException ex){
+        } catch(NullPointerException ex) {
             return 0L;
         }
         return timeElapsed;
     }
 
     public void quit() {
-        System.exit(0);
+        if (quitFn == null) {
+            throw new IllegalStateException("quitFn not set.");
+        }
+        quitFn.call(false);
     }
-    
-    public void commands(){
+
+    public void commands() {
         nifty.gotoScreen("commands");
     }
 
@@ -197,7 +197,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         var txtAddInf = nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class);
         txtAddInf.setText("0");
     }
-    
+
     //edit screen
     public void apply(){
         try{
@@ -206,7 +206,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         }catch(Exception ex){}
         cleanEditComps();
         nifty.gotoScreen("pause");
-        
+
     }
     private void cleanEditComps(){
         nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class).setText("0");
@@ -227,7 +227,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class).setText("");
         nifty.gotoScreen("pause");
     }
-    
+
     public void initHudText(BitmapFont guiFont){
         personText = new BitmapText(guiFont, true);
         timeText = new BitmapText(guiFont, false);
@@ -285,21 +285,23 @@ public class StartScreenController extends BaseAppState implements ScreenControl
             }
     }
 
-    public void hideHudComp(){
-        hudText.forEach(i -> guiNode.detachChild(i));
-        guiNode.detachChild(pic);
-    }
-
-    public void showHudComp(){
-        hudText.forEach(i -> guiNode.attachChild(i));
-        guiNode.attachChild(pic);
-        
-    }
     public void onStartButtonClicked(Callback<Simulation.Options> callback) {
         startSimFn = callback;
     }
 
     public void onQuitButtonClicked(Callback<Boolean> callback) {
         quitFn = callback;
+    }
+
+    public void enterPauseScreen() {
+        nifty.gotoScreen("pause");
+        hudText.forEach(i -> guiNode.detachChild(i));
+        guiNode.detachChild(pic);
+    }
+
+    public void exitPauseScreen() {
+        nifty.gotoScreen("hud");
+        hudText.forEach(i -> guiNode.attachChild(i));
+        guiNode.attachChild(pic);
     }
 }
