@@ -51,6 +51,17 @@ application {
     mainClassName = mainClass.get()
 }
 
+sourceSets {
+    main {
+        java {
+            setSrcDirs(listOf("src"))
+        }
+        resources {
+            setSrcDirs(listOf("src"))
+        }
+    }
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
