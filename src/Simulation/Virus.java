@@ -14,7 +14,7 @@ public class Virus extends Thread{
 
     private float strenght;
     private Random rand;
-    private List<Person> crowd;
+    private volatile List<Person> crowd;
     private List<Person> infectedPeople;
     private int numPeople;
     private boolean isSpreading = false;
@@ -38,8 +38,11 @@ public class Virus extends Thread{
         isSpreading = true;
     }
 
-    public void stopSprading() {
+    public void stopSpreading() {
         isSpreading = false;
+    }
+    public void resumeSpreading(){
+        isSpreading = true;
     }
 
     private void keepSpreading() {
@@ -50,9 +53,9 @@ public class Virus extends Thread{
 
         for (Person p : crowd) {
             if (p.isInfected()) {
-                Set<Person> nearPeople = p.getNearPeople();
-
-                Set<Person> allNearPeople = new HashSet<Person>(nearPeople);
+                var nearPeople = p.getNearPeople();
+                //System.out.println("Simulation.Virus.keepSpreading()");
+                var allNearPeople = new HashSet<>(nearPeople);
                 if (p.getLastNear() != null) {
                     nearPeople.removeAll(p.getLastNear());
                 }
@@ -79,7 +82,23 @@ public class Virus extends Thread{
     public int getInfectedNumb(){
         return infectedPeople.isEmpty() ? 0 : infectedPeople.size();
     }
-
+    
+    public void forceInfection(Person victim){
+        victim.infect();
+        infectedPeople.add(victim);
+    }
+    public void resumeInfected(){
+        this.infectedPeople.forEach(i -> i.heal());
+        this.infectedPeople.clear();
+        //resume to 1 infected
+        this.forceInfection(crowd.get(0));
+    }
+    public void updateCrowd(List<Person> p){
+        this.crowd = p;
+    }
+    public List<Person> getCrowd(){
+        return crowd;
+    }
     public void update(float tpf) {
         keepSpreading();
     }

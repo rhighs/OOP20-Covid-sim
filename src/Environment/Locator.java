@@ -10,45 +10,55 @@ import com.jme3.scene.Node;
  * @author rob
  */
 public class Locator {
-    static SimpleApplication _app;
-    static Graphics graphics;
-    static Physics physics;
-    static Ambient ambient;
-    static MainMap map;
-    static Input input;
+    private SimpleApplication app;
+    private Graphics graphics;
+    private Physics physics;
+    private Ambient ambient;
+    private MainMap map;
+    private Input input;
+    private SimulationCamera cam;
+    private Node guiNode;
     
-    static public void provideApplication(SimpleApplication app){
-        _app = app;
-        
-        Node rootNode = _app.getRootNode();
-        AssetManager assetManager = _app.getAssetManager();
-        BulletAppState bullet = new BulletAppState();
+    public Locator(SimpleApplication app){
+        this.app = app;
+        guiNode = app.getGuiNode();
+        var rootNode = app.getRootNode();
+        var assetManager = app.getAssetManager();
+        var bullet = new BulletAppState();
         app.getStateManager().attach(bullet);
 
         graphics = new Graphics(assetManager, rootNode);
         physics = new Physics(bullet);
-        ambient = new Ambient(assetManager, rootNode, _app.getViewPort());
+        ambient = new Ambient(assetManager, rootNode, app.getViewPort());
         map = new MainMap(assetManager, bullet, rootNode);
-        input = new Input(_app.getInputManager());
+        input = new Input(app.getInputManager(), app.getGuiNode());
+        cam = new SimulationCamera(app.getCamera(), app.getFlyByCamera());
     }
     
-    static public Graphics getGraphics(){
+    public Graphics getGraphics(){
         return graphics;
     }
     
-    static public Physics getPhysics(){
+    public Physics getPhysics(){
         return physics;
     }
     
-    static public Ambient getAmbient(){
+    public Ambient getAmbient(){
         return ambient;
     }
     
-    static public MainMap getMap(){
+    public MainMap getMap(){
         return map;
     }
     
-    static public Input getInput(){
+    public Input getInput(){
         return input;
+    }
+    
+    public Node getGuiNode(){
+        return guiNode;
+    }
+    public SimulationCamera getSimulationCamera(){
+        return cam;
     }
 }

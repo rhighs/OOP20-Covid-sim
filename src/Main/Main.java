@@ -1,91 +1,97 @@
 package Main;
 
+import Components.Lighting;
+import Simulation.Simulation;
 import com.jme3.math.Vector3f;
 import com.jme3.input.KeyInput;
 import com.jme3.math.ColorRGBA;
-import de.lessvoid.nifty.Nifty;
 import com.jme3.font.BitmapText;
 import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.ActionListener;
-
+import de.lessvoid.nifty.Nifty;
+import Environment.Locator;
 import Simulation.Simulation;
-import Simulation.PersonPicker;
 import GUI.StartScreenController;
 
-import Environment.Locator;
 /**
  * @author chris, rob, jurismo, savi
  */
 public class Main extends SimpleApplication {
-    private final BulletAppState bState = new BulletAppState();
-    private final Simulation simulation = new Simulation();
+    enum ScreenState {
+        START_SCREEN,
+        SIMULATION_SCREEN,
+        PAUSE_SCREEN,
+    }
+    ScreenState state = ScreenState.START_SCREEN;
 
+    private Locator world;
+    private StartScreenController screenControl;
+    private Simulation simulation;
+    private BitmapText ch;
     private Nifty nifty;
-    private BitmapText hudText;
-    private StartScreenController startScreenState;
 
     public static void main(String[] args) {
         new Main().start();
     }
 
-    public Main() {
-        //super(new FlyCamAppState());
-    }
-    
     @Override
     public void simpleInitApp() {
-        inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
-        ActionListener pause = new ActionListener() {
-            public void onAction(String name, boolean keyPressed, float tpf){
-                nifty.gotoScreen("pause");
-                startScreenState.setLabelInf(simulation.getInfectedNumb());
-            }
-        };
-        inputManager.addListener(pause, new String[]{"Pause Game"});
-        
-        inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
-        ActionListener escPause = new ActionListener() {
-            public void onAction(String name, boolean keyPressed, float tpf){
-                nifty.gotoScreen("hud");
-            }
-        };
-        inputManager.addListener(escPause, new String[]{"Esc Pause Game"});
-        Locator.provideApplication(this);
-                
-        initNiftyGUI();
-        viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        bState.setDebugEnabled(true);
-        stateManager.attach(bState);
-        flyCam.setMoveSpeed(50);
-                
-        cam.setLocation(new Vector3f(20, 20, 5));
-        //simulation.start(100, assetManager, bState, rootNode, viewPort);
+        // keep this at the top or else we'll get exceptions.
+        world = new Locator(this);
+        this.simulation = new Simulation(world);
+        setDisplayStatView(false);
+        setDisplayFps(false);
+        setupGUI();
+        setupKeyMappings();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        //hudText.setText("Infected: " + simulation.getPersonCount());
-        hudText.setText("Press [P] to pause");//simulation.getInfectedNumb(); //!!!!! non fa l'update
-        simulation.step(tpf);
+        switch (state) {
+        case START_SCREEN: break;
+        case SIMULATION_SCREEN:
+            screenControl.updateText();
+            simulation.step(tpf);
+            break;
+        case PAUSE_SCREEN: break;
+        }
     }
 
     @Override
     public void simpleRender(RenderManager rm){
-
     }
 
-    private void initNiftyGUI() {
-        hudText = new BitmapText(guiFont, false);
-        //set cursor visible on init GUI
+    private void setupKeyMappings() {
+        inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
+        inputManager.addListener(new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                screenControl.GoTo("pause");
+                screenControl.hideHudComp();
+                guiNode.detachChild(ch);
+                inputManager.setCursorVisible(true);
+                state = ScreenState.PAUSE_SCREEN;
+            }
+        }, "Pause Game");
+
+        inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addListener(new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                guiNode.attachChild(ch);
+                screenControl.showHudComp();
+                inputManager.setCursorVisible(false);
+                nifty.gotoScreen("hud");
+                state = ScreenState.SIMULATION_SCREEN;
+            }
+        }, "Esc Pause Game");
+    }
+
+    private void setupGUI() {
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
-        //stateManager.attach(startScreenState);
-
         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
             assetManager,
             inputManager,
@@ -94,20 +100,51 @@ public class Main extends SimpleApplication {
         );
 
         nifty = niftyDisplay.getNifty();
-        startScreenState = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
-        nifty.fromXml("Interface/Screen.xml", "start", startScreenState);
-        // attach the nifty display to the gui view port as a processor
+        screenControl = new StartScreenController(nifty, flyCam, inputManager, world);
+        screenControl.onStartButtonClicked(o -> startSimulation(o));
+        screenControl.onQuitButtonClicked(from -> finish(from));
+        nifty.fromXml("Interface/Screen.xml", "start", screenControl);
         guiViewPort.addProcessor(niftyDisplay);
-        // this is the command to switch GUI nifty.gotoScreen("hud");
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        hudText.setColor(ColorRGBA.Blue);                             // font color
-        hudText.setText("You can write any string here");             // the text
-        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
-        guiNode.attachChild(hudText);
+        screenControl.initHudText(guiFont);
+        screenControl.setHudImage(assetManager, settings);
+        screenControl.setHudText(settings,guiFont);
     }
 
-    public void startSimulation(StartScreenController.Options options) {
-        simulation.start(options.nPerson, options.nMasks, options.protection);
-        PersonPicker picker = new PersonPicker(this);
+    private void initCrossHairs() {
+        guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
+        ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+");        // fake crosshairs
+        ch.setLocalTranslation( // center
+            settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+            settings.getHeight() / 2 + ch.getLineHeight() / 2, 0
+        );
+        guiNode.attachChild(ch);
+    }
+
+    public void startSimulation(Simulation.Options options) {
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        initCrossHairs();
+        simulation.start(options);
+        screenControl.loadSimulation(simulation);
+        viewPort.setBackgroundColor(ColorRGBA.Cyan);
+        flyCam.setMoveSpeed(50);
+        cam.setLocation(new Vector3f(20, 20, 5));
+        state = ScreenState.SIMULATION_SCREEN;
+    }
+
+    /* This function is called both when the user closes the window and when the user
+     * presses the quit button on the GUI.
+     * @fromQuitButton indicates if it came from the GUI. */
+    public void finish(Boolean fromQuitButton) {
+        System.err.println("exiting...");
+        System.exit(0);
+    }
+
+    @Override
+    public void destroy() {
+        finish(false);
     }
 }

@@ -1,50 +1,75 @@
 package GUI;
 
-import Simulation.Mask;
+import Simulation.Simulation;
 import de.lessvoid.nifty.Nifty;
 import com.jme3.app.Application;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import de.lessvoid.nifty.screen.Screen;
 import com.jme3.app.state.BaseAppState;
+import com.jme3.asset.AssetManager;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Node;
+import com.jme3.system.AppSettings;
+import com.jme3.ui.Picture;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.DropDown;
+<<<<<<< HEAD
 import de.lessvoid.nifty.controls.NiftyControl;
+=======
+import de.lessvoid.nifty.controls.Label;
+>>>>>>> 784b82dcda83e9fc82c8a86efc2476c85c32da6c
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import Environment.Locator;
+import Simulation.Person;
+
 
 /**
  * @author json 
  */
 public class StartScreenController extends BaseAppState implements ScreenController{
 
-    public final static class Options {
-        public final int nPerson;
-        public final int nMasks;
-        public final Mask.MaskProtection protection;
-
-        public Options(int p, int m, Mask.MaskProtection pr) {
-            nPerson = p;
-            nMasks = m;
-            protection = pr;
-        }
-    }
-    
     @FunctionalInterface
-    public static interface Callback {
-        void call(Options options);
+    public static interface Callback<T> {
+        void call(T elem);
     }
 
+    private static int DEFAULT_PERSON = 50;
     private Nifty nifty;
     private FlyByCamera flyCam;
     private InputManager inputManager;
-    private Callback call;
+    private Callback<Simulation.Options> startSimFn;
+    private Callback<Boolean> quitFn;
+    private Person.Mask.Protection prot;
+    private Simulation sim;
+    private Node guiNode;
+    private Instant start;
+    private BitmapText personText;
+    private BitmapText infText;
+    private BitmapText timeText;
+    private BitmapText maskTypeText;
+    private List<BitmapText> hudText;
+    private Locator world;
+    private Picture pic;
 
-    public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Callback call) {
+    public StartScreenController(Nifty nifty, FlyByCamera flyCam, InputManager inputManager, Locator world) {
         this.nifty = nifty;
         this.flyCam = flyCam;
         this.inputManager = inputManager;
-        this.call = call;
+        this.start = Instant.now();
+        this.world = world;
+        guiNode = world.getGuiNode();
+        //default
+        prot = Person.Mask.Protection.FP1;
     }
 
     @Override
@@ -73,64 +98,212 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
     @Override
     public void onStartScreen() {
-        TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
-        textField.setText("1");
-        TextField textF = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
-        textF.setText("0");
         //add items to the dropDown
         DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
-        dropDown.addItem(Mask.MaskProtection.FP1);
-        dropDown.addItem(Mask.MaskProtection.FP2);
-        dropDown.addItem(Mask.MaskProtection.FP3);
-        
-        nifty.getScreen("start").findNiftyControl("StartButton", Button.class).disable();
+        dropDown.addItem(Person.Mask.Protection.FP1);
+        dropDown.addItem(Person.Mask.Protection.FP2);
+        dropDown.addItem(Person.Mask.Protection.FP3);
     }
 
     @Override
     public void onEndScreen() {
     }
-    
+
+    public void GoTo(String screen) {
+        nifty.gotoScreen(screen);
+    }
+
+    // This method is called by the load button.
     public void load(){
-        final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
-        final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
-        final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
-        final String text = textField.getRealText();
+        nifty.gotoScreen("load");
+    }
 
-        try{
+    public void loadWorst(){
+        prot = Person.Mask.Protection.FP1;
+        startSimulation(new Simulation.Options(
+            DEFAULT_PERSON,
+            DEFAULT_PERSON,
+            prot
+        ));
+    }
 
-            Options options = new Options(
-                Integer.parseInt(text),
-                Integer.parseInt(textNoM.getRealText()),
-                (Mask.MaskProtection) dropDown.getSelection()
-            );
-            nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
-            call.call(options);
-
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        
+    public void loadBest(){
+        prot = Person.Mask.Protection.FP3;
+        startSimulation(new Simulation.Options(
+            DEFAULT_PERSON,
+            0,
+            prot
+        ));
     }
 
     public void startGame(String screen) {
-        flyCam.setEnabled(true);
-        flyCam.setDragToRotate(false);
-        inputManager.setCursorVisible(false);
-        // get number of person
-        
-        nifty.gotoScreen(screen);
+        final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
+        final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
+        final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
+
+        prot = (Person.Mask.Protection) dropDown.getSelection();
+        if (prot == null) {
+            prot = Person.Mask.Protection.FP1;
+        }
+        // nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
+        startSimulation(new Simulation.Options(
+            Integer.parseInt(textField.getRealText()),
+            Integer.parseInt(textNoM.getRealText()),
+            prot
+        ));
+    }
+
+    public void startSimulation(Simulation.Options options) {
+        if (startSimFn == null) {
+            throw new IllegalStateException("Callback for starting simulation not set.");
+        }
+        nifty.gotoScreen("hud");
+        startSimFn.call(options);
+    }
+
+
+
+    //PauseScreen
+
+    private Long getTime(){
+
+        long timeElapsed;
+
+        try{
+            Instant finish = Instant.now();
+            timeElapsed = Duration.between(start, finish).toSeconds();
+
+        }catch(NullPointerException ex){
+            return 0L;
+        }
+        return timeElapsed;
+    }
+
+    public void quit() {
+        System.exit(0);
     }
     
-    //PauseScreen
-    public void setLabelInf(int inf)
-    {
-        TextField txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
-        txtInf.setText(Integer.toString(inf));
-        txtInf.setEnabled(false);
+    public void commands(){
+        nifty.gotoScreen("commands");
     }
 
-    public void quitGame() {
-        getApplication().stop();
+    public void loadSimulation(Simulation simulation){
+        this.sim = simulation;
+    }
+
+    public void edit(){
+        setEditComponent();
+        nifty.gotoScreen("edit");
+        cleanEditComps();
+    }
+
+    private void setEditComponent(){
+        var txtAddInf = nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class);
+        txtAddInf.setText("0");
+    }
+    
+    //edit screen
+    public void apply(){
+        try{
+            var txtAddInf = nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class);
+            sim.setInfected(Integer.parseInt(txtAddInf.getRealText()));
+        }catch(Exception ex){}
+        cleanEditComps();
+        nifty.gotoScreen("pause");
+        
+    }
+    private void cleanEditComps(){
+        nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class).setText("0");
+        nifty.getScreen("edit").findNiftyControl("RepLabel", Label.class).setText("");
+        nifty.getScreen("edit").findNiftyControl("RepLabel", Label.class).setText("");
+    }
+    public void stateMask(){
+        sim.changeMaskState();
+        nifty.getScreen("edit").findNiftyControl("RepLabel", Label.class).setText("Switching mask state!");
+    }
+
+    public void noInfected(){
+        sim.resumeInfected();
+        nifty.getScreen("edit").findNiftyControl("RepLabel", Label.class).setText("Infected resumed!");
+    }
+
+    public void cancel() {
+        nifty.getScreen("edit").findNiftyControl("txtAddInf", TextField.class).setText("");
+        nifty.gotoScreen("pause");
+    }
+    
+    public void initHudText(BitmapFont guiFont){
+        personText = new BitmapText(guiFont, true);
+        timeText = new BitmapText(guiFont, false);
+        infText = new BitmapText(guiFont,false);
+        maskTypeText = new BitmapText(guiFont,false);
+        hudText = new ArrayList<>();
+        hudText.addAll(Arrays.asList(personText, timeText, infText, maskTypeText));
+    }
+
+    public void setHudText(AppSettings settings, BitmapFont guiFont){
+        this.initHudText(guiFont);
+        personText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
+        personText.setColor(ColorRGBA.White);                             // font color
+        personText.setText("People: ");
+        personText.setLocalTranslation(0, settings.getHeight()/4, 0); // position
+        guiNode.attachChild(personText);
+
+        infText.setSize(guiFont.getCharSet().getRenderedSize());
+        infText.setColor(ColorRGBA.White);                             // font color
+        infText.setText("Infected: ");
+        infText.setLocalTranslation(0, settings.getHeight()/5, 0); // position
+        guiNode.attachChild(infText);
+
+        timeText.setSize(guiFont.getCharSet().getRenderedSize());
+        timeText.setColor(ColorRGBA.White);                             // font color
+        timeText.setText("Time: ");
+        timeText.setLocalTranslation(0, settings.getHeight()/12, 0); // position
+        guiNode.attachChild(timeText);
+
+        maskTypeText.setSize(guiFont.getCharSet().getRenderedSize());
+        maskTypeText.setColor(ColorRGBA.White);                             // font color
+        maskTypeText.setText("Mask Type: ");
+        maskTypeText.setLocalTranslation(0, settings.getHeight()/7, 0); // position
+        guiNode.attachChild(maskTypeText);
+    }
+
+    public void setHudImage(AssetManager assetManager, AppSettings settings){
+        pic = new Picture("HUD Picture");
+        pic.setImage(assetManager, "Interface/black.jpg", true);
+        pic.setWidth(settings.getWidth()/4);
+        pic.setHeight(settings.getHeight()/4);
+        pic.setPosition(0, 0);
+        pic.move(0f, 0f, -1);
+        guiNode.attachChild(pic);
+    }
+
+    public void updateText(){
+            personText.setText("Person: " + sim.getPersonCount());
+            infText.setText("Infected: " + sim.getInfectedNumb());
+            maskTypeText.setText("Mask Type: " + prot);
+            try{
+                timeText.setText("Time: " + this.getTime());
+            }catch(Exception ex){
+                timeText.setText("0");
+            }
+    }
+
+    public void hideHudComp(){
+        hudText.forEach(i -> guiNode.detachChild(i));
+        guiNode.detachChild(pic);
+    }
+
+    public void showHudComp(){
+        hudText.forEach(i -> guiNode.attachChild(i));
+        guiNode.attachChild(pic);
+        
+    }
+    public void onStartButtonClicked(Callback<Simulation.Options> callback) {
+        startSimFn = callback;
+    }
+
+    public void onQuitButtonClicked(Callback<Boolean> callback) {
+        quitFn = callback;
     }
 }
-

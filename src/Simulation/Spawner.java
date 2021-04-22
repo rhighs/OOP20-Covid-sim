@@ -25,8 +25,8 @@ public class Spawner {
 
     public void setRandomSpawnPoints(int numPoints){
         this.numPoints = numPoints;
-        NavMesh nav = map.getNavFromScene();
-        Random rng = new Random();
+        var nav = map.getNavFromScene();
+        var rng = new Random();
         for(int i = 0; i < numPoints; i++){
             int randIdx = rng.nextInt(nav.getNumCells());
             Vector3f randomPoint = nav.getCell(randIdx).getRandomPoint();
@@ -38,6 +38,7 @@ public class Spawner {
         if (spawnPoints == null){
             return;
         }
+
         int numPeople = crowd.size();
         int perPoint = numPeople / numPoints;
 

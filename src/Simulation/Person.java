@@ -1,42 +1,63 @@
 package Simulation;
 
+import Components.GraphicsComponent;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.io.IOException;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.math.ColorRGBA;
-import Components.PhysicsComponent;
-import java.util.stream.Collectors;
-import Components.MovementComponent;
-import Components.GraphicsComponent;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
+import com.jme3.export.Savable;
+import Components.PhysicsComponent;
+import Components.MovementComponent;
+import Components.ModelGraphicsComponent;
+import Environment.Locator;
 
-public class Person implements Entity {
+public class Person implements Entity, Savable {
+    public static class Mask {
+        public enum Status {
+            UP,
+            DOWN
+        }
+        public enum Protection {
+            FP1,
+            FP2,
+            FP3,
+        }
+        private Status status;
+        private Protection protection;
 
-    final private GraphicsComponent gfx;
+        public Mask(Protection protection, Status status) {
+            this.status = status;
+            this.protection = protection;
+        }
+    }
+
+    private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
     final private MovementComponent mov;
     private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
-    Vector3f pos;
 
-    //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
-    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint) {
-        gfx = new GraphicsComponent(this);
+    public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
+        this.gfx = new ModelGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        phyc = new PhysicsComponent(this);
-        mov = new MovementComponent(getSpatial());
-        phyc.initProximityBox(2);
-        //default
-        this.wearMask(new Mask(protection, Mask.MaskStatus.UP));
+        this.phyc = new PhysicsComponent(world.getPhysics(), this);
+        this.mov = new MovementComponent(world.getMap(), this.getSpatial());
+        this.phyc.initProximityBox(2);
+        this.mask = new Mask(protection, Mask.Status.UP);
     }
-       
+
+    @Override
     public CollisionShape getCollisionShape() {
         return null;
     }
 
-    /* *** Getters and setters *** */
     @Override
     public Spatial getSpatial() {
         return gfx.getSpatial();
@@ -47,14 +68,38 @@ public class Person implements Entity {
         return Identificator.PERSON;
     }
 
+    @Override
+    public void update(float tpf) {
+        mov.update(tpf);
+        phyc.update();
+    }
+
+    @Override
+    public void setPosition(final Vector3f point){
+        phyc.setPosition(point);
+    }
+
+    @Override
+    public Vector3f getPosition() {
+        return phyc.getPosition();
+    }
+
     public Mask getMask() {
         return mask;
     }
-    
+
     public void wearMask(Mask m) {
         this.mask = m;
     }
-    
+
+    public Mask.Status getMaskStatus() {
+        return mask.status;
+    }
+
+    public Mask.Protection getMaskProtection() {
+        return mask.protection;
+    }
+
     public boolean isInfected() {
         return infected;
     }
@@ -62,6 +107,11 @@ public class Person implements Entity {
     public void infect() {
         infected = true;
         gfx.changeColor(ColorRGBA.Red);
+    }
+
+    public void heal(){
+        infected = false;
+        gfx.changeColor(ColorRGBA.Blue);
     }
 
     public void setLastNear(Set<Person> people) {
@@ -76,24 +126,12 @@ public class Person implements Entity {
         phyc.initProximityBox(distance);
     }
 
-    /* *** Actual member functions *** */
-    @Override
-    public void update(float tpf) {
-        mov.update(tpf);
-        phyc.update();
-    }
-
     public void maskDown() {
-        mask.maskDown();
+        mask.status = Mask.Status.DOWN;
     }
 
-    @Override
-    public void setPosition(Vector3f pos) {
-    }
-
-    @Override
-    public Vector3f getPosition() {
-        return getSpatial().getLocalTranslation();
+    public void switchMaskState(){
+        mask.status = mask.status == Mask.Status.UP ? Mask.Status.DOWN : Mask.Status.UP;
     }
 
     public Set<Entity> getNearEntities() {
@@ -109,7 +147,10 @@ public class Person implements Entity {
     }
 
     @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void write(JmeExporter arg0) throws IOException {
+    }
+
+    @Override
+    public void read(JmeImporter arg0) throws IOException {
     }
 }

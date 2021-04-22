@@ -42,4 +42,8 @@ public class Graphics {
             m.setColor("Diffuse", color);
     }
     
+    public Spatial getModel(final String modelPath){
+        return this.assetManager.loadModel(modelPath);
+    }
+    
 }

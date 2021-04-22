@@ -4,11 +4,10 @@ import java.util.Random;
 import java.util.function.BiFunction;
 
 /**
+ * This is the Infection algorithm.
  *
- * @author simon
  */
 public class Infection implements BiFunction<Person, Person, Boolean> {
-
     private static int INF_RADIUS = 5;
     private static int STATUS_PERC = 70;
     private static int FP1_PERC = 30;
@@ -26,39 +25,26 @@ public class Infection implements BiFunction<Person, Person, Boolean> {
         }
 
         int trasm = checkTrasmissibility(p);
-
         if (trasm == 100) {
             return true;
         }
-        //più è alto il parametro di trasmissione più è alta la probabilità di infettare
+        // più è alto il parametro di trasmissione più è alta la probabilità di infettare
         Random rand = new Random();
         final int upperbound = 101;
-        if (rand.nextInt(upperbound) <= trasm) {
-            return true;
-        }   
-        return false;
+        return rand.nextInt() <= trasm;
     }
 
-    //infection depends from Mask status and type
+    // infection depends from Mask status and type
     // mask status 70% mask type 30%
     private int checkTrasmissibility(Person p) {
-        
-        Mask maskPerson = p.getMask();
-        
-        //percentage of trasmissibility
         int perc = 0;
-        //Migliorabile
-        
-        //check maskStatus (if Down is 70%)
-        perc += maskPerson.getStatus() == Mask.MaskStatus.UP ? 0 : STATUS_PERC;
-        
-        //check maskProtection (if FFP1 perc is 30%)
-        if(maskPerson.getProtection() == Mask.MaskProtection.FP1){
-            perc += FP1_PERC;
-        }else{
-            perc += maskPerson.getProtection() == Mask.MaskProtection.FP2 ? FP2_PERC : FP3_PERC;
-        }
 
+        perc += p.getMaskStatus() == Person.Mask.Status.UP ? 0 : STATUS_PERC;
+        switch (p.getMaskProtection()) {
+        case FP1: perc += FP1_PERC; break;
+        case FP2: perc += FP2_PERC; break;
+        case FP3: perc += FP3_PERC; break;
+        }
         return perc;
     }
 }

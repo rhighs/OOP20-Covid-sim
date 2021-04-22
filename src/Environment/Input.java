@@ -1,29 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Environment;
 
-import com.jme3.input.InputManager;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.Trigger;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import com.jme3.input.InputManager;
+import com.jme3.input.controls.Trigger;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.scene.Node;
+import java.util.List;
 
 /**
  *
  * @author rob
  */
-
 public class Input implements ActionListener {
     private InputManager input;
     private Map<String, InputAction> actions;
+    private Node guiNode;
     
-    public Input(InputManager input){
+    public Input(final InputManager input, final Node guiNode){
         this.input = input;
+        this.actions = new HashMap<>();
         input.addListener(this);
-        this.actions = new HashMap<>(); 
     }
 
     @Override
@@ -31,12 +28,18 @@ public class Input implements ActionListener {
         actions.entrySet()
                 .stream()
                 .filter(e -> e.getKey().equals(actionName) && !isPressed)
-                .forEach(e -> e.getValue().run());
+                .forEach(e -> {
+                    try{
+                        e.getValue().run();
+                    }catch(Exception ex){
+                        return;
+                    }
+                 });
     }
     
     public void addAction(String actionName, InputAction action, Trigger inputTrigger){
+        input.addListener(this, actionName);
         input.addMapping(actionName, inputTrigger);
         actions.put(actionName, action);
     }
-    
 }
