@@ -1,7 +1,9 @@
 package Environment;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.scene.Node;
 
 /**
  *
@@ -18,9 +20,9 @@ public class Locator {
     static public void provideApplication(SimpleApplication app){
         _app = app;
         
-        var rootNode = _app.getRootNode();
-        var assetManager = _app.getAssetManager();
-        var bullet = new BulletAppState();
+        Node rootNode = _app.getRootNode();
+        AssetManager assetManager = _app.getAssetManager();
+        BulletAppState bullet = new BulletAppState();
         app.getStateManager().attach(bullet);
 
         graphics = new Graphics(assetManager, rootNode);

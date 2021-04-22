@@ -47,7 +47,7 @@ class PathGeneratorCall implements Callable<List<Waypoint>> {
     }
 
     public List<Waypoint> call() throws Exception {
-        var r = pathGen.getRandomPoint();
+        Vector3f r = pathGen.getRandomPoint();
         System.out.println(startingPoint + " " + r);
         return pathGen.getPath(startingPoint, pathGen.getRandomPoint());
     }

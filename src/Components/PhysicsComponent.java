@@ -15,6 +15,8 @@ import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 
 import Environment.Locator;
 import Environment.Physics;
+import com.jme3.scene.shape.Box;
+import java.util.List;
 
 /**
  *
@@ -74,8 +76,8 @@ public class PhysicsComponent{
     }
 
     public void initProximityBox(final float size) {
-        var boxSize = new Vector3f(size, size, size);
-        var boxCollShape = new BoxCollisionShape(boxSize);
+        Vector3f boxSize = new Vector3f(size, size, size);
+        BoxCollisionShape boxCollShape = new BoxCollisionShape(boxSize);
 
         proximityBox = new GhostControl(boxCollShape);
 
@@ -88,7 +90,7 @@ public class PhysicsComponent{
         int nNear = proximityBox.getOverlappingCount();
 
         if (nNear != 0) {
-            var nearEntities = proximityBox.getOverlappingObjects()
+            Set<Entity> nearEntities = proximityBox.getOverlappingObjects()
                     .stream()
                     //.filter(o -> (o.getUserObject() instanceof Entity))
                     .filter(o -> o instanceof GhostControl)
@@ -104,7 +106,7 @@ public class PhysicsComponent{
     public Optional<Float> getNearDistance(final Entity guest) {
 
         boolean isNear = getNearEntities().contains(guest);
-        var guestPos = guest.getPosition();
+        Vector3f guestPos = guest.getPosition();
 
         if (isNear) {
             float distance = position.distance(guestPos);

@@ -15,20 +15,27 @@ public class Ambient {
     private Node rootNode;
     private ViewPort viewPort;
     private AssetManager assetManager;
-    
+    final int SHADOWMAP_SIZE = 4096;
+
+    final private Vector3f lightDirection = new Vector3f(-0.5f, -0.5f, -0.5f);
+
     public Ambient(final AssetManager assetManager, final Node rootNode, final ViewPort viewPort){
         this.rootNode = rootNode;
         this.viewPort = viewPort;
         this.assetManager = assetManager;
+
+        var light = new DirectionalLight();
+        light.setDirection(lightDirection.normalizeLocal());
+        light.setColor(ColorRGBA.White);
+        this.addSunLight(light, SHADOWMAP_SIZE);
     }
     
-    public void addSunLight(final DirectionalLight light, int shadowDefinition){
-        rootNode.addLight(light);        
-        var shadowRenderer = new DirectionalLightShadowRenderer(assetManager, shadowDefinition, 3);
+    private void addSunLight(final DirectionalLight light, int shadowDefinition){
+        DirectionalLightShadowRenderer shadowRenderer = new DirectionalLightShadowRenderer(assetManager, shadowDefinition, 3);
         shadowRenderer.setLight(light);
+        rootNode.addLight(light);
         viewPort.addProcessor(shadowRenderer);
         rootNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
     }
-    
-            
+
 }

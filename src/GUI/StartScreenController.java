@@ -9,6 +9,7 @@ import de.lessvoid.nifty.screen.Screen;
 import com.jme3.app.state.BaseAppState;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.NiftyControl;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -93,9 +94,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         final TextField textField = nifty.getScreen("start").findNiftyControl("textPerson", TextField.class);
         final TextField textNoM = nifty.getScreen("start").findNiftyControl("txtNoMask", TextField.class);
         final DropDown dropDown = nifty.getScreen("start").findNiftyControl("dropMask", DropDown.class);
-        final var text = textField.getRealText();
+        final String text = textField.getRealText();
 
         try{
+
             Options options = new Options(
                 Integer.parseInt(text),
                 Integer.parseInt(textNoM.getRealText()),
@@ -104,9 +106,12 @@ public class StartScreenController extends BaseAppState implements ScreenControl
             nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
             call.call(options);
 
-        }catch(Exception ex){}
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
         
     }
+
     public void startGame(String screen) {
         flyCam.setEnabled(true);
         flyCam.setDragToRotate(false);
@@ -119,10 +124,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     //PauseScreen
     public void setLabelInf(int inf)
     {
-        var txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
+        TextField txtInf = nifty.getScreen("pause").findNiftyControl("txtInf", TextField.class);
         txtInf.setText(Integer.toString(inf));
         txtInf.setEnabled(false);
     }
+
     public void quitGame() {
         getApplication().stop();
     }

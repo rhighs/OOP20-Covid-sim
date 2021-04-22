@@ -45,7 +45,7 @@ public class Simulation {
             return;
         }
 
-        for (var p : crowd) {
+        for (Person p : crowd) {
             p.update(tpf);
         }
     }

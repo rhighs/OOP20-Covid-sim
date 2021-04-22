@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  *
@@ -30,7 +31,7 @@ public class Virus extends Thread{
 
     public void startSpreading() {
         infectedPeople = new ArrayList<>();
-        var unluckyBoi = crowd.get(rand.nextInt(numPeople));
+        Person unluckyBoi = crowd.get(rand.nextInt(numPeople));
         unluckyBoi.infect();
 
         infectedPeople.add(unluckyBoi);
@@ -47,11 +48,11 @@ public class Virus extends Thread{
             return;
         }
 
-        for (var p : crowd) {
+        for (Person p : crowd) {
             if (p.isInfected()) {
-                var nearPeople = p.getNearPeople();
+                Set<Person> nearPeople = p.getNearPeople();
 
-                var allNearPeople = new HashSet<>(nearPeople);
+                Set<Person> allNearPeople = new HashSet<Person>(nearPeople);
                 if (p.getLastNear() != null) {
                     nearPeople.removeAll(p.getLastNear());
                 }

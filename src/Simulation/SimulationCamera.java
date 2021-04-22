@@ -50,7 +50,7 @@ public class SimulationCamera {
             return;
         }
         
-        var pos = attachedEntity.getPosition();
+        Vector3f pos = attachedEntity.getPosition();
         cam.setLocation(pos);
     }
     

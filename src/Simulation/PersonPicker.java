@@ -9,6 +9,8 @@ import Environment.InputAction;
 import Environment.Locator;
 import com.jme3.input.MouseInput;
 import com.jme3.app.SimpleApplication;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -54,13 +56,13 @@ public class PersonPicker implements ActionListener {
         Ray ray = new Ray(cam.getLocation(), cam.getDirection());
 
         rootNode.collideWith(ray, results);
-
-        var found = results.getClosestCollision();
+        
+        CollisionResult found = results.getClosestCollision();
 
         try{
             node = found.getGeometry();
         }catch (Exception ex){
-            var err = ex.toString();
+            String err = ex.toString();
             return Optional.empty();
         }
 
@@ -68,7 +70,7 @@ public class PersonPicker implements ActionListener {
             return Optional.empty();
         }
 
-        var userData = node.getUserData("entity");
+        Entity userData = node.getUserData("entity");
 
         if (userData == null) {
             return Optional.empty();
@@ -103,7 +105,7 @@ public class PersonPicker implements ActionListener {
             p = (Person) pickPerson().get();
             cam.attachToEntity(p);
         }catch(Exception ex){
-            var err = ex.toString();
+            String err = ex.toString();
         }
     }
 

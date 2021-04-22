@@ -29,7 +29,7 @@ public class Graphics {
     }
     
     public Material createShadedMaterial(final ColorRGBA ambient, final ColorRGBA diffuse){
-        var material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        Material material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setBoolean("UseMaterialColors", true);
         material.setColor("Ambient", ambient);
         material.setColor("Diffuse", diffuse);
@@ -38,7 +38,7 @@ public class Graphics {
     }
     
     public void changeMaterialColor(final Spatial spatial, final ColorRGBA color) {
-            var m = ((Geometry) spatial).getMaterial();
+            Material m = ((Geometry) spatial).getMaterial();
             m.setColor("Diffuse", color);
     }
     
