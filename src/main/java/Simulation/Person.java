@@ -1,7 +1,7 @@
 package Simulation;
 
+import Components.Graphics.CubeGraphicsComponent;
 import Components.Graphics.GraphicsComponent;
-import Components.Graphics.ModelGraphicsComponent;
 import Components.Movement.MovementComponent;
 import Components.Physics.PhysicsComponent;
 import Environment.Locator;
@@ -25,7 +25,7 @@ public class Person implements Entity, Savable {
     private boolean infected;
     private Mask mask;
     public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
-        this.gfx = new ModelGraphicsComponent(world.getGraphics(), this);
+        this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
         this.phyc = new PhysicsComponent(world.getPhysics(), this);
         this.mov = new MovementComponent(world.getMap(), this.getSpatial());
