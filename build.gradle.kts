@@ -31,9 +31,9 @@ dependencies {
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    // JUnit API and testing engine
-    //testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
-    //testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    testImplementation("org.mockito:mockito-core:3.+")
 }
 
 tasks.withType<JavaCompile> {
