@@ -15,6 +15,9 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - name: Fix permissions
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: ./gradlew build
 
