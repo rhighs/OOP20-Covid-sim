@@ -1,40 +1,25 @@
 package Main;
 
-import Components.Lighting;
-import Simulation.Simulation;
-import com.jme3.math.Vector3f;
-import com.jme3.input.KeyInput;
-import com.jme3.math.ColorRGBA;
-import com.jme3.font.BitmapText;
-import com.jme3.app.SimpleApplication;
-import com.jme3.renderer.RenderManager;
-import com.jme3.niftygui.NiftyJmeDisplay;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.ActionListener;
-import de.lessvoid.nifty.Nifty;
 import Environment.Locator;
+import GUI.Controllers.StartScreenController;
 import Simulation.Simulation;
-import GUI.StartScreenController;
+import com.jme3.app.SimpleApplication;
+import com.jme3.font.BitmapText;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.RenderManager;
 
 /**
- *  This is the Main class. This class handles everything: Simulation, GUI,
- *  Simulation states, etc.
+ * This is the Main class. This class handles everything: Simulation, GUI,
+ * Simulation states, etc.
  */
 public class Main extends SimpleApplication {
     /**
-     * Enum for screen states. These are used in update()
-     * to do different things based on which screen we are.
-     * For example, while we are inside the pause screen,
-     * we won't update the simulation
-     */
-    enum ScreenState {
-        START_SCREEN,
-        SIMULATION_SCREEN,
-        PAUSE_SCREEN,
-    }
-
-    /**
      * Fields for Main class.
+     *
      * @state: keeps track of the screen state. See above.
      * @world:
      * @screenControl: controller for the GUI class.
@@ -79,20 +64,23 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         switch (state) {
-        case START_SCREEN: break;
-        case SIMULATION_SCREEN:
-            screenControl.updateText();
-            simulation.step(tpf);
-            break;
-        case PAUSE_SCREEN: break;
+            case START_SCREEN:
+                break;
+            case SIMULATION_SCREEN:
+                screenControl.updateText();
+                simulation.step(tpf);
+                break;
+            case PAUSE_SCREEN:
+                break;
         }
     }
 
     @Override
-    public void simpleRender(RenderManager rm){
+    public void simpleRender(RenderManager rm) {
     }
 
-    /** This function setups key mappings.
+    /**
+     * This function setups key mappings.
      * In particular, it sets up key mapping for entering and exiting the pause screen:
      * - P for entering
      * - E for exiting
@@ -101,7 +89,7 @@ public class Main extends SimpleApplication {
     private void setupKeyMappings() {
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addListener(new ActionListener() {
-            public void onAction(String name, boolean keyPressed, float tpf){
+            public void onAction(String name, boolean keyPressed, float tpf) {
                 screenControl.enterPauseScreen();
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
@@ -111,7 +99,7 @@ public class Main extends SimpleApplication {
 
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
         inputManager.addListener(new ActionListener() {
-            public void onAction(String name, boolean keyPressed, float tpf){
+            public void onAction(String name, boolean keyPressed, float tpf) {
                 screenControl.exitPauseScreen();
                 guiNode.attachChild(ch);
                 inputManager.setCursorVisible(false);
@@ -134,7 +122,7 @@ public class Main extends SimpleApplication {
         screenControl.onQuitButtonClicked(from -> finish(from));
         screenControl.initHudText(guiFont);
         screenControl.setHudImage(assetManager, settings);
-        screenControl.setHudText(settings,guiFont);
+        screenControl.setHudText(settings, guiFont);
     }
 
     /**
@@ -146,8 +134,8 @@ public class Main extends SimpleApplication {
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");        // fake crosshairs
         ch.setLocalTranslation( // center
-            settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
-            settings.getHeight() / 2 + ch.getLineHeight() / 2, 0
+                settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+                settings.getHeight() / 2 + ch.getLineHeight() / 2, 0
         );
         guiNode.attachChild(ch);
     }
@@ -174,7 +162,9 @@ public class Main extends SimpleApplication {
      * This function closes application.
      * It is called both when the user closes the window and when the user
      * presses the quit button on the GUI.
-     * @fromQuitButton indicates if it came from the GUI. */
+     *
+     * @fromQuitButton indicates if it came from the GUI.
+     */
     public void finish(Boolean fromQuitButton) {
         System.err.println("exiting...");
         System.exit(0);
@@ -186,5 +176,17 @@ public class Main extends SimpleApplication {
     @Override
     public void destroy() {
         finish(false);
+    }
+
+    /**
+     * Enum for screen states. These are used in update()
+     * to do different things based on which screen we are.
+     * For example, while we are inside the pause screen,
+     * we won't update the simulation
+     */
+    enum ScreenState {
+        START_SCREEN,
+        SIMULATION_SCREEN,
+        PAUSE_SCREEN,
     }
 }

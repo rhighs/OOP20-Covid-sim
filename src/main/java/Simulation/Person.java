@@ -1,50 +1,29 @@
 package Simulation;
 
-import Components.GraphicsComponent;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.stream.Collectors;
-import java.io.IOException;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import com.jme3.math.ColorRGBA;
-import com.jme3.bullet.collision.shapes.CollisionShape;
+import Components.Graphics.GraphicsComponent;
+import Components.Graphics.ModelGraphicsComponent;
+import Components.Movement.MovementComponent;
+import Components.Physics.PhysicsComponent;
+import Environment.Locator;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.Savable;
-import Components.PhysicsComponent;
-import Components.MovementComponent;
-import Components.ModelGraphicsComponent;
-import Environment.Locator;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Person implements Entity, Savable {
-    public static class Mask {
-        public enum Status {
-            UP,
-            DOWN
-        }
-        public enum Protection {
-            FP1,
-            FP2,
-            FP3,
-        }
-        private Status status;
-        private Protection protection;
-
-        public Mask(Protection protection, Status status) {
-            this.status = status;
-            this.protection = protection;
-        }
-    }
-
-    private GraphicsComponent gfx;
-    final private PhysicsComponent phyc;
-    final private MovementComponent mov;
-    Vector3f pos;
+    private final GraphicsComponent gfx;
+    private final PhysicsComponent phyc;
+    private final MovementComponent mov;
     private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
-
     public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
         this.gfx = new ModelGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
@@ -55,8 +34,39 @@ public class Person implements Entity, Savable {
     }
 
     @Override
-    public CollisionShape getCollisionShape() {
-        return null;
+    public void update(float tpf) {
+        mov.update(tpf);
+        phyc.update(tpf);
+    }
+
+    public void infect() {
+        infected = true;
+        gfx.changeColor(ColorRGBA.Red);
+    }
+
+    public boolean isInfected() {
+        return infected;
+    }
+
+    public void heal() {
+        infected = false;
+        gfx.changeColor(ColorRGBA.Blue);
+    }
+
+    public Mask getMask() {
+        return mask;
+    }
+
+    public void wearMask(Mask m) {
+        this.mask = m;
+    }
+
+    public void maskDown() {
+        mask.status = Mask.Status.DOWN;
+    }
+
+    public void switchMaskState() {
+        mask.status = mask.status == Mask.Status.UP ? Mask.Status.DOWN : Mask.Status.UP;
     }
 
     @Override
@@ -69,76 +79,7 @@ public class Person implements Entity, Savable {
         return Identificator.PERSON;
     }
 
-    @Override
-    public void update(float tpf) {
-        mov.update(tpf);
-        phyc.update();
-    }
-
-    @Override
-    public void setPosition(final Vector3f point){
-        phyc.setPosition(point);
-    }
-
-    @Override
-    public Vector3f getPosition() {
-        return phyc.getPosition();
-    }
-
-    public Mask getMask() {
-        return mask;
-    }
-
-    public void wearMask(Mask m) {
-        this.mask = m;
-    }
-
-    public Mask.Status getMaskStatus() {
-        return mask.status;
-    }
-
-    public Mask.Protection getMaskProtection() {
-        return mask.protection;
-    }
-
-    public boolean isInfected() {
-        return infected;
-    }
-
-    public void infect() {
-        infected = true;
-        gfx.changeColor(ColorRGBA.Red);
-    }
-
-    public void heal(){
-        infected = false;
-        gfx.changeColor(ColorRGBA.Blue);
-    }
-
-    public void setLastNear(Set<Person> people) {
-        lastNearPeople = new HashSet<Person>(people);
-    }
-
-    public Set<Person> getLastNear() {
-        return lastNearPeople;
-    }
-
-    public void setInfectionDistance(float distance) {
-        phyc.initProximityBox(distance);
-    }
-
-    public void maskDown() {
-        mask.status = Mask.Status.DOWN;
-    }
-
-    public void switchMaskState(){
-        mask.status = mask.status == Mask.Status.UP ? Mask.Status.DOWN : Mask.Status.UP;
-    }
-
-    public Set<Entity> getNearEntities() {
-        return phyc.getNearEntities();
-    }
-
+    //from here till eof, its all physics info related methods
     public Set<Person> getNearPeople() {
         return getNearEntities()
                 .stream()
@@ -148,10 +89,66 @@ public class Person implements Entity, Savable {
     }
 
     @Override
+    public Vector3f getPosition() {
+        return phyc.getPosition();
+    }
+
+    @Override
+    public void setPosition(final Vector3f point) {
+        phyc.setPosition(point);
+    }
+
+    public Set<Person> getLastNear() {
+        return lastNearPeople;
+    }
+
+    public void setLastNear(Set<Person> people) {
+        lastNearPeople = new HashSet<Person>(people);
+    }
+
+    public Set<Entity> getNearEntities() {
+        return phyc.getNearEntities();
+    }
+
+    /*
+     *   Unfortunately we don't need these methods, but its required to "implement" them because
+     *   the Savable interface allows us to make an entity object *savable* into jme3 spatial userdata.
+     *   ( see PersonPicker.pickPerson() )
+     */
+    @Override
     public void write(JmeExporter arg0) throws IOException {
     }
 
     @Override
     public void read(JmeImporter arg0) throws IOException {
+    }
+
+    public static class Mask {
+        private final Protection protection;
+        private Status status;
+
+        public Mask(Protection protection, Status status) {
+            this.status = status;
+            this.protection = protection;
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+
+        public Protection getProtection() {
+            return protection;
+        }
+
+        public enum Status {
+            UP,
+            DOWN
+        }
+
+        public enum Protection {
+            FP1,
+            FP2,
+            FP3,
+        }
     }
 }

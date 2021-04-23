@@ -1,26 +1,27 @@
-package Components;
+package Components.Graphics;
 
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.Geometry;
-import com.jme3.math.ColorRGBA;
-import com.jme3.scene.shape.Box;
-import com.jme3.material.Material;
-import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import Environment.Services.Graphical.Graphics;
 import Simulation.Entity;
-import Environment.Graphics;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 
 public class CubeGraphicsComponent implements GraphicsComponent {
-    private Entity entity;
-    private Spatial sp;
-    private Material mat;
-    private ColorRGBA color = ColorRGBA.Green;
-    private Graphics graphics;
+    private final String GEO_NAME = "PersonCube";
+    private final Entity entity;
+    private final Spatial sp;
+    private final Material mat;
+    private final ColorRGBA color = ColorRGBA.Green;
+    private final Graphics graphics;
 
     public CubeGraphicsComponent(final Graphics graphics, final Entity entity) {
         this.graphics = graphics;
         this.entity = entity;
-        this.sp = new Geometry("PersonCube", new Box(40, 40, 40));
+        this.sp = new Geometry(GEO_NAME, new Box(40, 40, 40));
         mat = graphics.createShadedMaterial(ColorRGBA.Red, ColorRGBA.Blue);
         this.sp.setMaterial(mat);
         this.sp.scale(0.03f);

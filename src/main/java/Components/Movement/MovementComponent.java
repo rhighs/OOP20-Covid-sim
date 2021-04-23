@@ -1,40 +1,32 @@
-package Components;
+package Components.Movement;
 
-import java.util.List;
-import java.util.ArrayList;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import java.util.concurrent.Future;
+import Environment.Services.Map.MainMap;
+import Environment.Services.Map.PathFinderExecutor;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 
-import Environment.Locator;
-import Environment.MainMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 
 public class MovementComponent {
     private long start;
-    private MainMap map;
-    private Spatial spatial;
+    private final MainMap map;
+    private final Spatial spatial;
     private int currIndex = 0;
     private Waypoint currPoint;
-    private PathFinderExecutor pathCalc;
-    private BetterCharacterControl spatialControl;
+    private final PathFinderExecutor pathCalc;
+    private final BetterCharacterControl spatialControl;
     private Future<List<Waypoint>> wayPointsFuture;
     private List<Waypoint> wayPoints = new ArrayList<>();
-
-    private enum State {
-        NO_MORE_WAYPOINTS,
-        FOLLOW_WAYPOINT,
-        AT_WAYPOINT,
-    }
-
     private State state = State.NO_MORE_WAYPOINTS;
 
     public MovementComponent(final MainMap map, final Spatial spatial) {
         this.map = map;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
-
         this.pathCalc = map.createPathCalculator();
     }
 
@@ -112,5 +104,11 @@ public class MovementComponent {
                 atWaypoint();
                 break;
         }
+    }
+
+    private enum State {
+        NO_MORE_WAYPOINTS,
+        FOLLOW_WAYPOINT,
+        AT_WAYPOINT,
     }
 }

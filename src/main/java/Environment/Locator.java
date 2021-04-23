@@ -1,24 +1,29 @@
 package Environment;
 
+import Environment.Services.Graphical.Ambient;
+import Environment.Services.Graphical.Graphics;
+import Environment.Services.Graphical.SimulationCamera;
+import Environment.Services.InputHandling.Input;
+import Environment.Services.Map.MainMap;
+import Environment.Services.Physical.Physics;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Node;
 
 /**
- *
  * @author rob
  */
 public class Locator {
-    private SimpleApplication app;
-    private Graphics graphics;
-    private Physics physics;
-    private Ambient ambient;
-    private MainMap map;
-    private Input input;
-    private SimulationCamera cam;
-    private Node guiNode;
-    
-    public Locator(SimpleApplication app){
+    private final SimpleApplication app;
+    private final Graphics graphics;
+    private final Physics physics;
+    private final Ambient ambient;
+    private final MainMap map;
+    private final Input input;
+    private final SimulationCamera cam;
+    private final Node guiNode;
+
+    public Locator(SimpleApplication app) {
         this.app = app;
         guiNode = app.getGuiNode();
         var rootNode = app.getRootNode();
@@ -33,31 +38,32 @@ public class Locator {
         input = new Input(app.getInputManager(), app.getGuiNode());
         cam = new SimulationCamera(app.getCamera(), app.getFlyByCamera());
     }
-    
-    public Graphics getGraphics(){
+
+    public Graphics getGraphics() {
         return graphics;
     }
-    
-    public Physics getPhysics(){
+
+    public Physics getPhysics() {
         return physics;
     }
-    
-    public Ambient getAmbient(){
+
+    public Ambient getAmbient() {
         return ambient;
     }
-    
-    public MainMap getMap(){
+
+    public MainMap getMap() {
         return map;
     }
-    
-    public Input getInput(){
+
+    public Input getInput() {
         return input;
     }
-    
-    public Node getGuiNode(){
+
+    public Node getGuiNode() {
         return guiNode;
     }
-    public SimulationCamera getSimulationCamera(){
+
+    public SimulationCamera getSimulationCamera() {
         return cam;
     }
 }
