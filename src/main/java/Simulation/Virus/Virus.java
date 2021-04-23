@@ -39,26 +39,22 @@ public class Virus extends Thread {
     }
 
     private void keepSpreading() {
-
         if (!isSpreading) {
             return;
         }
-
         for (Person p : crowd) {
-
-            if (p.isInfected()) {
-                var nearPeople = p.getNearPeople();
-                var allNearPeople = new HashSet<>(nearPeople);
-
-                if (p.getLastNear() != null) {
-                    nearPeople.removeAll(p.getLastNear());
-                }
-
-                nearPeople.forEach(person -> tryInfection(p, person));
-                p.setLastNear(allNearPeople);
+            if (!p.isInfected()) {
+                continue;
             }
+            var adjPeople = p.getAdjacentPeople();
+            var allAdjPeople = new HashSet<>(adjPeople);
+            var lastPeople = p.getLastAdjacentPeople();
+            if (lastPeople != null) {
+                adjPeople.removeAll(lastPeople);
+            }
+            adjPeople.forEach(person -> tryInfection(p, person));
+            p.setLastAdjacentPeople(allAdjPeople);
         }
-
     }
 
     public boolean tryInfection(Person infector, Person victim) {
