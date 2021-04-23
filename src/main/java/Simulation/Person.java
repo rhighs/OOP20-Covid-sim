@@ -1,28 +1,43 @@
 package Simulation;
 
-import com.jme3.bullet.BulletAppState;
+import Components.GraphicsComponent;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.io.IOException;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.Node;
-import com.jme3.asset.AssetManager;
-import Components.MovementComponent;
-import Components.GraphicsComponent;
-import Components.PathCalculator;
-import Components.PhysicsComponent;
+import com.jme3.math.ColorRGBA;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
-import com.jme3.math.ColorRGBA;
 import com.jme3.export.Savable;
+import Components.PhysicsComponent;
+import Components.MovementComponent;
+import Components.ModelGraphicsComponent;
+import Environment.Locator;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+public class Person implements Entity, Savable {
+    public static class Mask {
+        public enum Status {
+            UP,
+            DOWN
+        }
+        public enum Protection {
+            FP1,
+            FP2,
+            FP3,
+        }
+        private Status status;
+        private Protection protection;
 
-public class Person implements Entity, IPerson, Savable {
+        public Mask(Protection protection, Status status) {
+            this.status = status;
+            this.protection = protection;
+        }
+    }
 
-    final private GraphicsComponent gfx;
+    private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
     final private MovementComponent mov;
     Vector3f pos;
@@ -30,23 +45,20 @@ public class Person implements Entity, IPerson, Savable {
     private boolean infected;
     private Mask mask;
 
-    //public Person(final Vector3f spawnPoint, BulletAppState bState, Node rootNode, PathCalculator pathCalc, AssetManager assetManager) {
-    public Person(/*final Spatial scene,*/Mask.MaskProtection protection, final Vector3f spawnPoint, BulletAppState bState, Node rootNode, /*SimpleApplication app,*/ PathCalculator pathCalc,
-                                          AssetManager assetManager) {
-        gfx = new GraphicsComponent(this, assetManager, rootNode);
+    public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
+        this.gfx = new ModelGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        phyc = new PhysicsComponent(this, bState);
-        mov = new MovementComponent(getSpatial(), /*scene,*/ pathCalc);
-        phyc.initProximityBox(2);
-        //default
-        this.wearMask(new MaskImpl(protection, Mask.MaskStatus.UP));
+        this.phyc = new PhysicsComponent(world.getPhysics(), this);
+        this.mov = new MovementComponent(world.getMap(), this.getSpatial());
+        this.phyc.initProximityBox(2);
+        this.mask = new Mask(protection, Mask.Status.UP);
     }
 
+    @Override
     public CollisionShape getCollisionShape() {
         return null;
     }
 
-    /* *** Getters and setters *** */
     @Override
     public Spatial getSpatial() {
         return gfx.getSpatial();
@@ -58,57 +70,69 @@ public class Person implements Entity, IPerson, Savable {
     }
 
     @Override
-    public Mask getMask() {
-        return mask;
-    }
-
-    @Override
-    public void wearMask(Mask m) {
-        this.mask = m;
-    }
-
-    @Override
-    public boolean isInfected() {
-        return infected;
-    }
-
-    @Override
-    public void infect() {
-        infected = true;
-        gfx.changeColor(ColorRGBA.Red);
-    }
-
-    public Set<Person> getLastNear() {
-        return lastNearPeople;
-    }
-
-    public void setLastNear(Set<Person> people) {
-        lastNearPeople = new HashSet<Person>(people);
-    }
-
-    public void setInfectionDistance(float distance) {
-        phyc.initProximityBox(distance);
-    }
-
-    /* *** Actual member functions *** */
-    @Override
     public void update(float tpf) {
         mov.update(tpf);
         phyc.update();
     }
 
     @Override
-    public void maskDown() {
-        mask.maskDown();
+    public void setPosition(final Vector3f point){
+        phyc.setPosition(point);
     }
 
     @Override
     public Vector3f getPosition() {
-        return getSpatial().getLocalTranslation();
+        return phyc.getPosition();
     }
 
-    @Override
-    public void setPosition(Vector3f pos) {
+    public Mask getMask() {
+        return mask;
+    }
+
+    public void wearMask(Mask m) {
+        this.mask = m;
+    }
+
+    public Mask.Status getMaskStatus() {
+        return mask.status;
+    }
+
+    public Mask.Protection getMaskProtection() {
+        return mask.protection;
+    }
+
+    public boolean isInfected() {
+        return infected;
+    }
+
+    public void infect() {
+        infected = true;
+        gfx.changeColor(ColorRGBA.Red);
+    }
+
+    public void heal(){
+        infected = false;
+        gfx.changeColor(ColorRGBA.Blue);
+    }
+
+    public void setLastNear(Set<Person> people) {
+        lastNearPeople = new HashSet<Person>(people);
+    }
+
+    public Set<Person> getLastNear() {
+        return lastNearPeople;
+    }
+
+    public void setInfectionDistance(float distance) {
+        phyc.initProximityBox(distance);
+    }
+
+    public void maskDown() {
+        mask.status = Mask.Status.DOWN;
+    }
+
+    public void switchMaskState(){
+        mask.status = mask.status == Mask.Status.UP ? Mask.Status.DOWN : Mask.Status.UP;
     }
 
     public Set<Entity> getNearEntities() {
@@ -124,17 +148,10 @@ public class Person implements Entity, IPerson, Savable {
     }
 
     @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void write(JmeExporter arg0) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void read(JmeImporter arg0) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

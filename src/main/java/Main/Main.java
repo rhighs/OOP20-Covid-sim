@@ -1,94 +1,189 @@
 package Main;
 
-import Simulation.Mask;
-import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.math.Vector3f;
-import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.RenderManager;
-import com.jme3.font.BitmapText;
-import com.jme3.niftygui.NiftyJmeDisplay;
-import de.lessvoid.nifty.Nifty;
-
 import Simulation.Simulation;
-import Simulation.Picker;
+import com.jme3.math.Vector3f;
+import com.jme3.input.KeyInput;
+import com.jme3.math.ColorRGBA;
+import com.jme3.font.BitmapText;
+import com.jme3.app.SimpleApplication;
+import com.jme3.renderer.RenderManager;
+import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.ActionListener;
+import de.lessvoid.nifty.Nifty;
+import Environment.Locator;
+import Simulation.Simulation;
 import GUI.StartScreenController;
 
 /**
- * @author chris, rob, jurismo, savi
+ *  This is the Main class. This class handles everything: Simulation, GUI,
+ *  Simulation states, etc.
  */
 public class Main extends SimpleApplication {
-    private final BulletAppState bState = new BulletAppState();
-    private final Simulation simulation = new Simulation();
+    /**
+     * Enum for screen states. These are used in update()
+     * to do different things based on which screen we are.
+     * For example, while we are inside the pause screen,
+     * we won't update the simulation
+     */
+    enum ScreenState {
+        START_SCREEN,
+        SIMULATION_SCREEN,
+        PAUSE_SCREEN,
+    }
 
-    private Nifty nifty;
-    private BitmapText hudText;
-    private StartScreenController startScreenState;
+    /**
+     * Fields for Main class.
+     * @state: keeps track of the screen state. See above.
+     * @world:
+     * @screenControl: controller for the GUI class.
+     * @simulation: controller for simulation.
+     * @crosshair: A crosshair only seen inside the simulation screen.
+     */
+    private ScreenState state = ScreenState.START_SCREEN;
+    private Locator world;
+    private StartScreenController screenControl;
+    private Simulation simulation;
+    private BitmapText ch;
 
     public static void main(String[] args) {
         new Main().start();
     }
 
-    public Main() {
-        //super(new FlyCamAppState());
-    }
-
+    /**
+     * Initializes the application.
+     * This initializes the world, initializes the GUI controller,
+     * sets key mappings for entering/exiting the pause screen
+     * and hides the JME debug status (which is visible by default).
+     */
     @Override
     public void simpleInitApp() {
-        initNiftyGUI();
-        viewPort.setBackgroundColor(ColorRGBA.Cyan);
-        bState.setDebugEnabled(true);
-        stateManager.attach(bState);
-        flyCam.setMoveSpeed(50);
-        cam.setLocation(new Vector3f(20, 20, 5));
-        //simulation.start(100, assetManager, bState, rootNode, viewPort);
+        // keep this at the top or else we'll get exceptions.
+        world = new Locator(this);
+        this.simulation = new Simulation(world);
+        setDisplayStatView(false);
+        setDisplayFps(false);
+        setupGUI();
+        setupKeyMappings();
     }
 
+    /**
+     * Updates the application.
+     * This should do different things depending on whether we are
+     * in the starting screen, in the pause screen or in the simulation
+     * screen.
+     * More importantly, when we are in the pause screen, the simulation
+     * SHOULDN'T update.
+     */
     @Override
     public void simpleUpdate(float tpf) {
-        // hudText.setText("Infected: " + simulation.getInfectedNumb()); //!!!!! non fa l'update
-        simulation.step(tpf);
+        switch (state) {
+        case START_SCREEN: break;
+        case SIMULATION_SCREEN:
+            screenControl.updateText();
+            simulation.step(tpf);
+            break;
+        case PAUSE_SCREEN: break;
+        }
     }
 
     @Override
     public void simpleRender(RenderManager rm){
-
     }
 
-    private void initNiftyGUI() {
-        hudText = new BitmapText(guiFont, false);
-        //set cursor visible on init GUI
+    /** This function setups key mappings.
+     * In particular, it sets up key mapping for entering and exiting the pause screen:
+     * - P for entering
+     * - E for exiting
+     * When entering/exiting, we also set the @state field.
+     */
+    private void setupKeyMappings() {
+        inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
+        inputManager.addListener(new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                screenControl.enterPauseScreen();
+                guiNode.detachChild(ch);
+                inputManager.setCursorVisible(true);
+                state = ScreenState.PAUSE_SCREEN;
+            }
+        }, "Pause Game");
+
+        inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
+        inputManager.addListener(new ActionListener() {
+            public void onAction(String name, boolean keyPressed, float tpf){
+                screenControl.exitPauseScreen();
+                guiNode.attachChild(ch);
+                inputManager.setCursorVisible(false);
+                state = ScreenState.SIMULATION_SCREEN;
+            }
+        }, "Esc Pause Game");
+    }
+
+    /**
+     * Sets up the GUI.
+     * We set up the GUI by creatin it and setting up callbacks for the start button
+     * and the quit button.
+     */
+    private void setupGUI() {
         flyCam.setEnabled(false);
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
-        //stateManager.attach(startScreenState);
-
-        NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
-            assetManager,
-            inputManager,
-            audioRenderer,
-            guiViewPort
-        );
-
-        nifty = niftyDisplay.getNifty();
-        startScreenState = new StartScreenController(nifty, flyCam, inputManager, o -> startSimulation(o));
-        nifty.fromXml("Interface/Screen.xml", "start", startScreenState);
-        // attach the nifty display to the gui view port as a processor
-        guiViewPort.addProcessor(niftyDisplay);
-        // this is the command to switch GUI nifty.gotoScreen("hud");
-        hudText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        hudText.setColor(ColorRGBA.Blue);                             // font color
-        hudText.setText("You can write any string here");             // the text
-        hudText.setLocalTranslation(300, hudText.getLineHeight(), 0); // position
-        guiNode.attachChild(hudText);
+        screenControl = new StartScreenController(this, world);
+        screenControl.onStartButtonClicked(o -> startSimulation(o));
+        screenControl.onQuitButtonClicked(from -> finish(from));
+        screenControl.initHudText(guiFont);
+        screenControl.setHudImage(assetManager, settings);
+        screenControl.setHudText(settings,guiFont);
     }
 
-    public void startSimulation(StartScreenController.Options options) {
-        // int numPerson = startScreenState.loadP();
-        // int noMask = startScreenState.getNoMask();
-        // Mask.MaskProtection protection = startScreenState.getMaskP();
-        simulation.start(options.nPerson, options.nMasks, options.protection,
-                         assetManager, bState, rootNode, this.getViewPort());
-        Picker picker = new Picker(this, simulation.getPersonList());
+    /**
+     * Sets up the crosshairs.
+     */
+    private void initCrossHairs() {
+        guiFont = assetManager.loadFont("Interface/Fonts/PhetsarathOT.fnt");
+        ch = new BitmapText(guiFont, false);
+        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        ch.setText("+");        // fake crosshairs
+        ch.setLocalTranslation( // center
+            settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+            settings.getHeight() / 2 + ch.getLineHeight() / 2, 0
+        );
+        guiNode.attachChild(ch);
+    }
+
+    /**
+     * Starts the simulation.
+     * This involves not just calling simulation's startSimulation method,
+     * but also setting up the camera and changing the state field.
+     */
+    public void startSimulation(Simulation.Options options) {
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+        inputManager.setCursorVisible(false);
+        initCrossHairs();
+        simulation.start(options);
+        screenControl.loadSimulation(simulation);
+        viewPort.setBackgroundColor(ColorRGBA.Cyan);
+        flyCam.setMoveSpeed(50);
+        cam.setLocation(new Vector3f(20, 20, 5));
+        state = ScreenState.SIMULATION_SCREEN;
+    }
+
+    /**
+     * This function closes application.
+     * It is called both when the user closes the window and when the user
+     * presses the quit button on the GUI.
+     * @fromQuitButton indicates if it came from the GUI. */
+    public void finish(Boolean fromQuitButton) {
+        System.err.println("exiting...");
+        System.exit(0);
+    }
+
+    /**
+     * This function is called by JME when the user closes the window.
+     */
+    @Override
+    public void destroy() {
+        finish(false);
     }
 }

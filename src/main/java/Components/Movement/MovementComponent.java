@@ -2,40 +2,40 @@ package Components;
 
 import java.util.List;
 import java.util.ArrayList;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import java.util.concurrent.Future;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
-import java.util.concurrent.Future;
+
+import Environment.Locator;
+import Environment.MainMap;
 
 public class MovementComponent {
-    // private Spatial scene;
-    private Spatial spatial;
-    private BetterCharacterControl spatialControl;
-    private Waypoint currPoint;
-    private int currIndex = 0;
-    private List<Waypoint> wayPoints = new ArrayList<>();
-
     private long start;
-
+    private MainMap map;
+    private Spatial spatial;
+    private int currIndex = 0;
+    private Waypoint currPoint;
+    private PathFinderExecutor pathCalc;
+    private BetterCharacterControl spatialControl;
     private Future<List<Waypoint>> wayPointsFuture;
-
-    private PathCalculator pathCalc;
+    private List<Waypoint> wayPoints = new ArrayList<>();
 
     private enum State {
         NO_MORE_WAYPOINTS,
         FOLLOW_WAYPOINT,
         AT_WAYPOINT,
     }
-    State state = State.NO_MORE_WAYPOINTS;
 
-    public MovementComponent(final Spatial spatial, /*final Spatial scene,*/ PathCalculator pathCalc) {
-        // this.scene = scene;
+    private State state = State.NO_MORE_WAYPOINTS;
+
+    public MovementComponent(final MainMap map, final Spatial spatial) {
+        this.map = map;
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
 
-        this.pathCalc = pathCalc;
+        this.pathCalc = map.createPathCalculator();
     }
 
     private void finishedWaypoints() {
@@ -54,27 +54,21 @@ public class MovementComponent {
                 }
                 currPoint = wayPoints.get(currIndex);
             } catch (Exception e) {
-                System.out.println("caught an exception here");
-                //System.out.println("no wayPoints: " + wayPoints.size() + ", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
-                System.exit(1);
+                return;
             }
             start = System.currentTimeMillis();
             currIndex++;
-            //System.out.println("generated new waypoints");
             state = State.FOLLOW_WAYPOINT;
-            //System.out.println(", target: " + target.getX() + "," + target.getY() + "," + target.getZ());
         }
     }
 
     private void followWaypoint() {
         if (currPoint == null) {
-            System.out.println("currPoint is null");
             System.exit(1);
         }
         Vector3f currPointVector = currPoint.getPosition();
         // if we're very near to the waypoint, change state to pick a new one
         if (spatial.getLocalTranslation().distance(currPointVector) <= 1) {
-            //System.out.println("got to waypoint");
             this.spatialControl.setWalkDirection(Vector3f.ZERO);
             this.state = State.AT_WAYPOINT;
             start = System.currentTimeMillis();
@@ -100,7 +94,6 @@ public class MovementComponent {
             this.state = State.NO_MORE_WAYPOINTS;
             wayPointsFuture = null;
         } else {
-            //System.out.println("change to follow waypoint state, currIndex: " + currIndex);
             this.currPoint = wayPoints.get(currIndex);
             currIndex++;
             this.state = State.FOLLOW_WAYPOINT;
