@@ -97,20 +97,6 @@ public class PhysicsComponent {
         return Collections.EMPTY_SET;
     }
 
-    public Optional<Float> getNearDistance(final Entity guest) {
-
-        boolean isNear = getNearEntities().contains(guest);
-        Vector3f guestPos = guest.getPosition();
-
-        if (isNear) {
-            float distance = position.distance(guestPos);
-
-            return Optional.of(distance);
-        }
-
-        return Optional.empty();
-    }
-
     public Vector3f getPosition() {
         return this.position;
     }
