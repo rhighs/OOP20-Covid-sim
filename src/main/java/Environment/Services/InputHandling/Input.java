@@ -1,23 +1,22 @@
-package Environment;
+package Environment.Services.InputHandling;
 
-import java.util.Map;
-import java.util.HashMap;
 import com.jme3.input.InputManager;
-import com.jme3.input.controls.Trigger;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.Trigger;
 import com.jme3.scene.Node;
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- *
  * @author rob
  */
 public class Input implements ActionListener {
-    private InputManager input;
-    private Map<String, InputAction> actions;
+    private final InputManager input;
+    private final Map<String, InputAction> actions;
     private Node guiNode;
-    
-    public Input(final InputManager input, final Node guiNode){
+
+    public Input(final InputManager input, final Node guiNode) {
         this.input = input;
         this.actions = new HashMap<>();
         input.addListener(this);
@@ -29,15 +28,15 @@ public class Input implements ActionListener {
                 .stream()
                 .filter(e -> e.getKey().equals(actionName) && !isPressed)
                 .forEach(e -> {
-                    try{
+                    try {
                         e.getValue().run();
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         return;
                     }
-                 });
+                });
     }
-    
-    public void addAction(String actionName, InputAction action, Trigger inputTrigger){
+
+    public void addAction(String actionName, InputAction action, Trigger inputTrigger) {
         input.addListener(this, actionName);
         input.addMapping(actionName, inputTrigger);
         actions.put(actionName, action);

@@ -1,28 +1,25 @@
-package Components;
+package Components.Graphics;
 
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.Geometry;
-import com.jme3.math.ColorRGBA;
-import com.jme3.scene.shape.Box;
-import com.jme3.material.Material;
+import Environment.Services.Graphical.Graphics;
 import Simulation.Entity;
-import Environment.Graphics;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Spatial;
 
 public class ModelGraphicsComponent implements GraphicsComponent {
     private Entity entity;
-    private Spatial sp;
+    private final Spatial sp;
     private Graphics graphics;
 
     public ModelGraphicsComponent(final Graphics graphics, final Entity entity) {
         // TODO
         // load a model, setup color, etc...
-        
+
         var model = graphics.getModel("Models/person.glb");
         model.setShadowMode(ShadowMode.CastAndReceive);
         this.sp = model;
-        
+
         this.show();
     }
 

@@ -1,31 +1,31 @@
-package Components;
+package Environment.Services.Map;
 
+
+import com.jme3.ai.navmesh.NavMesh;
+import com.jme3.ai.navmesh.Path.Waypoint;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
 import java.util.List;
-import com.jme3.scene.Node;
-import com.jme3.math.Vector3f;
-import java.util.concurrent.Future;
-import com.jme3.ai.navmesh.NavMesh;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import com.jme3.ai.navmesh.Path.Waypoint;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
- *
  * @author rob
  */
 public class PathFinderExecutor {
 
-    private ExecutorService pool = Executors.newSingleThreadExecutor();
+    PathFinder pathGen;
+    private final ExecutorService pool = Executors.newSingleThreadExecutor();
     private Node scene;
     private NavMesh nav;
-    PathFinder pathGen;
 
     public PathFinderExecutor(final NavMesh navMesh) {
         nav = navMesh;
     }
-    
+
     public PathFinderExecutor(final Node scene) {
         this.scene = scene;
     }

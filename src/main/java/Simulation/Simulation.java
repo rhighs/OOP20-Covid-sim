@@ -1,15 +1,27 @@
 package Simulation;
 
-import Environment.SimulationCamera;
-import java.util.List;
-import Environment.MainMap;
-import java.util.ArrayList;
-import Components.PathFinder;
+import Environment.Services.Map.PathFinder;
 import Environment.Locator;
-import java.util.Collections;
+import Environment.Services.Map.MainMap;
+import Environment.Services.Graphical.SimulationCamera;
+import Simulation.CrowdHandlers.PersonPicker;
+import Simulation.Virus.Virus;
 import com.jme3.scene.Node;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Simulation {
+    private final List<Person> crowd = Collections.synchronizedList(new ArrayList<>());
+    private final Locator world;
+    private final SimulationCamera cam;
+    private MainMap map;
+    private Virus virus;
+    private PathFinder pg;
+    private int numPerson = 0;
+    private PersonPicker picker;
+
     public static class Options {
         public final int numPerson;
         public final int numMasks;
@@ -21,15 +33,6 @@ public class Simulation {
             protection = pr;
         }
     }
-
-    private MainMap map;
-    private List<Person> crowd = Collections.synchronizedList(new ArrayList<>());
-    private Virus virus;
-    private PathFinder pg;
-    private int numPerson = 0;
-    private Locator world;
-    private SimulationCamera cam;
-    private PersonPicker picker;
 
     public Simulation(final Locator world) {
         this.world = world;
@@ -76,23 +79,24 @@ public class Simulation {
         return crowd.size();
     }
 
-    public int getInfectedNumb(){
+    public int getInfectedNumb() {
         if (crowd == null) {
             throw new IllegalStateException("simulation.step called before starting simulation");
         }
         return virus.getInfectedNumb();
     }
 
-    public void changeMaskState(){
+    public void changeMaskState() {
         virus.stopSpreading();
-        for (int i = 0; i < crowd.size(); i++){
+
+        for (int i = 0; i < crowd.size(); i++) {
             this.crowd.get(i).switchMaskState();
         }
-        
+
         virus.resumeSpreading();
     }
 
-    public void resumeInfected(){
+    public void resumeInfected() {
         virus.stopSpreading();
         virus.resumeInfected();
         virus.resumeSpreading();
@@ -100,16 +104,18 @@ public class Simulation {
 
     public void setInfected(int infected) {
         virus.stopSpreading();
-        for (var p : this.crowd){
+
+        for (var p : this.crowd) {
             if (infected != 0 && !p.isInfected()) {
                 virus.forceInfection(p);
                 infected--;
             }
         }
+
         virus.resumeSpreading();
     }
 
-    public Node getGuiNode(){
+    public Node getGuiNode() {
         return world.getGuiNode();
     }
 }

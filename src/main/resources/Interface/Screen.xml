@@ -2,7 +2,7 @@
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
     <useStyles filename="nifty-default-styles.xml"/>
     <useControls filename="nifty-default-controls.xml"/>
-    <screen id="start" controller="GUI.StartScreenController">
+    <screen id="start" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/back.jpg"></image>
         </layer>
@@ -80,7 +80,7 @@
     </screen>
     
     
-    <screen id="hud" controller="GUI.StartScreenController">
+    <screen id="hud" controller="GUI.Controllers.StartScreenController">
         <layer id="foreground" childLayout="horizontal">
             <panel id="hud_panel" width="100%" height="80%" childLayout="vertical">
                     <control name="label" text="Press [P] to pause" style="nifty-label" id="HudLabel" align="center"
@@ -92,7 +92,7 @@
     </screen>
     
     
-    <screen id="load" controller="GUI.StartScreenController">
+    <screen id="load" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/back.jpg"></image>
         </layer>
@@ -140,7 +140,7 @@
         </layer>
     </screen>
     
-    <screen id="commands" controller="GUI.StartScreenController">
+    <screen id="commands" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/back.jpg"></image>
         </layer>
@@ -196,7 +196,7 @@
     </screen>
     
     
-    <screen id="pause" controller="GUI.StartScreenController">
+    <screen id="pause" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/back.jpg"></image>
         </layer>
@@ -247,7 +247,7 @@
     
     
     
-    <screen id="edit" controller="GUI.StartScreenController">
+    <screen id="edit" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
             <image filename="Interface/back.jpg"></image>
         </layer>
