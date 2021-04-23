@@ -5,6 +5,10 @@ factoryConfiguration.json
 # nbproject
 nbproject/private/*
 *.so
+*.dll
+
+.gradle
+
 
 ### Java ###
 *.class
@@ -76,6 +80,7 @@ local.properties
 
 # Package Files #
 *.jar
+!libs/jME3-ai.jar
 *.war
 *.nar
 *.ear
@@ -95,6 +100,7 @@ local.properties
 # .idea/modules
 # *.iml
 # *.ipr
+.idea
 
 ### NetBeans ###
 **/nbproject/private/
@@ -105,4 +111,3 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-

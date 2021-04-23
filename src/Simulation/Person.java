@@ -40,6 +40,7 @@ public class Person implements Entity, Savable {
     private GraphicsComponent gfx;
     final private PhysicsComponent phyc;
     final private MovementComponent mov;
+    Vector3f pos;
     private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
@@ -141,7 +142,7 @@ public class Person implements Entity, Savable {
     public Set<Person> getNearPeople() {
         return getNearEntities()
                 .stream()
-                .filter(e -> e.getIdentificator() == Entity.Identificator.PERSON)
+                .filter(e -> e.getIdentificator() == Identificator.PERSON)
                 .map(e -> (Person) e)
                 .collect(Collectors.toSet());
     }
