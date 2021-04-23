@@ -38,7 +38,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
     private static final int DEFAULT_PERSON = 50;
     private final String SCREEN_PATH = "Interface/Screen.xml";
-    private final String HUD_IMAGE_PATH = "Interface/black.png";
+    private final String HUD_IMAGE_PATH = "Interface/black.jpg";
     private final String START_SCREEN_NAME = Screens.START.getName();
     private final Nifty nifty;
     private final FlyByCamera flyCam;
