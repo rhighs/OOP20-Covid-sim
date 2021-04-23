@@ -1,0 +1,121 @@
+package Simulation;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import com.jme3.scene.Node;
+import Environment.Services.Map.PathFinder;
+import Environment.Locator;
+import Environment.Services.Map.MainMap;
+import Environment.Services.Graphical.SimulationCamera;
+import Simulation.CrowdHandlers.PersonPicker;
+import Simulation.Virus.Virus;
+
+/**
+ * This is the main Simulation class.
+ * It holds properties such as:
+ * - The people list
+ * - The main map, which is a map of the Unibo,
+ * - The virus, which manages infections,
+ * - The picker, which lets the player "pick" a person and follow it.
+ * The people list is used as a synchronized list since more than one thread operates
+ * on it (for example, the virus operates on it via another thread).
+ */
+public class SimulationImpl implements Simulation {
+    private final List<Person> crowd = Collections.synchronizedList(new ArrayList<>());
+    private final Locator world;
+    private final SimulationCamera cam;
+    private MainMap map;
+    private Virus virus;
+    private PathFinder pg;
+    private PersonPicker picker;
+
+    /**
+     * Constructor for simulation.
+     * @param world the world this simulation uses.
+     * While the simulation can be constructed immediately, it is
+     * an error to use any other method before calling start().
+     */
+    public SimulationImpl(final Locator world) {
+        this.world = world;
+        cam = world.getSimulationCamera();
+    }
+
+    @Override
+    public void start(Options options) {
+        this.map = world.getMap();
+        this.pg = map.createPathGenerator();
+        for (int i = 0; i < options.numPerson; i++) {
+            Person p = new Person(world, options.protection, pg.getRandomPoint());
+            if (options.numMasks != 0) {
+                p.maskDown();
+            }
+            crowd.add(p);
+        }
+        picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
+        this.virus = new Virus(crowd, 2);
+        // virus is a thread, by the way
+        virus.start();
+    }
+
+    @Override
+    public void step(float tpf) {
+        if (crowd == null) {
+            throw new IllegalStateException("simulation.step called before starting simulation");
+        }
+        cam.update(tpf);
+        for (var p : crowd) {
+            p.update(tpf);
+        }
+    }
+
+    @Override
+    public List<Person> getPersonList() {
+        return this.crowd;
+    }
+
+    @Override
+    public int getPersonCount() {
+        if (crowd == null) {
+            throw new IllegalStateException("simulation.getPersonCount called before starting simulation");
+        }
+        return crowd.size();
+    }
+
+    @Override
+    public int getInfectedNumb() {
+        if (crowd == null) {
+            throw new IllegalStateException("simulation.getInfectedNumb called before starting simulation");
+        }
+        return virus.getInfectedNumb();
+    }
+
+    @Override
+    public void changeMaskState() {
+        virus.stopSpreading();
+        for (int i = 0; i < crowd.size(); i++) {
+            this.crowd.get(i).switchMaskState();
+        }
+        virus.resumeSpreading();
+    }
+
+    @Override
+    public void resumeInfected() {
+        virus.stopSpreading();
+        virus.resumeInfected();
+        virus.resumeSpreading();
+    }
+
+    @Override
+    public void setInfected(int infected) {
+        virus.stopSpreading();
+        for (var p : this.crowd) {
+            if (infected != 0 && !p.isInfected()) {
+                virus.forceInfection(p);
+                infected--;
+            }
+        }
+        virus.resumeSpreading();
+    }
+}
+
