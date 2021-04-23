@@ -1,26 +1,25 @@
-package Components;
+package Components.Physics;
 
-import java.util.Set;
-import java.util.Random;
+import Environment.Services.Physical.Physics;
 import Simulation.Entity;
-import java.util.Optional;
-import java.util.Collections;
+import com.jme3.app.SimpleApplication;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import java.util.stream.Collectors;
-import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 
-import Environment.Locator;
-import Environment.Physics;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author rob
  */
-public class PhysicsComponent{
+public class PhysicsComponent {
+    private static final float DIRECTION_LENGTH = 20;
     private final Vector3f spatialScale;
     private final Entity entity;
     private final Spatial spatial;
@@ -28,11 +27,8 @@ public class PhysicsComponent{
     private Vector3f position;
     private SimpleApplication app;
     private GhostControl proximityBox;
-    private Physics physics;
-    
-    private Random randMass;
-
-    private static float DIRECTION_LENGTH = 20;
+    private final Physics physics;
+    private final Random randMass;
 
     public PhysicsComponent(final Physics physics, Entity entity) {
         this.app = app;
@@ -49,7 +45,7 @@ public class PhysicsComponent{
         */
         randMass = new Random();
         spatialControl = new BetterCharacterControl(1f, 9f, (randMass.nextInt(10) + 1));
-        
+
         spatial.setUserData("entity", entity);
         setControlEnabled(true);
     }
@@ -65,7 +61,7 @@ public class PhysicsComponent{
             physics.addToSpace(spatialControl);
             physics.addToSpace(spatial);
         } else if (hasControl && spaceNotEmpty) {
-            spatial.removeControl(spatialControl);         
+            spatial.removeControl(spatialControl);
             physics.removeFromSpace(spatialControl);
             physics.removeFromSpace(spatial);
         }
@@ -76,8 +72,8 @@ public class PhysicsComponent{
     }
 
     public void initProximityBox(final float size) {
-        var boxSize = new Vector3f(size, size, size);
-        var boxCollShape = new BoxCollisionShape(boxSize);
+        Vector3f boxSize = new Vector3f(size, size, size);
+        BoxCollisionShape boxCollShape = new BoxCollisionShape(boxSize);
 
         proximityBox = new GhostControl(boxCollShape);
         spatial.addControl(proximityBox);
@@ -89,9 +85,8 @@ public class PhysicsComponent{
         int nNear = proximityBox.getOverlappingCount();
 
         if (nNear != 0) {
-            var nearEntities = proximityBox.getOverlappingObjects()
+            Set<Entity> nearEntities = proximityBox.getOverlappingObjects()
                     .stream()
-                    //.filter(o -> (o.getUserObject() instanceof Entity))
                     .filter(o -> o instanceof GhostControl)
                     .map(o -> (Entity) o.getUserObject())
                     .collect(Collectors.toSet());
@@ -105,7 +100,7 @@ public class PhysicsComponent{
     public Optional<Float> getNearDistance(final Entity guest) {
 
         boolean isNear = getNearEntities().contains(guest);
-        var guestPos = guest.getPosition();
+        Vector3f guestPos = guest.getPosition();
 
         if (isNear) {
             float distance = position.distance(guestPos);
@@ -115,16 +110,16 @@ public class PhysicsComponent{
 
         return Optional.empty();
     }
-    
-    public void setPosition(final Vector3f point){
-        this.spatial.setLocalTranslation(point);
-    }
-    
-    public Vector3f getPosition(){
+
+    public Vector3f getPosition() {
         return this.position;
     }
 
-    public void update() {
+    public void setPosition(final Vector3f point) {
+        this.spatial.setLocalTranslation(point);
+    }
+
+    public void update(float tpf) {
         position = spatial.getLocalTranslation();
     }
 }

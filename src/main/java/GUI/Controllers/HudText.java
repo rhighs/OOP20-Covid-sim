@@ -1,21 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Simulation;
+package GUI.Controllers;
 
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
+
 import java.util.List;
 
 /**
- *
  * @author json
  */
 public class HudText {
 
-    private List<BitmapText> text;
+    private final List<BitmapText> text;
     private final int backX;
     private final int backY;
 
