@@ -40,7 +40,7 @@ public class Simulation {
         cam = world.getSimulationCamera();
         this.lights = new Lights(world.getAmbient(), cam);
         picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
-        this.virus = new Virus(crowd, 2);
+        this.virus = new Virus(crowd);
     }
 
     public void start(Options options) {

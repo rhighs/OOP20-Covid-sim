@@ -3,20 +3,19 @@ package Simulation.Virus;
 import Simulation.Person;
 
 import java.util.Random;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * @author Json, rob
  */
-public class Infection implements BiFunction<Person, Person, Boolean> {
-    private static final int INF_RADIUS = 5;
+public class Infection implements Function<Person, Boolean> {
     private static final int STATUS_PERC = 70;
     private static final int FP1_PERC = 30;
     private static final int FP2_PERC = 20;
     private static final int FP3_PERC = 10;
 
     @Override
-    public Boolean apply(Person infector, Person victim) {
+    public Boolean apply(Person victim) {
         return infection(victim);
     }
 

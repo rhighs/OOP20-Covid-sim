@@ -12,19 +12,21 @@ import java.util.Random;
  */
 public class Virus extends Thread {
 
-    private final float strenght;
     private final Random rand;
+
     private int numPeople;
+
     private final Infection infectionAlgo;
+
     private volatile List<Person> crowd;
+
     private List<Person> infectedPeople;
+
     private boolean isSpreading = false;
 
-    public Virus(final List<Person> crowd, final float strenght) {
-        this.strenght = strenght;
+    public Virus(final List<Person> crowd) {
         this.crowd = crowd;
         infectionAlgo = new Infection();
-
         rand = new Random();
     }
 
@@ -54,16 +56,16 @@ public class Virus extends Thread {
                     nearPeople.removeAll(p.getLastNear());
                 }
 
-                nearPeople.forEach(person -> tryInfection(p, person));
+                nearPeople.forEach(person -> tryInfection(person));
                 p.setLastNear(allNearPeople);
             }
         }
 
     }
 
-    public boolean tryInfection(Person infector, Person victim) {
+    public boolean tryInfection(Person victim) {
 
-        if (infectionAlgo.apply(infector, victim)) {
+        if (infectionAlgo.apply(victim)) {
             victim.infect();
             infectedPeople.add(victim);
             return true;
