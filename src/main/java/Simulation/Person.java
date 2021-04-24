@@ -94,7 +94,6 @@ public class Person implements Entity, Savable {
         return phyc.getPosition();
     }
 
-    @Override
     public void setPosition(final Vector3f point) {
         phyc.setPosition(point);
     }

@@ -21,6 +21,8 @@ public class PathManagerImpl implements PathManager {
 
     private final Spatial spatial;
 
+    private boolean isRequested = false;
+
     private Future<List<Waypoint>> nextPathFuture;
 
     private int currentWaypointIndex = 0;
@@ -41,6 +43,7 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Waypoint getWaypoint() {
+        System.out.println("waypoints is: " + (waypoints == null ? "null" : "not null"));
         if (waypoints == null || waypoints.isEmpty()) {
             if (!isPathReady()) {
                 return null;
@@ -49,8 +52,10 @@ public class PathManagerImpl implements PathManager {
             try {
                 waypoints = nextPathFuture.get();
                 nextPathFuture = null;
+                isRequested = false;
                 currentWaypointIndex = 0;
             } catch (Exception exception) {
+                exception.printStackTrace();
                 return null;
             }
         }
@@ -66,6 +71,7 @@ public class PathManagerImpl implements PathManager {
     @Override
     public void requestNewPath() {
         nextPathFuture = pathCalculator.request(spatial.getLocalTranslation());
+        isRequested = true;
     }
 
     @Override
@@ -97,6 +103,6 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Boolean isPathRequested() {
-        return nextPathFuture != null;
+        return isRequested;
     }
 }

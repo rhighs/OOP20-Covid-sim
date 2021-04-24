@@ -220,9 +220,18 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     }
 
     public void updateText() {
-        personText.setText("Person: " + sim.getPersonCount());
-        infText.setText("Infected: " + sim.getInfectedNumb());
-        maskTypeText.setText("Mask Type: " + prot);
+
+        if(sim == null){
+            System.out.println("dino");
+        }
+
+        try{
+            personText.setText("Person: " + sim.getPersonCount());
+            infText.setText("Infected: " + sim.getInfectedNumb());
+            maskTypeText.setText("Mask Type: " + prot);
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
+        }
 
         Long time = this.getTime();
         timeText.setText(time != null ? "Text: " + time : "0");

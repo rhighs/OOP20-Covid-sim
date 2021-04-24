@@ -14,7 +14,7 @@ public class Virus extends Thread {
 
     private final float strenght;
     private final Random rand;
-    private final int numPeople;
+    private int numPeople;
     private final Infection infectionAlgo;
     private volatile List<Person> crowd;
     private List<Person> infectedPeople;
@@ -23,13 +23,13 @@ public class Virus extends Thread {
     public Virus(final List<Person> crowd, final float strenght) {
         this.strenght = strenght;
         this.crowd = crowd;
-        this.numPeople = crowd.size();
         infectionAlgo = new Infection();
 
         rand = new Random();
     }
 
-    public void startSpreading() {
+    private void startSpreading() {
+        this.numPeople = crowd.size();
         infectedPeople = new ArrayList<>();
         Person unluckyBoi = crowd.get(rand.nextInt(numPeople));
         unluckyBoi.infect();

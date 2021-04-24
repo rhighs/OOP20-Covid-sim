@@ -9,16 +9,22 @@ import com.jme3.renderer.Camera;
  * @author rob
  */
 public class SimulationCamera {
+
     private final Camera cam;
+
     private final FlyByCamera flyCam;
+
     private Entity attachedEntity;
+
+    private final float MOVE_SPEED = 30f;
 
     public SimulationCamera(final Camera cam, final FlyByCamera flyCam) {
         this.cam = cam;
         this.flyCam = flyCam;
+        flyCam.setMoveSpeed(MOVE_SPEED);
     }
 
-    public void update(float tpf) {
+    public void update() {
         followEntity();
     }
 
