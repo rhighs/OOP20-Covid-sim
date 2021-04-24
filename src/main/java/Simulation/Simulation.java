@@ -15,7 +15,7 @@ public interface Simulation {
      * @throws IllegalStateException
      * This method simply updates every person.
      */
-    public void step(float tpf);
+    public void update();
 
     /**
      * Getter for person list.

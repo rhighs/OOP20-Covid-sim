@@ -3,7 +3,7 @@ package Simulation.Virus;
 import Simulation.Person;
 
 import java.util.Random;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * A class that models an infection algorithm.
@@ -12,8 +12,7 @@ import java.util.function.BiFunction;
  * note: in the beginning there were supposed to be more infection algorithm,
  * but we ran out of time.
  */
-public class Infection implements BiFunction<Person, Person, Boolean> {
-    private static final int INF_RADIUS = 5;
+public class Infection implements Function<Person, Boolean> {
     private static final int STATUS_PERC = 70;
     private static final int FP1_PERC = 30;
     private static final int FP2_PERC = 20;
@@ -25,7 +24,7 @@ public class Infection implements BiFunction<Person, Person, Boolean> {
      * and only looks at the victim.
      */
     @Override
-    public Boolean apply(Person infector, Person victim) {
+    public Boolean apply(Person victim) {
         if (victim.isInfected()) {
             return false;
         }

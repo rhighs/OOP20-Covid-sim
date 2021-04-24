@@ -12,17 +12,21 @@ import java.util.Random;
  */
 public class Virus implements VirusInterface {
 
-    private final float strenght;
     private final Random rand;
-    private final int numPeople;
+
+    private int numPeople;
+
     private final Infection infectionAlgo;
+
     private volatile List<Person> crowd;
+
     private List<Person> infectedPeople;
+
     private boolean running = true;
+
     private boolean isSpreading = false;
 
-    public Virus(final List<Person> crowd, final float strenght) {
-        this.strenght = strenght;
+    public Virus(final List<Person> crowd) {
         this.crowd = crowd;
         this.numPeople = crowd.size();
         this.infectionAlgo = new Infection();
@@ -58,8 +62,22 @@ public class Virus implements VirusInterface {
 
     private void keepSpreading() {
         for (Person p : crowd) {
+// <<<<<<< HEAD
             if (!p.isInfected()) {
                 continue;
+// =======
+
+//             if (p.isInfected()) {
+//                 var nearPeople = p.getNearPeople();
+//                 var allNearPeople = new HashSet<>(nearPeople);
+
+//                 if (p.getLastNear() != null) {
+//                     nearPeople.removeAll(p.getLastNear());
+//                 }
+
+//                 nearPeople.forEach(person -> tryInfection(person));
+//                 p.setLastNear(allNearPeople);
+// >>>>>>> refactor
             }
             var adjPeople = p.getAdjacentPeople();
             var allAdjPeople = new HashSet<>(adjPeople);
@@ -67,13 +85,13 @@ public class Virus implements VirusInterface {
             if (lastPeople != null) {
                 adjPeople.removeAll(lastPeople);
             }
-            adjPeople.forEach(person -> tryInfection(p, person));
+            adjPeople.forEach(person -> tryInfection(person));
             p.setLastAdjacentPeople(allAdjPeople);
         }
     }
 
-    private boolean tryInfection(Person infector, Person victim) {
-        if (infectionAlgo.apply(infector, victim)) {
+    private boolean tryInfection(Person victim) {
+        if (infectionAlgo.apply(victim)) {
             victim.infect();
             infectedPeople.add(victim);
             return true;

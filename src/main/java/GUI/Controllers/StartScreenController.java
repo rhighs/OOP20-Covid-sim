@@ -38,8 +38,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
     private static final int DEFAULT_PERSON = 50;
     private final String SCREEN_PATH = "Interface/Screen.xml";
-    private final String HUD_IMAGE_PATH = "Interface/black.jpg";
+    private final String HUD_IMAGE_PATH = "Interface/black.png";
     private final String START_SCREEN_NAME = Screens.START.getName();
+    private final Locator world;
+    private final Instant start;
+    private final Node guiNode;
     private final Nifty nifty;
     private final FlyByCamera flyCam;
     private final InputManager inputManager;
@@ -47,15 +50,13 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private Callback<Boolean> quitFn;
     private Person.Mask.Protection prot;
     private Simulation sim;
-    private final Node guiNode;
-    private final Instant start;
     private BitmapText personText;
     private BitmapText infText;
     private BitmapText timeText;
     private BitmapText maskTypeText;
     private List<BitmapText> hudText;
-    private final Locator world;
     private Picture pic;
+
     public StartScreenController(SimpleApplication app, Locator world) {
         this.flyCam = app.getFlyByCamera();
         this.inputManager = app.getInputManager();
@@ -219,9 +220,18 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     }
 
     public void updateText() {
-        personText.setText("Person: " + sim.getPersonCount());
-        infText.setText("Infected: " + sim.getInfectedNumb());
-        maskTypeText.setText("Mask Type: " + prot);
+
+        if(sim == null){
+            System.out.println("dino");
+        }
+
+        try{
+            personText.setText("Person: " + sim.getPersonCount());
+            infText.setText("Infected: " + sim.getInfectedNumb());
+            maskTypeText.setText("Mask Type: " + prot);
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
+        }
 
         Long time = this.getTime();
         timeText.setText(time != null ? "Text: " + time : "0");

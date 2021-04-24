@@ -35,7 +35,7 @@ public class CubeGraphicsComponent implements GraphicsComponent {
      * @param entity   An interface that is implemented from entities (people, etc).
      */
     public CubeGraphicsComponent(final Graphics graphics, final Entity entity) {
-        this(graphics, entity, new Geometry(GEO_NAME, new Box(40, 40, 40)));
+        this(graphics, entity, new Geometry(GEO_NAME, new Box(10, 50, 10)));
     }
 
     /**

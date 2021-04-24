@@ -29,6 +29,7 @@ public class SimulationImpl implements Simulation {
     private Virus virus;
     private PathFinder pg;
     private PersonPicker picker;
+    private Lights lights;
 
     /**
      * Constructor for simulation.
@@ -38,7 +39,10 @@ public class SimulationImpl implements Simulation {
      */
     public SimulationImpl(final Locator world) {
         this.world = world;
-        cam = world.getSimulationCamera();
+        this.cam = world.getSimulationCamera();
+        this.lights = new Lights(world.getAmbient(), cam);
+        this.picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
+        this.virus = new Virus(crowd);
     }
 
     @Override
@@ -50,20 +54,19 @@ public class SimulationImpl implements Simulation {
             if (options.numMasks != 0) {
                 p.maskDown();
             }
+            System.out.println("person is at " + p.getPosition());
             crowd.add(p);
         }
-        picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
-        this.virus = new Virus(crowd, 2);
-        // virus is a thread, by the way
-        virus.run();
+        new Thread(this.virus).start();
     }
 
     @Override
-    public void step(float tpf) {
+    public void update() {
         if (crowd == null) {
             throw new IllegalStateException("simulation.step called before starting simulation");
         }
-        cam.update(tpf);
+        cam.update();
+        lights.update();
         for (var p : crowd) {
             p.update();
         }

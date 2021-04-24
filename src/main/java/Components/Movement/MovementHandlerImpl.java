@@ -40,25 +40,31 @@ public class MovementHandlerImpl implements MovementHandler {
 
         if (waypoint == null && !pathManager.isPathRequested()) {
             pathManager.requestNewPath();
+            System.out.println("1");
             return;
         }
 
         if (waypoint == null && !pathManager.isPathReady()) {
+            System.out.println("2");
             return;
         }
 
         if (stuckManager.isStuck()) {
+            System.out.println("3");
             pathManager.requestNewPath();
             stuckManager.reset();
             return;
         }
 
         if (pathManager.isPositionNear(waypoint)) {
+            System.out.println("4");
             pathManager.setPosition(null);
+            pathManager.nextWaypoint();
             stuckManager.toggle();
             return;
         }
 
+        System.out.println("5");
         pathManager.setPosition(waypoint);
     }
 }

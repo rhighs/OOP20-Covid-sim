@@ -15,6 +15,7 @@ import Components.Graphics.GraphicsComponent;
 import Components.Movement.MovementHandler;
 import Components.Movement.MovementHandlerImpl;
 import Components.Physics.PhysicsComponent;
+import Components.Physics.PhysicsComponentImpl;
 import Environment.Locator;
 
 /**
@@ -40,7 +41,7 @@ public class PersonImpl implements Person, Savable {
     public PersonImpl(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
         this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        this.phyc = new PhysicsComponent(world.getPhysics(), this);
+        this.phyc = new PhysicsComponentImpl(world.getPhysics(), this);
         this.mov = new MovementHandlerImpl(world.getMap(), this.getSpatial());
         this.phyc.initProximityBox(2);
         this.mask = new Mask(protection, Mask.Status.UP);

@@ -21,6 +21,8 @@ public class PathManagerImpl implements PathManager {
 
     private final Spatial spatial;
 
+    private boolean isRequested = false;
+
     private Future<List<Waypoint>> nextPathFuture;
 
     private int currentWaypointIndex = 0;
@@ -41,7 +43,8 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Waypoint getWaypoint() {
-        if (waypoints == null || waypoints.isEmpty()) {
+        System.out.println("waypoints is: " + (waypoints == null ? "null" : "not null"));
+        if (waypoints == null) {
             if (!isPathReady()) {
                 return null;
             }
@@ -49,8 +52,10 @@ public class PathManagerImpl implements PathManager {
             try {
                 waypoints = nextPathFuture.get();
                 nextPathFuture = null;
+                isRequested = false;
                 currentWaypointIndex = 0;
             } catch (Exception exception) {
+                exception.printStackTrace();
                 return null;
             }
         }
@@ -60,35 +65,39 @@ public class PathManagerImpl implements PathManager {
             return null;
         }
 
-        return waypoints.get(currentWaypointIndex++);
+        return waypoints.get(currentWaypointIndex);
     }
 
     @Override
     public void requestNewPath() {
         nextPathFuture = pathCalculator.request(spatial.getLocalTranslation());
+        isRequested = true;
     }
 
     @Override
     public void setPosition(Waypoint waypoint) {
-
         if (waypoint == null) {
             this.spatialControl.setWalkDirection(Vector3f.ZERO);
             return;
         }
 
         Vector3f v = waypoint.getPosition().subtract(spatial.getLocalTranslation());
-        spatialControl.setWalkDirection(v.normalize().mult(10));
+        spatialControl.setWalkDirection(v.normalize().mult(4));
         spatialControl.setViewDirection(v.negate());
     }
 
     @Override
     public Boolean isPositionNear(Waypoint waypoint) {
+        if(waypoint == null) {
+            return true;
+        }
+
         return spatial.getLocalTranslation().distance(waypoint.getPosition()) <= 1;
     }
 
     @Override
     public Boolean isPathReady() {
-        if (nextPathFuture == null) {
+        if(!isRequested) {
             return false;
         }
 
@@ -97,6 +106,11 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Boolean isPathRequested() {
-        return nextPathFuture != null;
+        return isRequested;
+    }
+
+    @Override
+    public void nextWaypoint() {
+        currentWaypointIndex++;
     }
 }
