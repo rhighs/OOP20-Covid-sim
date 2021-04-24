@@ -55,7 +55,7 @@ public class SimulationImpl implements Simulation {
         picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
         this.virus = new Virus(crowd, 2);
         // virus is a thread, by the way
-        virus.start();
+        virus.run();
     }
 
     @Override
