@@ -1,138 +1,107 @@
 package Simulation;
 
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.Savable;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
-import Components.Graphics.CubeGraphicsComponent;
-import Components.Graphics.GraphicsComponent;
-import Components.Movement.MovementHandler;
-import Components.Movement.MovementHandlerImpl;
-import Components.Physics.PhysicsComponent;
-import Environment.Locator;
 
-/**
- * The person class represent a person inside the simulation.
- * A person doesn't hold too much data: Almost all of it is inside
- * person components, which implement the real logic instead.
- * A person also holds the kind of mask it is wearing and an infected flag.
- * It also hold a set of the people who are near him.
- */
-public class Person implements PersonInterface, Savable {
-    private final GraphicsComponent gfx;
-    private final PhysicsComponent phyc;
-    private final MovementHandler mov;
-    private Set<Person> lastNearPeople;
-    private boolean infected;
-    private Mask mask;
+public interface Person extends Entity {
+    /**
+     * Sets the person's infection status.
+     */
+    void infect();
 
     /**
-     * @param world the world this person is in
-     * @param protection the kind of protection this person will have for his mask
-     * @param spawnPoint the point the person will spawn inside the world.
+     * Unsets the person's infection status.
      */
-    public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
-        this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
-        this.getSpatial().setLocalTranslation(spawnPoint);
-        this.phyc = new PhysicsComponent(world.getPhysics(), this);
-        this.mov = new MovementHandlerImpl(world.getMap(), this.getSpatial());
-        this.phyc.initProximityBox(2);
-        this.mask = new Mask(protection, Mask.Status.UP);
-    }
+    void heal();
 
-    @Override
-    public void update() {
-        mov.update();
-        phyc.update();
-    }
-
-    @Override
-    public Spatial getSpatial() {
-        return gfx.getSpatial();
-    }
-
-    @Override
-    public Vector3f getPosition() {
-        return phyc.getPosition();
-    }
-
-    @Override
-    public void setPosition(final Vector3f point) {
-        phyc.setPosition(point);
-    }
-
-    @Override
-    public ID getID() {
-        return ID.PERSON;
-    }
-
-    @Override
-    public void infect() {
-        infected = true;
-        gfx.changeColor(ColorRGBA.Red);
-    }
-
-    @Override
-    public boolean isInfected() {
-        return infected;
-    }
-
-    @Override
-    public void heal() {
-        infected = false;
-        gfx.changeColor(ColorRGBA.Blue);
-    }
-
-    @Override
-    public Mask getMask() {
-        return mask;
-    }
-
-    @Override
-    public void maskDown() {
-        mask.setStatus(Mask.Status.DOWN);
-    }
-
-    @Override
-    public void switchMaskState() {
-        mask.setStatus(mask.getStatus() == Mask.Status.UP ? Mask.Status.DOWN : Mask.Status.UP);
-    }
-
-    @Override
-    public Set<Person> getAdjacentPeople() {
-        return phyc.getNearEntities()
-                .stream()
-                .filter(e -> e.getID() == ID.PERSON)
-                .map(e -> (Person) e)
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public Set<Person> getLastAdjacentPeople() {
-        return lastNearPeople;
-    }
-
-    @Override
-    public void setLastAdjacentPeople(Set<Person> people) {
-        lastNearPeople = new HashSet<Person>(people);
-    }
-
-    /*
-     * Unfortunately we don't need these methods, but its required to "implement" them because
-     * the Savable interface allows us to make an entity object *savable* into jme3 spatial userdata.
-     * ( see PersonPicker.pickPerson() )
+    /**
+     * @return whether the person is infected.
      */
-    @Override
-    public void write(JmeExporter arg0) throws IOException {
-    }
+    boolean isInfected();
 
-    @Override
-    public void read(JmeImporter arg0) throws IOException {
+    /**
+     * @return a representation of the person's mask
+     */
+    public Mask getMask();
+
+    /**
+     * Sets the person's mask status the down. This has the effect
+     * of the person "removing" the mask.
+     */
+    void maskDown();
+
+    /**
+     * Switches the person's mask state.
+     */
+    void switchMaskState();
+
+    /**
+     * Gets all the people currently near or adjacent to this person.
+     */
+    Set<Person> getAdjacentPeople();
+
+    /**
+     * Gets the already memorized people. These are not necessarily the
+     * currently adjacent people.
+     */
+    Set<Person> getLastAdjacentPeople();
+
+    /**
+     * Memorizes the people in set people as the people adjacent to this person.
+     * Ideally, these should be set to the result of getAdjacentPeople().
+     * @param people the set of people to memorize
+     */
+    void setLastAdjacentPeople(Set<Person> people);
+
+    /**
+     * A class that models a mask.
+     * - protection: this indicates how much protection a mask offers. It is
+     *   modelled after real world mask protection. The better the
+     *   protection is, the less probability a person will have to get
+     *   infected.
+     * - status: indicates whether the person is using the mask or not. A
+     *   person who doesn't have a mask won't get any protection.
+     */
+    public static class Mask {
+        private final Protection protection;
+        private Status status;
+
+        /**
+         * @param protection
+         * @param status
+         */
+        public Mask(Protection protection, Status status) {
+            this.status = status;
+            this.protection = protection;
+        }
+
+        /**
+         * Returns the status of the mask.
+         */
+        public Status getStatus() {
+            return status;
+        }
+
+        public void setStatus(Status status) {
+            this.status = status;
+        }
+
+        /**
+         * Return the mask protection.
+         */
+        public Protection getProtection() {
+            return protection;
+        }
+
+        public enum Status {
+            UP,
+            DOWN
+        }
+
+        public enum Protection {
+            FP1,
+            FP2,
+            FP3,
+        }
     }
 }
+

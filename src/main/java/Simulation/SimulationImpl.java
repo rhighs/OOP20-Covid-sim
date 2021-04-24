@@ -46,7 +46,7 @@ public class SimulationImpl implements Simulation {
         this.map = world.getMap();
         this.pg = map.createPathGenerator();
         for (int i = 0; i < options.numPerson; i++) {
-            Person p = new Person(world, options.protection, pg.getRandomPoint());
+            Person p = new PersonImpl(world, options.protection, pg.getRandomPoint());
             if (options.numMasks != 0) {
                 p.maskDown();
             }
