@@ -3,6 +3,7 @@ package Main;
 import Environment.Locator;
 import GUI.Controllers.StartScreenController;
 import Simulation.Simulation;
+import Simulation.SimulationImpl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
@@ -46,7 +47,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         // keep this at the top or else we'll get exceptions.
         world = new Locator(this);
-        this.simulation = new Simulation(world);
+        this.simulation = new SimulationImpl(world);
         setDisplayStatView(false);
         setDisplayFps(false);
         setupGUI();

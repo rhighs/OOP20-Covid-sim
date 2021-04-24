@@ -3,7 +3,6 @@ package Environment.Services.InputHandling;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.Trigger;
-import com.jme3.scene.Node;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,19 +10,20 @@ import java.util.Map;
 /**
  * @author rob
  */
-public class Input implements ActionListener {
-    private final InputManager input;
-    private final Map<String, InputAction> actions;
-    private Node guiNode;
+public class InputHandlerImpl implements InputHandler, ActionListener {
 
-    public Input(final InputManager input, final Node guiNode) {
+    private final InputManager input;
+
+    private final Map<String, InputAction> actions;
+
+    public InputHandlerImpl(final InputManager input) {
         this.input = input;
         this.actions = new HashMap<>();
         input.addListener(this);
     }
 
     @Override
-    public void onAction(String actionName, boolean isPressed, float arg2) {
+    public void onAction(String actionName, boolean isPressed, float tpf) {
         actions.entrySet()
                 .stream()
                 .filter(e -> e.getKey().equals(actionName) && !isPressed)

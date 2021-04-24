@@ -1,6 +1,6 @@
 package Simulation.CrowdHandlers;
 
-import Environment.Services.Map.MainMap;
+import Environment.Services.Map.MainMapImpl;
 import Simulation.Person;
 import com.jme3.math.Vector3f;
 
@@ -13,11 +13,11 @@ import java.util.Random;
  */
 public class Spawner {
     private final List<Person> crowd;
-    private final MainMap map;
+    private final MainMapImpl map;
     private final List<Vector3f> spawnPoints = new ArrayList<>();
     private int numPoints;
 
-    public Spawner(final MainMap map, final List<Person> crowd) {
+    public Spawner(final MainMapImpl map, final List<Person> crowd) {
         this.crowd = new ArrayList<>();
         this.crowd.addAll(crowd);
         this.map = map;

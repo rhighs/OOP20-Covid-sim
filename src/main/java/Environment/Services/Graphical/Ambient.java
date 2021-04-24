@@ -6,10 +6,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.ssao.SSAOFilter;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
@@ -19,7 +16,6 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
  */
 public class Ambient {
     final int SHADOWMAP_SIZE = 4096;
-    final private Vector3f LIGHT_DIRECTION = new Vector3f(-0.5f, -0.5f, -0.5f);
     final private int NB_SPLITS = 3;
     private final Node rootNode;
     private final ViewPort viewPort;

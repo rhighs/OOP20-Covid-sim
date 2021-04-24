@@ -1,6 +1,7 @@
 package Components.Movement;
 
 import Environment.Services.Map.MainMap;
+import Environment.Services.Map.MainMapImpl;
 import Environment.Services.Map.PathFinderExecutor;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.bullet.control.BetterCharacterControl;
@@ -38,7 +39,7 @@ public class PathManagerImpl implements PathManager {
     public PathManagerImpl(MainMap map, Spatial spatial) {
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
-        this.pathCalculator = map.createPathCalculator();
+        this.pathCalculator = map.createPathFinderExecutor();
     }
 
     @Override
