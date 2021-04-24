@@ -8,9 +8,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+/**
+ * An implementation for the path manager.
+ */
 public class PathManagerImpl implements PathManager {
 
     private final PathFinderExecutor pathCalculator;
@@ -25,6 +27,12 @@ public class PathManagerImpl implements PathManager {
 
     private List<Waypoint> waypoints;
 
+    /**
+     * When invoked create a new instance of the path manager implementation.
+     *
+     * @param map     The map.
+     * @param spatial The spatial instance.
+     */
     public PathManagerImpl(MainMap map, Spatial spatial) {
         this.spatial = spatial;
         this.spatialControl = spatial.getControl(BetterCharacterControl.class);
@@ -33,8 +41,8 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Waypoint getWaypoint() {
-        if(waypoints == null || waypoints.isEmpty()) {
-            if(!isPathReady()) {
+        if (waypoints == null || waypoints.isEmpty()) {
+            if (!isPathReady()) {
                 return null;
             }
 
@@ -42,12 +50,12 @@ public class PathManagerImpl implements PathManager {
                 waypoints = nextPathFuture.get();
                 nextPathFuture = null;
                 currentWaypointIndex = 0;
-            } catch(Exception exception) {
+            } catch (Exception exception) {
                 return null;
             }
         }
 
-        if(currentWaypointIndex > waypoints.size() - 1) {
+        if (currentWaypointIndex > waypoints.size() - 1) {
             waypoints = null;
             return null;
         }
@@ -80,7 +88,7 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Boolean isPathReady() {
-        if(nextPathFuture == null) {
+        if (nextPathFuture == null) {
             return false;
         }
 

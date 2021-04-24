@@ -2,8 +2,8 @@ package Simulation;
 
 import Components.Graphics.CubeGraphicsComponent;
 import Components.Graphics.GraphicsComponent;
-import Components.Movement.MovementComponentContext;
 import Components.Movement.MovementHandler;
+import Components.Movement.MovementHandlerImpl;
 import Components.Physics.PhysicsComponent;
 import Environment.Locator;
 import com.jme3.export.JmeExporter;
@@ -29,7 +29,7 @@ public class Person implements Entity, Savable {
         this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
         this.phyc = new PhysicsComponent(world.getPhysics(), this);
-        this.mov = new MovementHandler(world.getMap(), this.getSpatial());
+        this.mov = new MovementHandlerImpl(world.getMap(), this.getSpatial());
         this.phyc.initProximityBox(2);
         this.mask = new Mask(protection, Mask.Status.UP);
     }
