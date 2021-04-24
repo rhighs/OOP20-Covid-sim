@@ -10,6 +10,7 @@ import Environment.Services.Map.MainMap;
 import Environment.Services.Graphical.SimulationCamera;
 import Simulation.CrowdHandlers.PersonPicker;
 import Simulation.Virus.Virus;
+import Simulation.CrowdHandlers.Spawner2;
 
 /**
  * This is the main Simulation class.
@@ -48,9 +49,9 @@ public class SimulationImpl implements Simulation {
     @Override
     public void start(Options options) {
         this.map = world.getMap();
-        this.pg = map.createPathGenerator();
+        this.pg = map.createPathFinder();
         for (int i = 0; i < options.numPerson; i++) {
-            Person p = new PersonImpl(world, options.protection, pg.getRandomPoint());
+            Person p = new PersonImpl(world, options.protection, Spawner2.getRandom());
             if (options.numMasks != 0) {
                 p.maskDown();
             }
