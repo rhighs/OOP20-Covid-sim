@@ -4,7 +4,7 @@ import Components.Graphics.CubeGraphicsComponent;
 import Components.Graphics.GraphicsComponent;
 import Components.Movement.MovementHandler;
 import Components.Movement.MovementHandlerImpl;
-import Components.Physics.PhysicsComponent;
+import Components.Physics.PhysicsComponentImpl;
 import Environment.Locator;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class Person implements Entity, Savable {
     private final GraphicsComponent gfx;
-    private final PhysicsComponent phyc;
+    private final PhysicsComponentImpl phyc;
     private final MovementHandler mov;
     private Set<Person> lastNearPeople;
     private boolean infected;
@@ -28,7 +28,7 @@ public class Person implements Entity, Savable {
     public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
         this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
-        this.phyc = new PhysicsComponent(world.getPhysics(), this);
+        this.phyc = new PhysicsComponentImpl(world.getPhysics(), this);
         this.mov = new MovementHandlerImpl(world.getMap(), this.getSpatial());
         this.phyc.initProximityBox(2);
         this.mask = new Mask(protection, Mask.Status.UP);
