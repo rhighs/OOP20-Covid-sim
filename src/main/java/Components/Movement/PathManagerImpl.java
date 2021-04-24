@@ -82,7 +82,7 @@ public class PathManagerImpl implements PathManager {
         }
 
         Vector3f v = waypoint.getPosition().subtract(spatial.getLocalTranslation());
-        spatialControl.setWalkDirection(v.normalize().mult(10));
+        spatialControl.setWalkDirection(v.normalize().mult(4));
         spatialControl.setViewDirection(v.negate());
     }
 
