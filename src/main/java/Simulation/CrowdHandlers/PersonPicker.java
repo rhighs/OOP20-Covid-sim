@@ -1,23 +1,22 @@
 package Simulation.CrowdHandlers;
 
-import Environment.Services.Graphical.Ambient;
-import Environment.Services.InputHandling.Input;
-import Environment.Services.InputHandling.InputAction;
-import Environment.Services.Graphical.SimulationCamera;
-import Simulation.Person;
+import java.util.Optional;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-
-import java.util.Optional;
+import Environment.Services.Graphical.Ambient;
+import Environment.Services.InputHandling.Input;
+import Environment.Services.InputHandling.InputAction;
+import Environment.Services.Graphical.SimulationCamera;
+import Simulation.Person;
 
 /**
  * @author rob
  */
-public class PersonPicker {
+public class PersonPicker implements PersonPickerInterface {
     private final Input input;
     private final Node rootNode;
     private final SimulationCamera cam;
@@ -35,6 +34,7 @@ public class PersonPicker {
         input.addAction("detachFromPerson", detachCam, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
     }
 
+    @Override
     public Optional<Person> pickPerson() {
         Spatial node;
         results = new CollisionResults();
