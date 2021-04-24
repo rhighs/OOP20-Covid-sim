@@ -13,13 +13,24 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 
 /**
- * This is the Main class. This class handles everything: Simulation, GUI,
- * Simulation states, etc.
+ *  This is the Main class. This class handles everything: Simulation, GUI,
+ *  Simulation states, etc.
  */
 public class Main extends SimpleApplication {
     /**
+     * Enum for screen states. These are used in update()
+     * to do different things based on which screen we are.
+     * For example, while we are inside the pause screen,
+     * we won't update the simulation
+     */
+    enum ScreenState {
+        START_SCREEN,
+        SIMULATION_SCREEN,
+        PAUSE_SCREEN,
+    }
+
+    /**
      * Fields for Main class.
-     *
      * @state: keeps track of the screen state. See above.
      * @world:
      * @screenControl: controller for the GUI class.
@@ -79,8 +90,7 @@ public class Main extends SimpleApplication {
     public void simpleRender(RenderManager rm) {
     }
 
-    /**
-     * This function setups key mappings.
+    /** This function setups key mappings.
      * In particular, it sets up key mapping for entering and exiting the pause screen:
      * - P for entering
      * - E for exiting
@@ -89,7 +99,7 @@ public class Main extends SimpleApplication {
     private void setupKeyMappings() {
         inputManager.addMapping("Pause Game", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addListener(new ActionListener() {
-            public void onAction(String name, boolean keyPressed, float tpf) {
+            public void onAction(String name, boolean keyPressed, float tpf){
                 screenControl.enterPauseScreen();
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
@@ -99,7 +109,7 @@ public class Main extends SimpleApplication {
 
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
         inputManager.addListener(new ActionListener() {
-            public void onAction(String name, boolean keyPressed, float tpf) {
+            public void onAction(String name, boolean keyPressed, float tpf){
                 screenControl.exitPauseScreen();
                 guiNode.attachChild(ch);
                 inputManager.setCursorVisible(false);
@@ -118,7 +128,6 @@ public class Main extends SimpleApplication {
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
         screenControl = new StartScreenController(this, world);
-        screenControl.loadSimulation(simulation);
         screenControl.onStartButtonClicked(o -> startSimulation(o));
         screenControl.onQuitButtonClicked(from -> finish(from));
         screenControl.initHudText(guiFont);
@@ -177,17 +186,5 @@ public class Main extends SimpleApplication {
     @Override
     public void destroy() {
         finish(false);
-    }
-
-    /**
-     * Enum for screen states. These are used in update()
-     * to do different things based on which screen we are.
-     * For example, while we are inside the pause screen,
-     * we won't update the simulation
-     */
-    enum ScreenState {
-        START_SCREEN,
-        SIMULATION_SCREEN,
-        PAUSE_SCREEN,
     }
 }
