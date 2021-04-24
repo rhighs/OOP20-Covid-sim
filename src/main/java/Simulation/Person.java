@@ -4,6 +4,7 @@ import Components.Graphics.CubeGraphicsComponent;
 import Components.Graphics.GraphicsComponent;
 import Components.Movement.MovementHandler;
 import Components.Movement.MovementHandlerImpl;
+import Components.Physics.PhysicsComponent;
 import Components.Physics.PhysicsComponentImpl;
 import Environment.Locator;
 import com.jme3.export.JmeExporter;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class Person implements Entity, Savable {
     private final GraphicsComponent gfx;
-    private final PhysicsComponentImpl phyc;
+    private final PhysicsComponent phyc;
     private final MovementHandler mov;
     private Set<Person> lastNearPeople;
     private boolean infected;

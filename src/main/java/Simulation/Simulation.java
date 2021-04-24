@@ -1,8 +1,8 @@
 package Simulation;
 
-import Environment.Services.Map.PathFinder;
-import Environment.Locator;
 import Environment.Services.Map.MainMap;
+import Environment.Services.Map.PathFinderImpl;
+import Environment.Locator;
 import Environment.Services.Graphical.SimulationCamera;
 import Simulation.CrowdHandlers.PersonPicker;
 import Simulation.Virus.Virus;
@@ -18,7 +18,7 @@ public class Simulation {
     private final SimulationCamera cam;
     private MainMap map;
     private Virus virus;
-    private PathFinder pg;
+    private PathFinderImpl pg;
     private int numPerson = 0;
     private PersonPicker picker;
     private Lights lights;
@@ -47,7 +47,7 @@ public class Simulation {
         this.numPerson = options.numPerson;
         this.map = world.getMap();
 
-        this.pg = map.createPathGenerator();
+        this.pg = map.createPathFinder();
 
         for (int i = 0; i < options.numPerson; i++) {
             Person p = new Person(world, options.protection, pg.getRandomPoint());

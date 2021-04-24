@@ -3,7 +3,6 @@ package Environment.Services.InputHandling;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.Trigger;
-import com.jme3.scene.Node;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,7 @@ public class InputHandlerImpl implements InputHandler, ActionListener {
 
     private final Map<String, InputAction> actions;
 
-    public InputHandlerImpl(final InputManager input, final Node guiNode) {
+    public InputHandlerImpl(final InputManager input) {
         this.input = input;
         this.actions = new HashMap<>();
         input.addListener(this);

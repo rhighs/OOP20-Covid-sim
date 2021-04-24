@@ -1,12 +1,12 @@
 package Components.Physics;
 
-import Environment.Services.Physical.Physics;
-import Simulation.Entity;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
+import Environment.Services.Physical.Physics;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import Simulation.Entity;
 
 import java.util.Random;
 import java.util.Set;
