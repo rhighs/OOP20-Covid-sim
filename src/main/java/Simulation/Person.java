@@ -10,9 +10,10 @@ import com.jme3.export.Savable;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import Components.Graphics.CubeGraphicsComponent;
 import Components.Graphics.GraphicsComponent;
-import Components.Graphics.ModelGraphicsComponent;
-import Components.Movement.MovementComponent;
+import Components.Movement.MovementHandler;
+import Components.Movement.MovementHandlerImpl;
 import Components.Physics.PhysicsComponent;
 import Environment.Locator;
 
@@ -26,10 +27,10 @@ import Environment.Locator;
 public class Person implements PersonInterface, Savable {
     private final GraphicsComponent gfx;
     private final PhysicsComponent phyc;
-    private final MovementComponent mov;
+    private final MovementHandler mov;
+    private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
-    private Set<Person> lastNearPeople;
 
     /**
      * @param world the world this person is in
@@ -37,18 +38,18 @@ public class Person implements PersonInterface, Savable {
      * @param spawnPoint the point the person will spawn inside the world.
      */
     public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
-        this.gfx = new ModelGraphicsComponent(world.getGraphics(), this);
+        this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
         this.phyc = new PhysicsComponent(world.getPhysics(), this);
-        this.mov = new MovementComponent(world.getMap(), this.getSpatial());
+        this.mov = new MovementHandlerImpl(world.getMap(), this.getSpatial());
         this.phyc.initProximityBox(2);
         this.mask = new Mask(protection, Mask.Status.UP);
     }
 
     @Override
-    public void update(float tpf) {
-        mov.update(tpf);
-        phyc.update(tpf);
+    public void update() {
+        mov.update();
+        phyc.update();
     }
 
     @Override

@@ -9,7 +9,7 @@ public interface Entity {
      * This is called every frame to update entity position.
      * @param tpf time per frame
      */
-    void update(float tpf);
+    void update();
 
     /**
      * A getter for a spatial.

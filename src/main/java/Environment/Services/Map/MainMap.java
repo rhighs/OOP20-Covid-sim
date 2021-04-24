@@ -41,10 +41,6 @@ public class MainMap {
         return new PathFinderExecutor(scene);
     }
 
-    public PathFinderExecutor getPathCalculator(){
-        return pathCalc;
-    }
-
     public PathFinder createPathGenerator() {
         return new PathFinder(scene);
     }

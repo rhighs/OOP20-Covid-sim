@@ -65,7 +65,7 @@ public class SimulationImpl implements Simulation {
         }
         cam.update(tpf);
         for (var p : crowd) {
-            p.update(tpf);
+            p.update();
         }
     }
 
