@@ -1,7 +1,7 @@
 package Simulation.CrowdHandlers;
 
 import Environment.Services.Graphical.Ambient;
-import Environment.Services.InputHandling.Input;
+import Environment.Services.InputHandling.InputHandlerImpl;
 import Environment.Services.InputHandling.InputAction;
 import Environment.Services.Graphical.SimulationCamera;
 import Simulation.Person;
@@ -18,13 +18,13 @@ import java.util.Optional;
  * @author rob
  */
 public class PersonPicker {
-    private final Input input;
+    private final InputHandlerImpl input;
     private final Node rootNode;
     private final SimulationCamera cam;
     private final Ambient ambient;
     private CollisionResults results;
 
-    public PersonPicker(final Input input, final Ambient ambient, final SimulationCamera cam) {
+    public PersonPicker(final InputHandlerImpl input, final Ambient ambient, final SimulationCamera cam) {
         this.input = input;
         this.cam = cam;
         this.ambient = ambient;
