@@ -9,6 +9,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -34,7 +35,7 @@ public class PathFinder {
 
         success = pathFinder.computePath(target);
 
-        return success == true ? pathFinder.getPath().getWaypoints() : null;
+        return success ? pathFinder.getPath().getWaypoints() : Collections.emptyList();
     }
 
     public Vector3f getRandomPoint() {

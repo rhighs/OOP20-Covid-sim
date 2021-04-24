@@ -44,7 +44,7 @@ public class PathManagerImpl implements PathManager {
     @Override
     public Waypoint getWaypoint() {
         System.out.println("waypoints is: " + (waypoints == null ? "null" : "not null"));
-        if (waypoints == null || waypoints.isEmpty()) {
+        if (waypoints == null) {
             if (!isPathReady()) {
                 return null;
             }
@@ -65,7 +65,7 @@ public class PathManagerImpl implements PathManager {
             return null;
         }
 
-        return waypoints.get(currentWaypointIndex++);
+        return waypoints.get(currentWaypointIndex);
     }
 
     @Override
@@ -76,7 +76,6 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public void setPosition(Waypoint waypoint) {
-
         if (waypoint == null) {
             this.spatialControl.setWalkDirection(Vector3f.ZERO);
             return;
@@ -89,12 +88,16 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Boolean isPositionNear(Waypoint waypoint) {
+        if(waypoint == null) {
+            return true;
+        }
+
         return spatial.getLocalTranslation().distance(waypoint.getPosition()) <= 1;
     }
 
     @Override
     public Boolean isPathReady() {
-        if (nextPathFuture == null) {
+        if(!isRequested) {
             return false;
         }
 
@@ -104,5 +107,10 @@ public class PathManagerImpl implements PathManager {
     @Override
     public Boolean isPathRequested() {
         return isRequested;
+    }
+
+    @Override
+    public void nextWaypoint() {
+        currentWaypointIndex++;
     }
 }

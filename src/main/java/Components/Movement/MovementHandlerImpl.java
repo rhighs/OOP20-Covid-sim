@@ -59,6 +59,7 @@ public class MovementHandlerImpl implements MovementHandler {
         if (pathManager.isPositionNear(waypoint)) {
             System.out.println("4");
             pathManager.setPosition(null);
+            pathManager.nextWaypoint();
             stuckManager.toggle();
             return;
         }

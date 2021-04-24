@@ -47,4 +47,6 @@ public interface PathManager {
      * @return True if was already requested, false otherwise (including if was requested and already used).
      */
     Boolean isPathRequested();
+
+    void nextWaypoint();
 }
