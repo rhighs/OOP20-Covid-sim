@@ -48,5 +48,8 @@ public interface PathManager {
      */
     Boolean isPathRequested();
 
+    /**
+     * Skips the current waypoint.
+     */
     void nextWaypoint();
 }
