@@ -13,22 +13,18 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.math.ColorRGBA;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.DropDown;
-import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,9 +32,9 @@ import java.util.List;
  */
 public class StartScreenController extends BaseAppState implements ScreenController {
 
-    private static final int DEFAULT_PERSON = 50;
+    public static final int DEFAULT_PERSON = 50;
     private final String SCREEN_PATH = "Interface/Screen.xml";
-    private final String HUD_IMAGE_PATH = "Interface/black.png";
+    public static final String HUD_IMAGE_PATH = "Interface/black.jpg";
     private final String START_SCREEN_NAME = Screens.START.getName();
     private final Nifty nifty;
     private final FlyByCamera flyCam;
@@ -56,6 +52,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private List<BitmapText> hudText;
     private final Locator world;
     private Picture pic;
+    private EditControl editControl;
+    private SituationControl situationControl;
+    private HudText hudTextControl;
+
+
     public StartScreenController(SimpleApplication app, Locator world) {
         this.flyCam = app.getFlyByCamera();
         this.inputManager = app.getInputManager();
@@ -74,6 +75,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         guiNode = world.getGuiNode();
         nifty.fromXml(SCREEN_PATH, START_SCREEN_NAME, this);
         prot = Person.Mask.Protection.FP1;
+
+        situationControl = new SituationControl();
+        hudTextControl = new HudText();
+        editControl = new EditControl(nifty);
+
     }
 
     @Override
@@ -85,26 +91,23 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         dropDown.addItem(Person.Mask.Protection.FP3);
     }
 
+    //load screen
     public void loadWorst() {
-        prot = Person.Mask.Protection.FP1;
-        startSimulation(new Simulation.Options(
-                DEFAULT_PERSON,
-                DEFAULT_PERSON,
-                prot
-        ));
+
+        startSimulation(situationControl.getWorst());
+
     }
 
     public void loadBest() {
-        prot = Person.Mask.Protection.FP3;
-        startSimulation(new Simulation.Options(
-                DEFAULT_PERSON,
-                0,
-                prot
-        ));
+
+        startSimulation(situationControl.getBest());
+
     }
 
     public void loadSimulation(Simulation simulation) {
         this.sim = simulation;
+        //TODO
+        editControl.setSim(sim);
     }
 
     public void startGame(String screen) {
@@ -145,133 +148,25 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         quitFn.call(false);
     }
 
-    //edit screen
-    public void apply() {
-        var realText = getScreen(Screens.EDIT.getName())
-                .findNiftyControl(Controls.ADD_INFECTED.getName(), TextField.class)
-                .getRealText();
-
-        try {
-            sim.setInfected(Integer.parseInt(realText));
-        } catch (Exception ex) {
-            //TODO
-            //something went wrong nullptr exc
-        }
-
-        cleanEditComps();
-        nifty.gotoScreen(Screens.PAUSE.getName());
-    }
-
-    private void cleanEditComps() {
-        var screen = getScreen(Screens.EDIT.getName());
-        screen.findNiftyControl(Controls.ADD_INFECTED.getName(), TextField.class).setText("0");
-        screen.findNiftyControl(Controls.REP_LABEL.getName(), Label.class).setText("");
-        screen.findNiftyControl(Controls.REP_LABEL.getName(), Label.class).setText("");
-    }
-
+    //HUD screens
     public void initHudText(BitmapFont guiFont) {
-        var textRight = new BitmapText(guiFont, true);
-        var textLeft = new BitmapText(guiFont, false);
-
-        personText = textRight;
-        timeText = textLeft;
-        infText = textLeft;
-        maskTypeText = textLeft;
-        hudText = new ArrayList<>();
-        hudText.addAll(Arrays.asList(personText, timeText, infText, maskTypeText));
+        hudTextControl.initHudText(guiFont);
     }
 
     public void setHudText(AppSettings settings, BitmapFont guiFont) {
-        this.initHudText(guiFont);
-        personText.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        personText.setColor(ColorRGBA.White);                             // font color
-        personText.setText("People: ");
-        personText.setLocalTranslation(0, settings.getHeight() / 4, 0); // position
-        guiNode.attachChild(personText);
-
-        infText.setSize(guiFont.getCharSet().getRenderedSize());
-        infText.setColor(ColorRGBA.White);                             // font color
-        infText.setText("Infected: ");
-        infText.setLocalTranslation(0, settings.getHeight() / 5, 0); // position
-        guiNode.attachChild(infText);
-
-        timeText.setSize(guiFont.getCharSet().getRenderedSize());
-        timeText.setColor(ColorRGBA.White);                             // font color
-        timeText.setText("Time: ");
-        timeText.setLocalTranslation(0, settings.getHeight() / 12, 0); // position
-        guiNode.attachChild(timeText);
-
-        maskTypeText.setSize(guiFont.getCharSet().getRenderedSize());
-        maskTypeText.setColor(ColorRGBA.White);                             // font color
-        maskTypeText.setText("Mask Type: ");
-        maskTypeText.setLocalTranslation(0, settings.getHeight() / 7, 0); // position
-        guiNode.attachChild(maskTypeText);
+        hudTextControl.setHudText(settings,guiFont,guiNode);
     }
 
     public void setHudImage(AssetManager assetManager, AppSettings settings) {
-        pic = new Picture("HUD Picture");
-        pic.setImage(assetManager, HUD_IMAGE_PATH, true);
-        pic.setWidth(settings.getWidth() / 4);
-        pic.setHeight(settings.getHeight() / 4);
-        pic.setPosition(0, 0);
-        pic.move(0f, 0f, -1);
-        guiNode.attachChild(pic);
+        hudTextControl.setHudImage(assetManager,settings,guiNode);
     }
 
     public void updateText() {
-        personText.setText("Person: " + sim.getPersonCount());
-        infText.setText("Infected: " + sim.getInfectedNumb());
-        maskTypeText.setText("Mask Type: " + prot);
-
+        
         Long time = this.getTime();
-        timeText.setText(time != null ? "Text: " + time : "0");
-    }
 
-    public void enterPauseScreen() {
-        nifty.gotoScreen(Screens.PAUSE.getName());
-        hudText.forEach(i -> guiNode.detachChild(i));
-        guiNode.detachChild(pic);
+        hudTextControl.updateText(sim.getPersonCount(), sim.getInfectedNumb(), time, prot);
     }
-
-    public void exitPauseScreen() {
-        nifty.gotoScreen(Screens.HUD.getName());
-        hudText.forEach(i -> guiNode.attachChild(i));
-        guiNode.attachChild(pic);
-    }
-
-    public void edit() {
-        setEditComponent();
-        nifty.gotoScreen(Screens.EDIT.getName());
-        cleanEditComps();
-    }
-
-    private void setEditComponent() {
-        getScreen(Screens.EDIT.getName())
-                .findNiftyControl(Controls.ADD_INFECTED.getName(), TextField.class)
-                .setText("0");
-    }
-
-    public void stateMask() {
-        sim.changeMaskState();
-        getScreen(Screens.EDIT.getName())
-                .findNiftyControl(Controls.REP_LABEL.getName(), Label.class)
-                .setText("Switching mask state!");
-    }
-
-    public void noInfected() {
-        sim.resumeInfected();
-        getScreen(Screens.EDIT.getName())
-                .findNiftyControl(Controls.REP_LABEL.getName(), Label.class)
-                .setText("Infected resumed!");
-    }
-
-    public void cancel() {
-        getScreen(Screens.EDIT.getName())
-                .findNiftyControl(Controls.ADD_INFECTED.getName(), TextField.class)
-                .setText("");
-        nifty.gotoScreen(Screens.PAUSE.getName());
-    }
-
     private Long getTime() {
         long timeElapsed;
 
@@ -283,6 +178,42 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         }
 
         return timeElapsed;
+    }
+
+    public void enterPauseScreen() {
+        nifty.gotoScreen(Screens.PAUSE.getName());
+
+    }
+
+    public void exitPauseScreen() {
+        nifty.gotoScreen(Screens.HUD.getName());
+        hudText.forEach(i -> guiNode.attachChild(i));
+        guiNode.attachChild(pic);
+    }
+
+
+    //edit screen
+
+    public void edit() {
+        editControl.setEditComponent();
+        nifty.gotoScreen(Screens.EDIT.getName());
+        editControl.cleanEditComps();
+    }
+
+    public void apply() {
+        editControl.apply();
+    }
+
+    public void stateMask() {
+        editControl.stateMask();
+    }
+
+    public void noInfected() {
+        editControl.noInfected();
+    }
+
+    public void cancel() {
+        editControl.cancel();
     }
 
     // This method is called by the load button.
@@ -302,10 +233,19 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         quitFn = callback;
     }
 
+
+    //TODO
     private Screen getScreen(String screeName) {
         return this.nifty.getScreen(screeName);
     }
 
+    public void backSit(){
+        nifty.gotoScreen(Screens.START.getName());
+    }
+
+    public void backCom(){
+        nifty.gotoScreen(Screens.PAUSE.getName());
+    }
     @Override
     public void onEndScreen() {
     }
