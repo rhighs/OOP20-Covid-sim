@@ -19,12 +19,12 @@ public class Infection implements Function<Person, Boolean> {
         return infection(victim);
     }
 
-    private boolean infection(Person p) {
-        if (p.isInfected()) {
+   public boolean infection(Person person) {
+        if (person.isInfected()) {
             return false;
         }
 
-        int trasm = checkTrasmissibility(p);
+        int trasm = checkTrasmissibility(person);
         if (trasm == 100) {
             return true;
         }
@@ -38,9 +38,9 @@ public class Infection implements Function<Person, Boolean> {
      *  infection depends from Mask status and type
      *  mask status 70% mask type 30%
      */
-    private int checkTrasmissibility(Person p) {
-        var protection = p.getMask().getProtection();
-        var status = p.getMask().getStatus();
+    public int checkTrasmissibility(Person person) {
+        var protection = person.getMask().getProtection();
+        var status = person.getMask().getStatus();
         int perc = 0;
 
         perc += status == Person.Mask.Status.UP ? 0 : STATUS_PERC;
@@ -58,4 +58,5 @@ public class Infection implements Function<Person, Boolean> {
 
         return perc;
     }
+
 }

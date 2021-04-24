@@ -16,7 +16,6 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
  */
 public class Ambient {
     final int SHADOWMAP_SIZE = 4096;
-    final private Vector3f LIGHT_DIRECTION = new Vector3f(-0.5f, -0.5f, -0.5f);
     final private int NB_SPLITS = 3;
     private final Node rootNode;
     private final ViewPort viewPort;

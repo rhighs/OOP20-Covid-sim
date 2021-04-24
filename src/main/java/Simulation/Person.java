@@ -20,12 +20,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Person implements Entity, Savable {
+
     private final GraphicsComponent gfx;
+
     private final PhysicsComponent phyc;
+
     private final MovementHandler mov;
+
     private Set<Person> lastNearPeople;
+
     private boolean infected;
+
     private Mask mask;
+
     public Person(final Locator world, Mask.Protection protection, final Vector3f spawnPoint) {
         this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
