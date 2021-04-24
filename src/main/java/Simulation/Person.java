@@ -2,7 +2,8 @@ package Simulation;
 
 import Components.Graphics.CubeGraphicsComponent;
 import Components.Graphics.GraphicsComponent;
-import Components.Movement.MovementComponent;
+import Components.Movement.MovementComponentContext;
+import Components.Movement.MovementHandler;
 import Components.Physics.PhysicsComponent;
 import Environment.Locator;
 import com.jme3.export.JmeExporter;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class Person implements Entity, Savable {
     private final GraphicsComponent gfx;
     private final PhysicsComponent phyc;
-    private final MovementComponent mov;
+    private final MovementHandler mov;
     private Set<Person> lastNearPeople;
     private boolean infected;
     private Mask mask;
@@ -28,15 +29,15 @@ public class Person implements Entity, Savable {
         this.gfx = new CubeGraphicsComponent(world.getGraphics(), this);
         this.getSpatial().setLocalTranslation(spawnPoint);
         this.phyc = new PhysicsComponent(world.getPhysics(), this);
-        this.mov = new MovementComponent(world.getMap(), this.getSpatial());
+        this.mov = new MovementHandler(world.getMap(), this.getSpatial());
         this.phyc.initProximityBox(2);
         this.mask = new Mask(protection, Mask.Status.UP);
     }
 
     @Override
-    public void update(float tpf) {
-        mov.update(tpf);
-        phyc.update(tpf);
+    public void update() {
+        mov.update();
+        phyc.update();
     }
 
     public void infect() {

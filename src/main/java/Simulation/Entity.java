@@ -4,7 +4,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 public interface Entity {
-    void update(float tpf);
+    /**
+     * Updates entity's components.
+     */
+    void update();
 
     Spatial getSpatial();
 

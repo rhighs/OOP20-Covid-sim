@@ -64,7 +64,7 @@ public class Simulation {
         }
         cam.update(tpf);
         for (var p : crowd) {
-            p.update(tpf);
+            p.update();
         }
     }
 

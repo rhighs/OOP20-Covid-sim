@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -105,7 +104,7 @@ public class PhysicsComponent {
         this.spatial.setLocalTranslation(point);
     }
 
-    public void update(float tpf) {
+    public void update() {
         position = spatial.getLocalTranslation();
     }
 }
