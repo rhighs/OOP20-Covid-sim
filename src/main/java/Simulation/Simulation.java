@@ -21,6 +21,7 @@ public class Simulation {
     private PathFinder pg;
     private int numPerson = 0;
     private PersonPicker picker;
+    private Lights lights;
 
     public static class Options {
         public final int numPerson;
@@ -37,6 +38,9 @@ public class Simulation {
     public Simulation(final Locator world) {
         this.world = world;
         cam = world.getSimulationCamera();
+        this.lights = new Lights(world.getAmbient(), cam);
+        picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
+        this.virus = new Virus(crowd, 2);
     }
 
     public void start(Options options) {
@@ -50,19 +54,21 @@ public class Simulation {
             if (options.numMasks != 0) {
                 p.maskDown();
             }
+            System.out.println("person is at " + p.getPosition());
             crowd.add(p);
         }
-        picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
-        this.virus = new Virus(crowd, 2);
         // virus is a thread, by the way
         virus.start();
     }
 
-    public void step(float tpf) {
+    public void update() {
         if (crowd == null) {
             throw new IllegalStateException("simulation.step called before starting simulation");
         }
-        cam.update(tpf);
+
+        cam.update();
+        lights.update();
+
         for (var p : crowd) {
             p.update();
         }
@@ -76,6 +82,7 @@ public class Simulation {
         if (crowd == null) {
             throw new IllegalStateException("simulation.step called before starting simulation");
         }
+
         return crowd.size();
     }
 
@@ -83,6 +90,7 @@ public class Simulation {
         if (crowd == null) {
             throw new IllegalStateException("simulation.step called before starting simulation");
         }
+
         return virus.getInfectedNumb();
     }
 

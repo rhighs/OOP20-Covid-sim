@@ -10,11 +10,7 @@ public interface Entity {
     void update();
 
     Spatial getSpatial();
-
     Vector3f getPosition();
-
-    void setPosition(Vector3f pos); // used for world generation
-
     Identificator getIdentificator();
 
     enum Identificator {

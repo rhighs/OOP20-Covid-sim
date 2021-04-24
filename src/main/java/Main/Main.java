@@ -68,7 +68,7 @@ public class Main extends SimpleApplication {
                 break;
             case SIMULATION_SCREEN:
                 screenControl.updateText();
-                simulation.step(tpf);
+                simulation.update();
                 break;
             case PAUSE_SCREEN:
                 break;
@@ -118,6 +118,7 @@ public class Main extends SimpleApplication {
         flyCam.setDragToRotate(true);
         inputManager.setCursorVisible(true);
         screenControl = new StartScreenController(this, world);
+        screenControl.loadSimulation(simulation);
         screenControl.onStartButtonClicked(o -> startSimulation(o));
         screenControl.onQuitButtonClicked(from -> finish(from));
         screenControl.initHudText(guiFont);

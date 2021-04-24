@@ -16,7 +16,8 @@ val jmeModules = listOf(
     "core",
     "desktop",
     "lwjgl",
-    "niftygui"
+    "niftygui",
+    "effects"
 )
 
 val jmeVersion = "3.3.2-stable"
