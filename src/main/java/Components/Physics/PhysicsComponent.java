@@ -2,7 +2,6 @@ package Components.Physics;
 
 import Simulation.Entity;
 import com.jme3.math.Vector3f;
-
 import java.util.Set;
 
 public interface PhysicsComponent {

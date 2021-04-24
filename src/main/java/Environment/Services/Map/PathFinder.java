@@ -40,7 +40,6 @@ public class PathFinder {
 
     public Vector3f getRandomPoint() {
         var idx = rand.nextInt(nav.getNumCells());
-        var v = new Vector3f(nav.getCell(idx).getRandomPoint());
-        return v;
+        return new Vector3f(nav.getCell(idx).getRandomPoint());
     }
 }
