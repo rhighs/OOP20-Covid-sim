@@ -63,10 +63,10 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         this.inputManager = app.getInputManager();
         this.world = world;
         NiftyJmeDisplay niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
-            app.getAssetManager(),
-            app.getInputManager(),
-            app.getAudioRenderer(),
-            app.getGuiViewPort()
+                app.getAssetManager(),
+                app.getInputManager(),
+                app.getAudioRenderer(),
+                app.getGuiViewPort()
         );
         this.nifty = niftyDisplay.getNifty();
         app.getGuiViewPort().addProcessor(niftyDisplay);
@@ -121,18 +121,18 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void loadWorst(){
         prot = Person.Mask.Protection.FP1;
         startSimulation(new Simulation.Options(
-            DEFAULT_PERSON,
-            DEFAULT_PERSON,
-            prot
+                DEFAULT_PERSON,
+                DEFAULT_PERSON,
+                prot
         ));
     }
 
     public void loadBest(){
         prot = Person.Mask.Protection.FP3;
         startSimulation(new Simulation.Options(
-            DEFAULT_PERSON,
-            0,
-            prot
+                DEFAULT_PERSON,
+                0,
+                prot
         ));
     }
 
@@ -147,9 +147,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         }
         // nifty.getScreen("start").findNiftyControl("StartButton", Button.class).enable();
         startSimulation(new Simulation.Options(
-            Integer.parseInt(textField.getRealText()),
-            Integer.parseInt(textNoM.getRealText()),
-            prot
+                Integer.parseInt(textField.getRealText()),
+                Integer.parseInt(textNoM.getRealText()),
+                prot
         ));
     }
 
@@ -275,14 +275,14 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     }
 
     public void updateText(){
-            personText.setText("Person: " + sim.getPersonCount());
-            infText.setText("Infected: " + sim.getInfectedNumb());
-            maskTypeText.setText("Mask Type: " + prot);
-            try{
-                timeText.setText("Time: " + this.getTime());
-            }catch(Exception ex){
-                timeText.setText("0");
-            }
+        personText.setText("Person: " + sim.getPersonCount());
+        infText.setText("Infected: " + sim.getInfectedNumb());
+        maskTypeText.setText("Mask Type: " + prot);
+        try{
+            timeText.setText("Time: " + this.getTime());
+        }catch(Exception ex){
+            timeText.setText("0");
+        }
     }
 
     public void onStartButtonClicked(Callback<Simulation.Options> callback) {

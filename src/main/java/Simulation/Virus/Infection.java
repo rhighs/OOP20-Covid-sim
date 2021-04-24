@@ -6,7 +6,11 @@ import java.util.Random;
 import java.util.function.Function;
 
 /**
- * @author Json, rob
+ * A class that models an infection algorithm.
+ * It takes on input the victim, and returns whether to
+ * infect the victim or not.
+ * note: in the beginning there were supposed to be more infection algorithm,
+ * but we ran out of time.
  */
 public class Infection implements Function<Person, Boolean> {
     private static final int STATUS_PERC = 70;
@@ -14,29 +18,26 @@ public class Infection implements Function<Person, Boolean> {
     private static final int FP2_PERC = 20;
     private static final int FP3_PERC = 10;
 
+    /**
+     * Run infection algorithm.
+     * This specific algorithm doesn't take care of the infector
+     * and only looks at the victim.
+     */
     @Override
     public Boolean apply(Person victim) {
-        return infection(victim);
-    }
-
-   public boolean infection(Person person) {
-        if (person.isInfected()) {
+        if (victim.isInfected()) {
             return false;
         }
 
-        int trasm = checkTrasmissibility(person);
-        if (trasm == 100) {
-            return true;
-        }
-        // più è alto il parametro di trasmissione più è alta la probabilità di infettare
+        int trasm = checkTrasmissibility(victim);
         var rand = new Random();
         final int upperbound = 101;
-        return rand.nextInt() <= trasm;
+        return rand.nextInt(upperbound) <= trasm;
     }
 
-    /*
-     *  infection depends from Mask status and type
-     *  mask status 70% mask type 30%
+    /**
+     * Check trasmissibility of a person.
+     * Trasmissibility only depends on the mask.
      */
     public int checkTrasmissibility(Person person) {
         var protection = person.getMask().getProtection();

@@ -1,28 +1,66 @@
 package Simulation;
 
-import Environment.Services.Map.MainMap;
-import Environment.Services.Map.PathFinderImpl;
-import Environment.Locator;
-import Environment.Services.Graphical.SimulationCamera;
-import Simulation.CrowdHandlers.PersonPicker;
-import Simulation.Virus.Virus;
-import com.jme3.scene.Node;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class Simulation {
-    private final List<Person> crowd = Collections.synchronizedList(new ArrayList<>());
-    private final Locator world;
-    private final SimulationCamera cam;
-    private MainMap map;
-    private Virus virus;
-    private PathFinderImpl pg;
-    private int numPerson = 0;
-    private PersonPicker picker;
-    private Lights lights;
+public interface Simulation {
+    /**
+     * Starts the simulation.
+     * @param options the options with which to start the simulation.
+     */
+    public void start(Options options);
 
+    /**
+     * Updates the simulation.
+     * @param tpf time per frame
+     * @throws IllegalStateException
+     * This method simply updates every person.
+     */
+    public void update();
+
+    /**
+     * Getter for person list.
+     * @return The list of people.
+     */
+    public List<Person> getPersonList();
+
+    /**
+     * Getter for person count.
+     * @return the person count, which corresponds to the total number of people.
+     */
+    public int getPersonCount();
+
+    /**
+     * Getter for infected person count.
+     * @return the number of infected people
+     */
+    public int getInfectedNumb();
+
+    /**
+     * Changes the status of the masks for all people.
+     * If the people who have masks were wearing them, by calling
+     * this method the people will stop wearing them, and viceversa.
+     */
+    public void changeMaskState();
+
+    /**
+     * Resumes the spreading of the virus.
+     */
+    public void resumeInfected();
+
+    /**
+     * Force a number of people to be infected.
+     * @param infected the number of people to be infected.
+     */
+    public void setInfected(int infected);
+
+    /**
+     * This class holds the options for starting the simulation.
+     * The simulation needs to know in advance the following things:
+     * - starting number of people (@numPerson)
+     * - starting number of people who use masks (@numMasks)
+     * - what kind of protection the mask use. This is shared between
+     *   every person who use a mask.
+     */
     public static class Options {
         public final int numPerson;
         public final int numMasks;
@@ -33,98 +71,6 @@ public class Simulation {
             numMasks = m;
             protection = pr;
         }
-    }
-
-    public Simulation(final Locator world) {
-        this.world = world;
-        cam = world.getSimulationCamera();
-        this.lights = new Lights(world.getAmbient(), cam);
-        picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
-        this.virus = new Virus(crowd);
-    }
-
-    public void start(Options options) {
-        this.numPerson = options.numPerson;
-        this.map = world.getMap();
-
-        this.pg = map.createPathFinder();
-
-        for (int i = 0; i < options.numPerson; i++) {
-            Person p = new Person(world, options.protection, pg.getRandomPoint());
-            if (options.numMasks != 0) {
-                p.maskDown();
-            }
-            System.out.println("person is at " + p.getPosition());
-            crowd.add(p);
-        }
-        // virus is a thread, by the way
-        virus.start();
-    }
-
-    public void update() {
-        if (crowd == null) {
-            throw new IllegalStateException("simulation.step called before starting simulation");
-        }
-
-        cam.update();
-        lights.update();
-
-        for (var p : crowd) {
-            p.update();
-        }
-    }
-
-    public List<Person> getPersonList() {
-        return this.crowd;
-    }
-
-    public int getPersonCount() {
-        if (crowd == null) {
-            throw new IllegalStateException("simulation.step called before starting simulation");
-        }
-
-        return crowd.size();
-    }
-
-    public int getInfectedNumb() {
-        if (crowd == null) {
-            throw new IllegalStateException("simulation.step called before starting simulation");
-        }
-
-        return virus.getInfectedNumb();
-    }
-
-    public void changeMaskState() {
-        virus.stopSpreading();
-
-        for (int i = 0; i < crowd.size(); i++) {
-            this.crowd.get(i).switchMaskState();
-        }
-
-        virus.resumeSpreading();
-    }
-
-    public void resumeInfected() {
-        virus.stopSpreading();
-        virus.resumeInfected();
-        virus.resumeSpreading();
-    }
-
-    public void setInfected(int infected) {
-        virus.stopSpreading();
-
-        for (var p : this.crowd) {
-            if (infected != 0 && !p.isInfected()) {
-                virus.forceInfection(p);
-                infected--;
-            }
-        }
-
-        virus.resumeSpreading();
-    }
-
-    public Node getGuiNode() {
-        return world.getGuiNode();
     }
 }
 
