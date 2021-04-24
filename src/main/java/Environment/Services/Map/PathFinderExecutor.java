@@ -1,7 +1,5 @@
 package Environment.Services.Map;
 
-
-import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.Path.Waypoint;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -17,14 +15,9 @@ import java.util.concurrent.Future;
  */
 public class PathFinderExecutor {
 
-    PathFinder pathGen;
     private final ExecutorService pool = Executors.newSingleThreadExecutor();
-    private Node scene;
-    private NavMesh nav;
 
-    public PathFinderExecutor(final NavMesh navMesh) {
-        nav = navMesh;
-    }
+    private Node scene;
 
     public PathFinderExecutor(final Node scene) {
         this.scene = scene;
@@ -45,8 +38,7 @@ class PathGeneratorCall implements Callable<List<Waypoint>> {
         this.startingPoint = pos;
     }
 
-    public List<Waypoint> call() throws Exception {
-        var r = pathGen.getRandomPoint();
+    public List<Waypoint> call() {
         return pathGen.getPath(startingPoint, pathGen.getRandomPoint());
     }
 }

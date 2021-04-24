@@ -18,11 +18,6 @@ public class PathFinder {
     public NavMeshPathfinder pathFinder;
     public Random rand;
 
-    public PathFinder(final NavMesh navMesh) {
-        rand = new Random();
-        nav = navMesh;
-    }
-
     public PathFinder(final Spatial scene) {
         rand = new Random();
         Node n = (Node) scene;

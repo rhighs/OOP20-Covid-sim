@@ -10,7 +10,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -97,20 +96,6 @@ public class PhysicsComponent {
         return Collections.EMPTY_SET;
     }
 
-    public Optional<Float> getNearDistance(final Entity guest) {
-
-        boolean isNear = getNearEntities().contains(guest);
-        Vector3f guestPos = guest.getPosition();
-
-        if (isNear) {
-            float distance = position.distance(guestPos);
-
-            return Optional.of(distance);
-        }
-
-        return Optional.empty();
-    }
-
     public Vector3f getPosition() {
         return this.position;
     }
@@ -119,7 +104,7 @@ public class PhysicsComponent {
         this.spatial.setLocalTranslation(point);
     }
 
-    public void update(float tpf) {
+    public void update() {
         position = spatial.getLocalTranslation();
     }
 }
