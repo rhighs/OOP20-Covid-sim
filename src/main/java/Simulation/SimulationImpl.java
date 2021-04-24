@@ -48,7 +48,7 @@ public class SimulationImpl implements Simulation {
     @Override
     public void start(Options options) {
         this.map = world.getMap();
-        this.pg = map.createPathGenerator();
+        this.pg = map.createPathFinder();
         for (int i = 0; i < options.numPerson; i++) {
             Person p = new PersonImpl(world, options.protection, pg.getRandomPoint());
             if (options.numMasks != 0) {
