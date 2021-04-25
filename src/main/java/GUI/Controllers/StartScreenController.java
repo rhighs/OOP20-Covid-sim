@@ -8,14 +8,11 @@ import Simulation.Simulation;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
-import com.jme3.asset.AssetManager;
-import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.Node;
-import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.DropDown;
@@ -23,18 +20,17 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.List;
 
 /**
- * @author json 
+ * @author json
+ * Controller for GUI attached with screen.xml
  */
 public class StartScreenController extends BaseAppState implements ScreenController {
 
-    public static final int DEFAULT_PERSON = 50;
+
     private final String SCREEN_PATH = "Interface/Screen.xml";
-    public static final String HUD_IMAGE_PATH = "Interface/black.jpg";
+    public static final String HUD_IMAGE_PATH = "Interface/black.png";
     private final String START_SCREEN_NAME = Screens.START.getName();
     private final Nifty nifty;
     private final FlyByCamera flyCam;
@@ -44,7 +40,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private Person.Mask.Protection prot;
     private Simulation sim;
     private final Node guiNode;
-    private final Instant start;
     private BitmapText personText;
     private BitmapText infText;
     private BitmapText timeText;
@@ -52,11 +47,16 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private List<BitmapText> hudText;
     private final Locator world;
     private Picture pic;
-    private EditControl editControl;
-    private SituationControl situationControl;
-    private HudText hudTextControl;
+    private SituationComponent situationControl;
+    private EditComponent editComponent;
 
 
+    /**
+     * Creates a new instance of the class.
+     *
+     * @param app The application.
+     * @param world  A locator which have the guiNode.
+     */
     public StartScreenController(SimpleApplication app, Locator world) {
         this.flyCam = app.getFlyByCamera();
         this.inputManager = app.getInputManager();
@@ -71,14 +71,9 @@ public class StartScreenController extends BaseAppState implements ScreenControl
 
         this.nifty = niftyDisplay.getNifty();
         app.getGuiViewPort().addProcessor(niftyDisplay);
-        this.start = Instant.now();
         guiNode = world.getGuiNode();
         nifty.fromXml(SCREEN_PATH, START_SCREEN_NAME, this);
         prot = Person.Mask.Protection.FP1;
-
-        situationControl = new SituationControl();
-        hudTextControl = new HudText();
-        editControl = new EditControl(nifty);
 
     }
 
@@ -91,25 +86,44 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         dropDown.addItem(Person.Mask.Protection.FP3);
     }
 
+    /**
+     * @return The nifty object
+     */
+    public Nifty getNifty(){
+        return nifty;
+    }
+
+
+    /**
+     * Load worst preset simulation
+     */
     //load screen
     public void loadWorst() {
 
-        startSimulation(situationControl.getWorst());
+        startSimulation(SituationComponent.getWorst());
 
     }
 
+    /**
+     * Load best preset simulation
+     */
     public void loadBest() {
 
-        startSimulation(situationControl.getBest());
+        startSimulation(SituationComponent.getBest());
 
     }
 
+    /**
+     * Load set simulation for controller usage
+     */
     public void loadSimulation(Simulation simulation) {
         this.sim = simulation;
-        //TODO
-        editControl.setSim(sim);
     }
 
+    /**
+     * Start screen
+     * Called from Start button, read input from user and load screen components
+     */
     public void startGame(String screen) {
         var niftyScreen = nifty.getScreen(START_SCREEN_NAME);
 
@@ -129,8 +143,16 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         );
 
         startSimulation(options);
+        loadEditComponent();
     }
 
+    private void loadEditComponent(){
+        editComponent = new EditComponent(nifty,sim);
+    }
+
+    /**
+     * Callback for startSimulation
+     */
     public void startSimulation(Simulation.Options options) {
         if (startSimFn == null) {
             throw new IllegalStateException("Callback for starting simulation not set.");
@@ -140,6 +162,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         startSimFn.call(options);
     }
 
+
     public void quit() {
         if (quitFn == null) {
             throw new IllegalStateException("quitFn not set.");
@@ -148,101 +171,94 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         quitFn.call(false);
     }
 
-    //HUD screens
-    public void initHudText(BitmapFont guiFont) {
-        hudTextControl.initHudText(guiFont);
-    }
 
-    public void setHudText(AppSettings settings, BitmapFont guiFont) {
-        hudTextControl.setHudText(settings,guiFont,guiNode);
-    }
-
-    public void setHudImage(AssetManager assetManager, AppSettings settings) {
-        hudTextControl.setHudImage(assetManager,settings,guiNode);
-    }
-
-    public void updateText() {
-        
-        Long time = this.getTime();
-
-        hudTextControl.updateText(sim.getPersonCount(), sim.getInfectedNumb(), time, prot);
-    }
-    private Long getTime() {
-        long timeElapsed;
-
-        try {
-            Instant finish = Instant.now();
-            timeElapsed = Duration.between(start, finish).toSeconds();
-        } catch (NullPointerException ex) {
-            return 0L;
-        }
-
-        return timeElapsed;
-    }
-
+    /**
+     * Go to pause screen
+     */
     public void enterPauseScreen() {
         nifty.gotoScreen(Screens.PAUSE.getName());
-
-    }
-
-    public void exitPauseScreen() {
-        nifty.gotoScreen(Screens.HUD.getName());
-        hudText.forEach(i -> guiNode.attachChild(i));
-        guiNode.attachChild(pic);
     }
 
 
     //edit screen
-
+    /**
+     * Go to edit screen
+     */
     public void edit() {
-        editControl.setEditComponent();
         nifty.gotoScreen(Screens.EDIT.getName());
-        editControl.cleanEditComps();
     }
 
-    public void apply() {
-        editControl.apply();
-    }
-
-    public void stateMask() {
-        editControl.stateMask();
-    }
-
-    public void noInfected() {
-        editControl.noInfected();
-    }
-
+    /**
+     * call cancel method in editComponent
+     */
     public void cancel() {
-        editControl.cancel();
+        editComponent.cancel();
     }
+
+    /**
+     * call stateMask method in editComponent
+     */
+    public void stateMask() {
+        editComponent.stateMask();
+    }
+
+    /**
+     * call noInfected method in editComponent
+     */
+    public void noInfected() {
+        editComponent.noInfected();
+    }
+
+    /**
+     * call apply method in editComponent
+     */
+    public void apply() {
+        editComponent.apply();
+    }
+
 
     // This method is called by the load button.
+    /**
+     * Go to load screen
+     */
     public void load() {
         nifty.gotoScreen(Screens.LOAD.getName());
     }
 
+    /**
+     * Go to commands screen
+     */
     public void commands() {
         nifty.gotoScreen(Screens.COMMANDS.getName());
     }
 
+    /**
+     * Set start callback
+     */
     public void onStartButtonClicked(Callback<Simulation.Options> callback) {
         startSimFn = callback;
     }
 
+    /**
+     * Set quit callback
+     */
     public void onQuitButtonClicked(Callback<Boolean> callback) {
         quitFn = callback;
     }
 
-
-    //TODO
     private Screen getScreen(String screeName) {
         return this.nifty.getScreen(screeName);
     }
-
+    /**
+     * Go to Start screen from load screen
+     */
     public void backSit(){
         nifty.gotoScreen(Screens.START.getName());
     }
 
+    /**
+     * Go to pause screen from commands screen
+     */
     public void backCom(){
         nifty.gotoScreen(Screens.PAUSE.getName());
     }

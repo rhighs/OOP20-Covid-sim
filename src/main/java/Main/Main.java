@@ -1,6 +1,8 @@
 package Main;
 
 import Environment.Locator;
+import GUI.Controllers.EditComponent;
+import GUI.Controllers.HudText;
 import GUI.Controllers.StartScreenController;
 import Simulation.Simulation;
 import com.jme3.app.SimpleApplication;
@@ -29,6 +31,8 @@ public class Main extends SimpleApplication {
     private ScreenState state = ScreenState.START_SCREEN;
     private Locator world;
     private StartScreenController screenControl;
+    private HudText hudControl;
+    private EditComponent editComponent;
     private Simulation simulation;
     private BitmapText ch;
 
@@ -67,7 +71,7 @@ public class Main extends SimpleApplication {
             case START_SCREEN:
                 break;
             case SIMULATION_SCREEN:
-                screenControl.updateText();
+                hudControl.updateText();
                 simulation.step(tpf);
                 break;
             case PAUSE_SCREEN:
@@ -91,6 +95,7 @@ public class Main extends SimpleApplication {
         inputManager.addListener(new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
                 screenControl.enterPauseScreen();
+                hudControl.detachAll();
                 guiNode.detachChild(ch);
                 inputManager.setCursorVisible(true);
                 state = ScreenState.PAUSE_SCREEN;
@@ -100,7 +105,7 @@ public class Main extends SimpleApplication {
         inputManager.addMapping("Esc Pause Game", new KeyTrigger(KeyInput.KEY_E));
         inputManager.addListener(new ActionListener() {
             public void onAction(String name, boolean keyPressed, float tpf) {
-                screenControl.exitPauseScreen();
+                hudControl.exitPauseScreen();
                 guiNode.attachChild(ch);
                 inputManager.setCursorVisible(false);
                 state = ScreenState.SIMULATION_SCREEN;
@@ -120,9 +125,6 @@ public class Main extends SimpleApplication {
         screenControl = new StartScreenController(this, world);
         screenControl.onStartButtonClicked(o -> startSimulation(o));
         screenControl.onQuitButtonClicked(from -> finish(from));
-        screenControl.initHudText(guiFont);
-        screenControl.setHudImage(assetManager, settings);
-        screenControl.setHudText(settings, guiFont);
     }
 
     /**
@@ -152,6 +154,7 @@ public class Main extends SimpleApplication {
         initCrossHairs();
         simulation.start(options);
         screenControl.loadSimulation(simulation);
+        hudControl = new HudText(simulation,assetManager,settings,world,screenControl.getNifty(),options);
         viewPort.setBackgroundColor(ColorRGBA.Cyan);
         flyCam.setMoveSpeed(50);
         cam.setLocation(new Vector3f(20, 20, 5));

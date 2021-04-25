@@ -4,7 +4,7 @@
     <useControls filename="nifty-default-controls.xml"/>
     <screen id="start" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/back.jpg"></image>
+            <image filename="Interface/back.png"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
             <panel id="panel_title" height="20%" width="100%" align="center"
@@ -80,11 +80,11 @@
     </screen>
 
 
-    <screen id="hud" controller="GUI.Controllers.StartScreenController">
+    <screen id="hud" controller="GUI.Controllers.HudText">
         <layer id="foreground" childLayout="horizontal">
             <panel id="hud_panel" width="100%" height="80%" childLayout="vertical">
                     <control name="label" text="Press [P] to pause" style="nifty-label" id="HudLabel" align="center"
-                      valign="center" backgroundImage="Interface/black.jpg">
+                      valign="center" backgroundImage="Interface/black.png">
                     </control>
             </panel>
 
@@ -94,7 +94,7 @@
 
     <screen id="load" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/back.jpg"></image>
+            <image filename="Interface/back.png"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
 
@@ -150,7 +150,7 @@
 
     <screen id="commands" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/back.jpg"></image>
+            <image filename="Interface/back.png"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
             <panel id="panel_title" height="20%" width="100%" align="center"
@@ -214,7 +214,7 @@
 
     <screen id="pause" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/back.jpg"></image>
+            <image filename="Interface/back.png"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
 
@@ -265,7 +265,7 @@
 
     <screen id="edit" controller="GUI.Controllers.StartScreenController">
         <layer id="background" childLayout="center">
-            <image filename="Interface/back.jpg"></image>
+            <image filename="Interface/back.png"></image>
         </layer>
         <layer id="foreground" childLayout="vertical">
 
