@@ -1,33 +1,3 @@
-\documentclass[a4paper,12pt]{report}
-
-\usepackage{alltt, fancyvrb, url}
-\usepackage{graphicx}
-\usepackage[utf8]{inputenc}
-\usepackage{hyperref}
-
-\usepackage[italian]{babel}
-\usepackage[italian]{cleveref}
-
-\title{Simulazione del Covid}
-
-\author{Christian Ricci, Roberto Montalti, Juri Simoncini, Edoardo Savini}
-\date{\today}
-
-\begin{document}
-
-\maketitle
-
-\begin{abstract}
-\end{abstract}
-
-\tableofcontents
-
-\chapter{Analisi}
-
-\section{Requisiti}
-
-\section{Analisi e modello del dominio}
-
 % esempio per aggiungere un immagine
 %\begin{figure}[h]
 %\centering{}
@@ -36,14 +6,110 @@
 %\label{img:analysis}
 %\end{figure}
 
+\documentclass[a4paper,12pt]{report}
+
+\usepackage{alltt, fancyvrb, url}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[italian]{babel}
+\usepackage[italian]{cleveref}
+
+\title{Covid Simulation}
+
+\author{Christian Ricci, Roberto Montalti, Juri Simoncini, Edoardo Savini}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Analisi}
+
+Il team si pone come obbiettivo lo sviluppo di una simulazione del Covid dentro l'università di Bologna. Lo scopo è poter permettere all'utente di visualizzare una possibile diffusione del Covid dentro l'università, attraverso una mappa virtuale della struttura. L'utente potrà inoltre modificare alcuni parametri della simulazione, per esempio potrà aggiungere nuove persone mentre la simulazione sta girando.
+
+\section{Requisiti}
+
+\subsection{Requisiti funzionali}
+\begin{itemize}
+\item L'applicazione permette di visualizzare una mappa dell'università, con una rappresentazione di alcune persone che si muovono all'interno della mappa.
+\item Ci devono essere persone contagiate dal virus, e queste devono poter contagiare altre persone.
+\item Le persone potranno indossare una mascherina che permetta a loro di abbassare la probabilità di contagio.
+\item Durante la simulazione si potranno vedere quali persone sono state contagiate dal virus.
+\item L'applicazione permette di iniziare una nuova simulazione con parametri differenti.
+\item L'utente avrà la possibilità di girare all'interno della mappa e poter visualizzare come si diffonde il virus.
+\item L'utente avrà anche la possibilità di aggiungere nuove persone alla simulazione, o di modificare alcuni parametri scelti all'inizio.
+\end{itemize}
+
+\subsection{Requisiti non funzionali}
+\begin{itemize}
+\item L'utente avrà la possibilità di "selezionare" una persona e poterla seguire automaticamente, semplicemente utilizzando il pulsante sinistro del mouse.
+\item La simulazione dovrà avere diversi "preset" a disposizione, invece di dover scegliere le opzioni iniziali. Un preset è un insieme di opzioni iniziali per la simulazione.
+\end{itemize}
+
+\section{Analisi e modello del dominio}
+Nella simulazione del Covid i soggetti principali sono le persone, le quali si muovono all'interno della mappa dell'università, ed il virus stesso, che gestisce le persone contagiate e cerca di contagiare nuove persone.
+
+Le persone si muovono liberamente all'interno di una mappa, seguendo un apposito algoritmo di movimento. All'interno della simulazione c'è sempre almeno una persona contagiata dal virus, e c'è la possibilità che altre persone vengano contagiate se queste sono abbastanza vicine ad esso. Il meccanismo di infezione è gestito dal virus, che si occupa di guardare quali persone sono vicine ad una persona contagiata e di applicare a loro un algoritmo di infezione. Inoltre, ogni persona può indossare una mascherina, che può influenzare la possibilità di contagio.
+
+La simulazione ha diversi parametri personalizzabili, quali il numero di persone, il numero di persone che non indossare una mascherina e il tipo di mascherina che ogni persona indossa.
+
+Una delle principali difficoltà sarà dover trovare un algoritmo di movimento adatto alle persone, che sia realistico e non troppo banale. Un'altra difficoltà sarà nel gestire la diffusione del virus.
+
 \chapter{Design}
 
 \section{Architettura}
 
+L'architettura di Covid Simulation si basa sull'MVC (Model - View - Controller) per quanto riguarda la parte della GUI (schermata iniziale, schermata di simulazione, schermata di pausa), e la visione ad alto livello del programma ma dentro alla simulazione stessa (dentro al Model) è stato usato un pattern differente, che si basa su un architettura a componenti seguita da alcuni videogiochi.
+La classe Main funge da controller delle schermate: ad ogni aggiornamento di frame esso guarda in quale schermata è l'applicazione e va a chiamare un apposito metodo che per l'aggiornamento delle proprietà delle schermate.
+
+Un apposito controller per la GUI, chiamato StartScreenController, gestisce le schermate iniziale e di pausa. Questo controller riesce a comunicare con il Main attraverso alcuni callback, e comunica con il controller della simulazione mandandogli direttamente i messaggi.
+
+La view per la GUI non è stata fatto usando codice, bensì abbiamo utilizzato una libreria chiamata Nifty GUI, che permette lo sviluppo di GUI utilizzando XML. I bottoni della view sono solo legati ai metodi del controller: in questo modo, se volessimo cambiare la View, ci basterebbe assicurarci di chiamare i relativi metodi del controller per ogni bottone.
+
+Il controller della simulazione è chiamato, appunto, Simulation ed esso gestisce il Model della simulazione, che comprende concetti quale il Virus e le persone. Esso ha disponibile un metodo per aggiornare tutte le persone, ed altri metodi per gestirle.
+
+Ogni persona fa utilizzo di componenti, che gestiscono un solo concetto o sottosistema dell'engine: ad esempio, il MovementComponent gestisce il movimento della persona, mentre il GraphicsComponent gestisce tutto ciò che riguarda la grafica.
+
+In figura è mostrata l'architettura ad alto livello dell'applicazione.
+
+% qui ci vuole un bel uml immerdato
+
 \section{Design dettagliato}
 
+\subsection{Christian Ricci}
+
+Io mi sono occupato per lo più di alcuni componenti del Model: Ad esempio, la classe della persona e alcuni dei suoi componenti. In particolare, io ho subito pensato, all'inizio del progetto, di creare un architettura a componenti per la persona, dato che sapevo che altrimenti la classe sarebbe diventata molto complessa, toccando varie parti dell'engine. Con un architettura a componenti, si va a scorporare queste parti, creando multiple classi che però diventano molto semplici, occupandosi di una sola cosa.
+
+Assieme a Roberto Montalti ed Edoardo Savini ho creato il Movement Component e l'algoritmo di movimento: per l'algoritmo abbiamo pensato che la persona dovesse scegliere un punto casuale dentro la mappa, e grazie ad una libreria per l'AI offerta dal JMonkeyEngine la persona avrebbe trovato la strada migliore per arrivarci. Il Movement Component in sè deve prima richiedere la strada e poi iniziare a seguirla; la richiesta di una nuova strada da seguire può però essere molto costosa, dato che l'algoritmo per trovare la strada migliore è dispendioso. Questo si traduce in una serie di stati per il componente, e quindi abbiamo pensato di usare un pattern chiamato "State Pattern" per gestire tutti questi stati. Inoltre, abbiamo dovuto astrarre la richiesta della strada in una nuova classe, che facesse uso di una thread pool per gestire tutte le richieste di una nuova strada per tutte le persone.
+
+In figura è mostrato un diagramma UML per il Movement Component.
+
+Ho inoltre creato una prima versione della simulazione, che aveva semplicemente 2 metodi per inizializzarla e aggiornarla. Juri Simoncini ha poi esteso la simulazione, creando alcuni metodi per manipolare le persone.
+
+Ho anche creato cose non legate al Model dell'applicazione: ad esempio ho creato una semplice gestione degli stati delle schermate nella classe Main, e ho creato un'interfaccia di callback per lasciare che il controller della GUI riesca a comunicare con la classe Main senza dover chiamare i suoi metodi direttamente: così facendo, si riesce a scorporare il controller della GUI dal resto dell'applicazione.
+
+\subsection{Roberto Montalti}
+
+\subsection{Juri Simoncini}
+
+\subsection{Edoardo Savini}
+
 \chapter{Sviluppo}
+
 \section{Testing automatizzato}
+
+% questo lo fa savini
+
+\section{Metodologia di lavoro}
+
+\subsection{Metodologia in generale}
+
+Abbiamo deciso di iniziare a sviluppare questo progetto con una fase di analisi, per capire esattamente cosa bisognasse fare, come potevamo suddividerci il lavoro e quali librerie potevamo utilizzare. Abbiamo presentato tutti le nostre idee riguardo al Model dell'applicazione. In retrospettiva la nostra fase di analisi potrebbe essere stata troppo corta, dato che ci siamo accorti più o meno a metà del progetto che l'engine non era particolarmente buono e abbiamo faticato molto per risolvere alcuni problemi legati alla librerie scelte.
+Durante lo sviluppo del progetto abbiamo deciso di non limitarci ai nostri ruoli, dato che alcune persone del team avevano
+
 
 \section{Note di sviluppo}
 
