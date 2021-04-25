@@ -44,7 +44,6 @@ public class PathManagerImpl implements PathManager {
 
     @Override
     public Waypoint getWaypoint() {
-        System.out.println("waypoints is: " + (waypoints == null ? "null" : "not null"));
         if (waypoints == null) {
             if (!isPathReady()) {
                 return null;
