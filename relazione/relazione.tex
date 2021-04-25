@@ -94,6 +94,15 @@ Ho anche creato cose non legate al Model dell'applicazione: ad esempio ho creato
 \subsection{Roberto Montalti}
 
 \subsection{Juri Simoncini}
+Io mi sono occupato dell'algortimo di infezione, la challenge principale erano capire su quali aspetti basarci per l'infezione, 
+ho preferito utilizzare come parametri dell'algoritmo le proprietà della mascherina avendo cosi un'algoritmo semplice e leggero.
+In seguito mi sono occupato del lato GUI: lato grafico e lato di controller.
+La scelta principale da fare era decidere se suddividere i controller per schermata oppure tenerne uno per tutte le schermate.
+Ho deciso di optare per la seconda soluzione dato che le feature da implementare non erano in grande quantità.
+Però per alleggerire il codice ho deciso di suddividire le implementazioni dei metodi in varie classi suddivise per schermate.
+Ho poi lavorato sulla simulazione per la manipolazione delle persone dato che mi era utile per le funzionalità del controller.
+
+
 
 \subsection{Edoardo Savini}
 
@@ -122,6 +131,19 @@ Classi sviluppate singolarmente:
 \subsection{Roberto Montalti}
 
 \subsection{Juri Simoncini}
+Lato GUI sia a lato grafico che a lato logico utilizzando la libreria nifty-gui.
+L'implementazione grafica si trova dentro al file screen.xml che poi viene passato allo StartScreenController, il controller della nostra GUI.
+Tutta l'interfaccia è stata organizzata per schermate, quindi è presente per ogni schermata (Start, Commands, Edit, Pause) uno screen nel file screen.xml.
+Lo StartScreenController presenta al suo interno tutti i metodi che vengono chiamati dai vari screen (bottoni, pulsanti, textField...).
+Per l'edit screen ho implementato una classe chiamata EditComponent con all'interno la logica per i metodi utili allo StartScreenController, stessa cosa ho attuato per il load screen con il loadComponent.
+Mentre per il testo presente nell' HUD ho optato per un oggetto separato dal controller, per non sovraccaricarne il lavoro, chiamato HudText.
+Il testo presente così riesce ad aggiornarsi in tempo reale grazie al metodo SimpleUpdate presente nel Main.
+L'algoritmo di infezione che viene utilizzato per infettare le varie persone presenti nella mappa.
+L'algoritmo si basa sulle dell'oggeto mask: Protection (FP1, FP2, FP3) e Status (UP, DOWN).
+Ho preferito assegnare più rilevanza allo status in base anche alle esperienze nella vita reale dato che una mascherina abbassata avrà un effetto maggiore sulla trasmissione del virus.
+Quindi lo status in percentuale ha un 70\% di rilevanza mentre la protection il restante 30.
+Perciò ho pensato alla trasmissibilità dell'infezione come una scala di valori da 0 a 100 in cui, per esempio, se la mascherina è abbassata ed è di tipo FP1 le probabilità di trasmissione è pari a 100.
+Per rappresentare la randomicità del contagio viene estratto un valore random da 0 a 100 e se questo è minore del valore della trasmissibilità calcolato la persona viene contagiata, quindi maggiore è il valore di trasmissibilità maggiori sono le porbabilità di essere contagiato.
 
 \subsection{Edoardo Savini}
 
@@ -139,15 +161,30 @@ Classi sviluppate singolarmente:
 \subsection{Roberto Montalti}
 
 \subsection{Juri Simoncini}
+\item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
+\item Nifty-gui: libreria utilizzata in tutto lo sviluppo della gui.
+\item Uso di lambda expressions.
 
 \subsection{Edoardo Savini}
 
 \chapter{Commenti finali}
 
 \section{Autovalutazione e lavori futuri}
+\subsection{Christian Ricci}
+
+\subsection{Roberto Montalti}
+
+\subsection{Juri Simoncini}
+Avrei potuto sicuramente fare di più ma per vari problemi non sono riuscito a mettere in atto tutti gli insegnamenti compresi a lezione soprattutto per quanto riguarda l'utilzzo del pattern MVC nella gui che sarebbe potuto essere attuato in maniera migliore.
+D'altro canto ritengo però di averci messo tutto l'impegno possibile per aiutare i miei colleghi nello sviluppo dell'applicazione e nello sviluppo portato avanti da me.
+In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le mie conoscenze facendomi conoscere un engine tutto nuovo e perciò avendo acquisito una nuova skill. 
+
+\subsection{Edoardo Savini}
+
 
 
 \section{Difficoltà incontrate e commenti per i docenti}
+
 
 \appendix
 \chapter{Guida utente}
