@@ -13,4 +13,10 @@ public interface PathFinderExecutor {
      * @return a Future which will contain a list of waypoint obtained by a PathGeneratorCall
      */
     Future<List<Path.Waypoint>> request(Vector3f currentPos);
+
+    /**
+     * Shutdown the thread pool. No more requests can be made after execution
+     * of this function.
+     */
+    void shutdown();
 }

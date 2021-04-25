@@ -121,5 +121,12 @@ public class SimulationImpl implements Simulation {
         }
         virus.resumeSpreading();
     }
+
+    @Override
+    public void shutdown() {
+        if (virus != null) {
+            virus.shutdown();
+        }
+    }
 }
 

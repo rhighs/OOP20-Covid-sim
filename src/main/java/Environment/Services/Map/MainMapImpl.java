@@ -11,6 +11,7 @@ public class MainMapImpl implements MainMap {
     private final String NAVMESH_NAME = "NavMesh";
     private final String SCENE_NAME = "SimulationScene";
     private Node scene;
+    private PathFinderExecutor pathFinder;
 
     public MainMapImpl(final AssetManager assetManager, final BulletAppState bullet, final Node rootNode) {
         scene = (Node) assetManager.loadModel(MAP_MODEL);
@@ -18,6 +19,8 @@ public class MainMapImpl implements MainMap {
 
         bullet.getPhysicsSpace().addAll(scene);
         rootNode.attachChild(scene);
+
+        this.pathFinder = new PathFinderExecutorImpl(scene);
     }
 
     @Override
@@ -29,12 +32,17 @@ public class MainMapImpl implements MainMap {
 
     @Override
     public PathFinderExecutor createPathFinderExecutor() {
-        return new PathFinderExecutorImpl(scene);
+        return pathFinder;
     }
 
     @Override
     public PathFinderImpl createPathFinder() {
         return new PathFinderImpl(scene);
+    }
+
+    @Override
+    public void shutdown() {
+        pathFinder.shutdown();
     }
 }
 

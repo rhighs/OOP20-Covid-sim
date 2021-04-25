@@ -18,4 +18,9 @@ public interface MainMap {
      * @return an instance of path finder
      */
     PathFinderImpl createPathFinder();
+
+    /**
+     * Shutdown the shared path finder.
+     */
+    void shutdown();
 }

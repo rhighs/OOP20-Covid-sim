@@ -51,7 +51,12 @@ public interface Simulation {
      * Force a number of people to be infected.
      * @param infected the number of people to be infected.
      */
-    public void setInfected(int infected);
+    void setInfected(int infected);
+
+    /**
+     * Shutdowns any thread started by the simulation.
+     */
+    void shutdown();
 
     /**
      * This class holds the options for starting the simulation.

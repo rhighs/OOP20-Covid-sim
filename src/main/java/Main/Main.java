@@ -171,8 +171,12 @@ public class Main extends SimpleApplication {
      * @fromQuitButton indicates if it came from the GUI.
      */
     public void finish(Boolean fromQuitButton) {
+        simulation.shutdown();
+        world.getMap().shutdown();
         System.err.println("exiting...");
-        System.exit(0);
+        if (fromQuitButton) {
+            System.exit(0);
+        }
     }
 
     /**

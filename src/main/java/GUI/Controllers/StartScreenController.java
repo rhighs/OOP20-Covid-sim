@@ -167,8 +167,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         if (quitFn == null) {
             throw new IllegalStateException("quitFn not set.");
         }
-
-        quitFn.call(false);
+        quitFn.call(true);
     }
 
 

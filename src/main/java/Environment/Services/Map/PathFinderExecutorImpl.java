@@ -27,4 +27,9 @@ public class PathFinderExecutorImpl implements PathFinderExecutor {
     public Future<List<Waypoint>> request(final Vector3f currentPos) {
         return pool.submit(new PathGeneratorCallImpl(new PathFinderImpl(scene), currentPos));
     }
+
+    @Override
+    public void shutdown() {
+        pool.shutdown();
+    }
 }
