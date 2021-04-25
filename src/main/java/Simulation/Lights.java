@@ -11,7 +11,7 @@ public class Lights {
 
     private Ambient ambient;
 
-    private final Vector3f sunLightDirection = new Vector3f(0.5f, 0.5f, 0.5f).normalizeLocal();
+    private final Vector3f sunLightDirection = new Vector3f(-0.5f, -0.5f, -0.5f).normalizeLocal();
 
     private final ColorRGBA AMBIENT_LIGHT_COLOR = ColorRGBA.White.mult(0.3f);
 

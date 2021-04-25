@@ -23,10 +23,13 @@ public class Graphics {
         rootNode.attachChild(elem);
     }
 
+// <<<<<<< HEAD
     public void removeFromScene(final Spatial elem) {
         rootNode.detachChild(elem);
     }
 
+// =======
+// >>>>>>> d8345603be4bd98f429811f34d5dc400b2f54966
     public Material createShadedMaterial(final ColorRGBA ambient, final ColorRGBA diffuse) {
         Material material = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         material.setBoolean("UseMaterialColors", true);
@@ -40,9 +43,12 @@ public class Graphics {
         Material m = ((Geometry) spatial).getMaterial();
         m.setColor("Diffuse", color);
     }
+// <<<<<<< HEAD
 
     public Spatial getModel(final String modelPath) {
         return this.assetManager.loadModel(modelPath);
     }
 
+// =======
+// >>>>>>> d8345603be4bd98f429811f34d5dc400b2f54966
 }
