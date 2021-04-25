@@ -96,6 +96,7 @@ Ho anche creato cose non legate al Model dell'applicazione: ad esempio ho creato
 \subsection{Juri Simoncini}
 
 \subsection{Edoardo Savini}
+Insieme a Christian Ricci e Roberto Montalti mi sono occupato del Movement Handler mentre personalmente ho effettuato il refactoring di altre classi e il testing delle stesse, incluso il testing automatizzato con GitHub Actions, usando le librerie jUnit per il testing e mockito per la creazione dei mock. Il testing è però incompleto a causa di alcune difficoltà riscontrate con alcune di esse, in quanto l'implementazione non permetteva lo stesso, anche invertendo il controllo.
 
 \chapter{Sviluppo}
 
@@ -112,6 +113,7 @@ Abbiamo deciso di iniziare a sviluppare questo progetto con una fase di analisi,
 Abbiamo deciso di suddividere in modo equo il lavoro, ma abbiamo anche che sarebbe stato meglio collaborare insieme su alcuni componenti dell'applicazione che sono risultati più difficili da scrivere, ad esempio l'algoritmo di movimento della persona.
 
 \subsection{Distributed Version Control System}
+
 Per il DVCS è stato utilizzato git, dato che tutti i membri del team avevano esperienza solo su questo. Abbiamo creato una repository su github e abbiamo deciso di creare un branch per ogni membro del team. Questo alla fine ci è sembrato poco produttivo, data la difficoltà per ognuno di stare alla pari con le feature che altri membri creavano.
 
 \subsection{Christian Ricci}
@@ -124,6 +126,14 @@ Classi sviluppate singolarmente:
 \subsection{Juri Simoncini}
 
 \subsection{Edoardo Savini}
+
+Sviluppo del Movement Handler e del testing.
+Classi sviluppate singolarmente:
+\begin{itemize}
+    \item \emph{PathManager} (e la relativa implementazione \emph{PathManagerImpl});
+    \item \emph{StuckManager} (e la relativa implementazione \emph{SystemTimeStuckManager});
+    \item tutte le classi di testing.
+\end{itemize}
 
 \section{Note di sviluppo}
 
@@ -141,6 +151,12 @@ Classi sviluppate singolarmente:
 \subsection{Juri Simoncini}
 
 \subsection{Edoardo Savini}
+
+\begin{itemize}
+    \item \emph{jUnit}: il framework utilizzato per i test;
+    
+    \item \emph{mockito}: il framework che permette di creare dei mock delle interfacce e delle classi, permettendo di isolare i singoli componenti nei test d'unità.
+\end{itemize}
 
 \chapter{Commenti finali}
 
