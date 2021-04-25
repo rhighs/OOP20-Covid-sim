@@ -29,6 +29,9 @@ public class Virus implements VirusInterface {
     public Virus(final List<Person> crowd) {
         this.crowd = crowd;
         this.numPeople = crowd.size();
+        if (numPeople < 0) {
+            throw new IllegalStateException("num people < 0");
+        }
         this.infectionAlgo = new Infection();
         this.rand = new Random();
     }

@@ -43,7 +43,6 @@ public class SimulationImpl implements Simulation {
         this.cam = world.getSimulationCamera();
         this.lights = new Lights(world.getAmbient(), cam);
         this.picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
-        this.virus = new Virus(crowd);
     }
 
     @Override
@@ -55,9 +54,10 @@ public class SimulationImpl implements Simulation {
             if (options.numMasks != 0) {
                 p.maskDown();
             }
-            System.out.println("person is at " + p.getPosition());
+            // System.out.println("person is at " + p.getPosition());
             crowd.add(p);
         }
+        this.virus = new Virus(crowd);
         new Thread(this.virus).start();
     }
 

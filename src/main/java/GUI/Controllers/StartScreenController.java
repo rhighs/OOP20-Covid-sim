@@ -143,7 +143,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         );
 
         startSimulation(options);
-        loadEditComponent();
     }
 
     private void loadEditComponent(){
@@ -154,6 +153,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
      * Callback for startSimulation
      */
     public void startSimulation(Simulation.Options options) {
+        loadEditComponent();
         if (startSimFn == null) {
             throw new IllegalStateException("Callback for starting simulation not set.");
         }
@@ -213,6 +213,8 @@ public class StartScreenController extends BaseAppState implements ScreenControl
      * call apply method in editComponent
      */
     public void apply() {
+        if (editComponent == null)
+            throw new IllegalStateException("brutto stronzo del cazzo");
         editComponent.apply();
     }
 
