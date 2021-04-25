@@ -108,14 +108,44 @@ Ho anche creato cose non legate al Model dell'applicazione: ad esempio ho creato
 \subsection{Metodologia in generale}
 
 Abbiamo deciso di iniziare a sviluppare questo progetto con una fase di analisi, per capire esattamente cosa bisognasse fare, come potevamo suddividerci il lavoro e quali librerie potevamo utilizzare. Abbiamo presentato tutti le nostre idee riguardo al Model dell'applicazione. In retrospettiva la nostra fase di analisi potrebbe essere stata troppo corta, dato che ci siamo accorti più o meno a metà del progetto che l'engine non era particolarmente buono e abbiamo faticato molto per risolvere alcuni problemi legati alla librerie scelte.
-Durante lo sviluppo del progetto abbiamo deciso di non limitarci ai nostri ruoli, dato che alcune persone del team avevano
 
+Abbiamo deciso di suddividere in modo equo il lavoro, ma abbiamo anche che sarebbe stato meglio collaborare insieme su alcuni componenti dell'applicazione che sono risultati più difficili da scrivere, ad esempio l'algoritmo di movimento della persona.
+
+\subsection{Distributed Version Control System}
+Per il DVCS è stato utilizzato git, dato che tutti i membri del team avevano esperienza solo su questo. Abbiamo creato una repository su github e abbiamo deciso di creare un branch per ogni membro del team. Questo alla fine ci è sembrato poco produttivo, data la difficoltà per ognuno di stare alla pari con le feature che altri membri creavano.
+
+\subsection{Christian Ricci}
+
+Sviluppo del Model dell'applicazione, in particolare la classe Simulazione, la classe Persona e alcuni dei suoi componenti e la classe Spawner. Ho inoltre contribuito ad aggiustare varie classi, tra cui il Virus e il controller della GUI.
+Classi sviluppate singolarmente:
+
+\subsection{Roberto Montalti}
+
+\subsection{Juri Simoncini}
+
+\subsection{Edoardo Savini}
 
 \section{Note di sviluppo}
+
+\subsection{Christian Ricci}
+
+\begin{itemize}
+\item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
+\item JMonkeyEngine AI: libreria utilizzata all'interno dell'implementazione del Movement Component.
+\item Thread Pool: un uso di una thread pool è stato fatto dentro al Movement Component per gestire le richieste di nuove strade.
+\item Generici: l'interfaccia di callback dentro il GUI controller è un'interfaccia funzionale generica, per permettere di registrare un qualunque callback.
+\end{itemize}
+
+\subsection{Roberto Montalti}
+
+\subsection{Juri Simoncini}
+
+\subsection{Edoardo Savini}
 
 \chapter{Commenti finali}
 
 \section{Autovalutazione e lavori futuri}
+
 
 \section{Difficoltà incontrate e commenti per i docenti}
 
