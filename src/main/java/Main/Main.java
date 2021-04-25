@@ -72,7 +72,7 @@ public class Main extends SimpleApplication {
             case START_SCREEN:
                 break;
             case SIMULATION_SCREEN:
-                screenControl.updateText();
+                hudControl.updateText();
                 simulation.update();
                 break;
             case PAUSE_SCREEN:

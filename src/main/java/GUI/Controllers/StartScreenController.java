@@ -32,9 +32,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private final String SCREEN_PATH = "Interface/Screen.xml";
     public static final String HUD_IMAGE_PATH = "Interface/black.png";
     private final String START_SCREEN_NAME = Screens.START.getName();
-    private final Locator world;
-    private final Instant start;
-    private final Node guiNode;
     private final Nifty nifty;
     private final FlyByCamera flyCam;
     private final InputManager inputManager;
@@ -48,9 +45,11 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private BitmapText timeText;
     private BitmapText maskTypeText;
     private List<BitmapText> hudText;
+    private final Locator world;
     private Picture pic;
     private SituationComponent situationControl;
     private EditComponent editComponent;
+
 
     /**
      * Creates a new instance of the class.
@@ -172,38 +171,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         quitFn.call(false);
     }
 
-    //HUD screens
-    public void initHudText(BitmapFont guiFont) {
-        hudTextControl.initHudText(guiFont);
-    }
-
-    public void setHudText(AppSettings settings, BitmapFont guiFont) {
-        hudTextControl.setHudText(settings,guiFont,guiNode);
-    }
-
-    public void setHudImage(AssetManager assetManager, AppSettings settings) {
-        hudTextControl.setHudImage(assetManager,settings,guiNode);
-    }
-
-    public void updateText() {
-
-        Long time = this.getTime();
-
-        hudTextControl.updateText(sim.getPersonCount(), sim.getInfectedNumb(), time, prot);
-    }
-
-    private Long getTime() {
-        long timeElapsed;
-
-        try {
-            Instant finish = Instant.now();
-            timeElapsed = Duration.between(start, finish).toSeconds();
-        } catch (NullPointerException ex) {
-            return 0L;
-        }
-
-        return timeElapsed;
-    }
 
     /**
      * Go to pause screen
@@ -211,6 +178,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void enterPauseScreen() {
         nifty.gotoScreen(Screens.PAUSE.getName());
     }
+
 
     //edit screen
     /**
@@ -248,7 +216,6 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         editComponent.apply();
     }
 
-
     // This method is called by the load button.
     /**
      * Go to load screen
@@ -281,6 +248,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     private Screen getScreen(String screeName) {
         return this.nifty.getScreen(screeName);
     }
+
     /**
      * Go to Start screen from load screen
      */
@@ -294,6 +262,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
     public void backCom(){
         nifty.gotoScreen(Screens.PAUSE.getName());
     }
+
     @Override
     public void onEndScreen() {
     }

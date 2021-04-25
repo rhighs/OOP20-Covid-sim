@@ -10,8 +10,8 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 /**
  * @author json
  * Logic for Edit screen
