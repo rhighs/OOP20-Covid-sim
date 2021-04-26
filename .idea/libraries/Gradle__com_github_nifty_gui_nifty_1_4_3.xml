@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.nifty-gui:nifty:1.4.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.nifty-gui/nifty/1.4.3/fa9ac16e00d1b375d10f58d1c1eb576950ae8c9d/nifty-1.4.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.nifty-gui/nifty/1.4.3/2b152f4b735a714234e002efaedca0630b16b0de/nifty-1.4.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

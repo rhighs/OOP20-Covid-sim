@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jmonkeyengine:jme3-effects:3.3.2-stable">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-effects/3.3.2-stable/c415dda7d9491d682a14fcb150091fd480e8b4c1/jme3-effects-3.3.2-stable.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-effects/3.3.2-stable/bc0f12769e20540db4ae183f07f346a3baef12a9/jme3-effects-3.3.2-stable-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
