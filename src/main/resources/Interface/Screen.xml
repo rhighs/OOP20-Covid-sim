@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
+    <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+    <screen id="start" controller="GUI.Controllers.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/back.png"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+            <panel id="panel_title" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="COVID-19 SIMULATION" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+
+            </panel>
+            <panel id="panel1" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panel_top_left" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="label" text="Set number of person" style="nifty-label" id="MaskLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="textPerson" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control id="txtPerson" name="textfield" maxLength="3">
+
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panel2" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panel2_left" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="label" text="Set person without mask" style="nifty-label" id="MaskLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="panel2_right" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control id="txtNoMask" name="textfield" maxLength="3">
+
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panel3" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panel3_left" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="label" text="Select mask type" style="nifty-label" id="MaskLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="panel3_right" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control id="dropMask" name="dropDown"align="center"
+                      valign="center">
+
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panel4" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panel4_left" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Start" id="StartButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="startGame(hud)"></interact>
+                    </control>
+                </panel>
+                <panel id="panel4_right" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Load Situation" id="LoadButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="load()"></interact>
+                    </control>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+
+
+    <screen id="hud" controller="GUI.Controllers.HudText">
+        <layer id="foreground" childLayout="horizontal">
+            <panel id="hud_panel" width="100%" height="80%" childLayout="vertical">
+                    <control name="label" text="Press [P] to pause" style="nifty-label" id="HudLabel" align="center"
+                      valign="center" backgroundImage="Interface/black.png">
+                    </control>
+            </panel>
+
+        </layer>
+    </screen>
+
+
+    <screen id="load" controller="GUI.Controllers.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/back.png"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+
+            <panel id="panelTitle" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="Preset Simulations" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+            </panel>
+
+            <panel id="panelWorst" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelInfleft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="label" text="People: 50; Protection: FP1; People no mask: 50" style="nifty-label" id="InfLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="textInfect" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                     <control name="button" label="load" id="BestButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="loadWorst()"></interact>
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelBest" height="20%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelInfleft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="label" text="People: 50; Protection: FP3; People no mask: 0" style="nifty-label" id="InfLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="panelWorst" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                     <control name="button" label="load" id="WorstButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="loadBest()"></interact>
+                    </control>
+                </panel>
+
+            </panel>
+            <panel id="panelBackSit" height="10%" width="100%" valign="center"
+                   childLayout="center">
+                <control name="button" label="Back" id="BackButton" align="center"
+                         valign="center" visibleToMouse="true">
+                    <interact onClick="backSit()"></interact>
+                </control>
+            </panel>
+
+        </layer>
+    </screen>
+
+    <screen id="commands" controller="GUI.Controllers.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/back.png"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+            <panel id="panel_title" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="Commands" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+
+            </panel>
+            <panel id="panelCommandsGlobal" height="70%" width="100%" align="center"
+                   childLayout="horizontal">
+                   <panel id="panelCommands" height="80%" width="50%" align="center"
+                   childLayout="vertical">
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="WASD">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="[E]">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="Right Click">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="Left Click">
+                </text>
+                <text width="50%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="center"textVAlign="top"
+                      text="Key Arrows">
+                </text>
+                </panel>
+
+            <panel id="panelDescr" height="80%" width="50%" align="center"
+                   childLayout="vertical">
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="To move">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="To HUD">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="Switch to person visual">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="Switch to global visual">
+                </text>
+                <text width="100%"height="10%" font="Interface/Fonts/PhetsarathOT.fnt" wrap="true"textHAlign="left"textVAlign="top"
+                      text="Move camera">
+                </text>
+            </panel>
+            </panel>
+            <panel id="panelBack" height="10%" width="100%" valign="center"
+                   childLayout="center">
+                <control name="button" label="Back" id="BackButton" align="center"
+                         valign="center" visibleToMouse="true">
+                    <interact onClick="backCom()"></interact>
+                </control>
+            </panel>
+
+
+        </layer>
+    </screen>
+
+
+    <screen id="pause" controller="GUI.Controllers.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/back.png"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+
+            <panel id="panelTitle" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="Menu" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+            </panel>
+
+            <panel id="panelButtons" height="80%" width="100%" align="center"
+              childLayout="vertical">
+
+                <panel id="panelCommand" height="33%" width="100%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Commands" id="CommandButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="commands()"></interact>
+                    </control>
+                </panel>
+                <panel id="panelEdit" height="33%" width="100%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Edit" id="ApplyButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="edit()"></interact>
+                    </control>
+                </panel>
+                <panel id="panelQuit" height="33%" width="100%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Quit" id="QuitButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="quit()"></interact>
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelEsc" height="10%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelEsc" height="50%" width="100%" valign="center"
+                  childLayout="center">
+                    <control name="label" text="Press [E] to return to HUD" style="nifty-label" id="ReturnLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+
+
+
+    <screen id="edit" controller="GUI.Controllers.StartScreenController">
+        <layer id="background" childLayout="center">
+            <image filename="Interface/back.png"></image>
+        </layer>
+        <layer id="foreground" childLayout="vertical">
+
+            <panel id="panelTitle" height="20%" width="100%" align="center"
+                   childLayout="center">
+                <text text="Edit parameters" font="Interface/Fonts/PhetsarathOT.fnt">
+                    </text>
+            </panel>
+            <panel id="panelAddInfPerson" height="15%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelAddInfleft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="label" text="Add Infected Person:" style="nifty-label" id="AddInfLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+                <panel id="panelAddInfright" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                     <control id="txtAddInf" name="textfield" maxLength="3">
+
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelEdit1" height="15%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelEditleft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="button" height="50%" width="50%" label="Change mask state" id="StateMButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="stateMask()"></interact>
+                    </control>
+                </panel>
+                <panel id="panelEditright" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                     <control name="button" label="No infected" id="noInfButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="noInfected()"></interact>
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelReport" height="15%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelReportLeft" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                   <control name="label" height="40%" width="40%" text="Report: " id="ReportLabel" align="center"
+                      valign="center" visibleToMouse="true">
+                    </control>
+                </panel>
+                <panel id="panelReportRight" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="label" width="100%" height="100%" style="nifty-label" id="RepLabel" align="center"
+                             valign="center">
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelButton" height="5%" width="75%" align="center"
+              childLayout="horizontal">
+               <panel id="panelApply" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Apply" id="ApplyButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="apply()"></interact>
+                    </control>
+                </panel>
+                <panel id="panelQuit" height="50%" width="50%" valign="center"
+                  childLayout="center">
+                    <control name="button" label="Cancel" id="QuitButton" align="center"
+                      valign="center" visibleToMouse="true">
+                        <interact onClick="cancel()"></interact>
+                    </control>
+                </panel>
+            </panel>
+            <panel id="panelEsc" height="10%" width="75%" align="center"
+              childLayout="horizontal">
+                <panel id="panelEsc" height="50%" width="100%" valign="center"
+                  childLayout="center">
+                    <control name="label" text="Press [E] to return to HUD" style="nifty-label" id="ReturnLabel" align="center"
+                      valign="center">
+                    </control>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+ </nifty>
+
+
