@@ -20,6 +20,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class StartScreenController extends BaseAppState implements ScreenControl
         guiNode = world.getGuiNode();
         nifty.fromXml(SCREEN_PATH, START_SCREEN_NAME, this);
         prot = Person.Mask.Protection.FP1;
-
+        this.start = Instant.now();
     }
 
     @Override
