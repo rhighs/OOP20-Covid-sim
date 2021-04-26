@@ -32,6 +32,7 @@ public class Locator {
         var rootNode = app.getRootNode();
         var assetManager = app.getAssetManager();
         var bullet = new BulletAppState();
+        bullet.setDebugEnabled(true);
         app.getStateManager().attach(bullet);
 
         graphics = new Graphics(assetManager, rootNode);

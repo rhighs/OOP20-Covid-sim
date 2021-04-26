@@ -3,14 +3,14 @@ package Simulation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import com.jme3.scene.Node;
+
 import Environment.Services.Map.PathFinder;
 import Environment.Locator;
 import Environment.Services.Map.MainMap;
 import Environment.Services.Graphical.SimulationCamera;
 import Simulation.CrowdHandlers.PersonPicker;
 import Simulation.Virus.Virus;
-import Simulation.CrowdHandlers.Spawner2;
+import Simulation.CrowdHandlers.Spawner;
 
 /**
  * This is the main Simulation class.
@@ -43,7 +43,6 @@ public class SimulationImpl implements Simulation {
         this.cam = world.getSimulationCamera();
         this.lights = new Lights(world.getAmbient(), cam);
         this.picker = new PersonPicker(world.getInput(), world.getAmbient(), cam);
-        this.virus = new Virus(crowd);
     }
 
     @Override
@@ -51,16 +50,15 @@ public class SimulationImpl implements Simulation {
         this.map = world.getMap();
         this.pg = map.createPathFinder();
         for (int i = 0; i < options.numPerson; i++) {
-            Person p = new PersonImpl(world, options.protection, Spawner2.getRandom());
+            Person p = new PersonImpl(world, options.protection, Spawner.getRandom());
             if (options.numMasks != 0) {
                 p.maskDown();
             }
-            System.out.println("person is at " + p.getPosition());
             crowd.add(p);
         }
+        this.virus = new Virus(crowd);
         new Thread(this.virus).start();
     }
-
     @Override
     public void update() {
         if (crowd == null) {

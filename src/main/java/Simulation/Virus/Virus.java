@@ -31,19 +31,22 @@ public class Virus implements VirusInterface {
         this.numPeople = crowd.size();
         this.infectionAlgo = new Infection();
         this.rand = new Random();
+        this.infectedPeople = new ArrayList<>();
     }
 
     @Override
     public void run() {
         startSpreading();
-        while (running) {
+
+        while(running){
             if (isSpreading) {
                 keepSpreading();
             }
+
             try {
                 Thread.sleep(10);
             } catch (Exception ex) {
-                //if .sleep somehow fails, just ingore and retry.
+                //if .sleep somehow fails, just ignore and retry.
             }
         }
     }
@@ -53,7 +56,8 @@ public class Virus implements VirusInterface {
     }
 
     private void startSpreading() {
-        infectedPeople = new ArrayList<>();
+        var num =rand.nextInt(numPeople);
+        System.out.println("Persone : " + num);
         Person unluckyBoi = crowd.get(rand.nextInt(numPeople));
         unluckyBoi.infect();
         infectedPeople.add(unluckyBoi);
@@ -62,23 +66,10 @@ public class Virus implements VirusInterface {
 
     private void keepSpreading() {
         for (Person p : crowd) {
-// <<<<<<< HEAD
             if (!p.isInfected()) {
                 continue;
-// =======
-
-//             if (p.isInfected()) {
-//                 var nearPeople = p.getNearPeople();
-//                 var allNearPeople = new HashSet<>(nearPeople);
-
-//                 if (p.getLastNear() != null) {
-//                     nearPeople.removeAll(p.getLastNear());
-//                 }
-
-//                 nearPeople.forEach(person -> tryInfection(person));
-//                 p.setLastNear(allNearPeople);
-// >>>>>>> refactor
             }
+
             var adjPeople = p.getAdjacentPeople();
             var allAdjPeople = new HashSet<>(adjPeople);
             var lastPeople = p.getLastAdjacentPeople();
