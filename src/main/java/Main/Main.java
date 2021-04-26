@@ -54,22 +54,6 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         // keep this method at the top or else we'll get exceptions.
-
-        /*
-        * This might be considered a sort of crazy thing to do, but it is actually
-        * required to use it in order to suppress a warning, given by the engine, that isn't logged
-        * as a traditional warning, but rather as a plain sys.out.println, which isn't really optimal
-        * from a performance perspective.
-        * Since our simulation wont access stdout anywhere in the code,
-        * i'll just block anything the engine tries to print out by doing the following.
-        */
-        System.setOut(new PrintStream(new OutputStream() {
-            @Override
-            public void write(int arg0) throws IOException {
-
-            }
-        }));
-
         world = new Locator(this);
         this.simulation = new SimulationImpl(world);
         setDisplayStatView(false);
