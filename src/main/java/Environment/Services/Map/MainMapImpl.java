@@ -7,7 +7,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 
 public class MainMapImpl implements MainMap {
-    private final String MAP_MODEL = "Scenes/ubibo/ubibo.j3o";
+    private final String MAP_MODEL = "Scenes/university/university.j3o";
     private final String NAVMESH_NAME = "NavMesh";
     private final String SCENE_NAME = "SimulationScene";
     private Node scene;
