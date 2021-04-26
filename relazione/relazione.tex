@@ -100,6 +100,13 @@ Il motivo di questa decisione deriva dal momento in cui Io e Christian abbiamo n
 
 Qui sotto riporto una semplice illustrazione dell'architettura appena menzionata.
 
+\begin{figure}[h]
+\centering{}
+\includegraphics{./locator_uml.png}
+\caption{Locator UML}
+\label{img:Locator UML}
+\end{figure}
+
 \subsection{Juri Simoncini}
 Io mi sono occupato dell'algortimo di infezione, la challenge principale erano capire su quali aspetti basarci per l'infezione, 
 ho preferito utilizzare come parametri dell'algoritmo le proprietà della mascherina avendo cosi un'algoritmo semplice e leggero.
@@ -155,6 +162,21 @@ dato che il Path Finder ci restituisce direttamente una lista di punti in manier
 
 La Navigation Mesh agisce come un grafo di fatto, dove cercare un percorso ottimale da un nodo dela grafo ad un altro.
 In figura una possiamo notare: i triangoli che rappresentano i nodi del grafo, quindi le zone navigabili, e figure a più lati, che identificano gli ostacoli.
+
+Classi sviluppate singolarmente:
+\begin{itemize}
+\item Locator e i suoi serivizi
+\item PhysicsComponent
+\item PersonPicker
+\item Sceens e Controls, Models per la gui
+\end{itemize}
+
+\begin{figure}[h]
+\centering{}
+\includegraphics{./navmesh_obstacle.png}
+\caption{Navigation Mesh}
+\label{img:Navigation Mesh}
+\end{figure}
 
 Ho inoltre gestito tutti gli aspetti generali di rendering dell'ambientazione.
 
@@ -262,7 +284,11 @@ Sono abbastanza contento del lavoro finale, anche se, come ho detto prima, sono 
 
 Tenendo in conto gli ostacoli incontrati nel corso di questi mesi e il tempo impiegato per arrivare conoscere a fondo l'engine, mi sento soddisfatto del risultato finale ottenuto, anche se come progetto a parer mio avrebbe potuto offrire di più.
 
-Ho sicuramente imparato molte cose interessanti e importanti, programmare in una manierà più consapevole e l'organizzazione di squadra sono state sicuramente alcune di queste.
+Sono soddisfatto inoltre del lavoro svolto dal mio team, che ha fatto il possibile per mantenere la promessa di portare a termine questo progetto in uno stato presentabile e apprezzabile, ho capito quanto sia importante essere coordinati in squadra e ancor più quanto sia importante una costante presenza da parte di tutti, anche se i partecipanti più attivi e presenti eravamo spesso io e il mio compagno Christian Ricci, con cui ho condiviso e implementato gran parte delle idee sorte durante lo sviluppo del progetto.   
+
+Questo per me è il primo progetto di questa portata, in cui mi trovo a lavorare con più di due persone e devo dire che l'organizzazione di gruppo viene spesso sottovalutata, da ora ritengo sia una priorità stabilire con largo anticipo come suddividire il carico di lavoro in ragioni di tempo e abilità per ogni membro del gruppo.
+
+Ho sicuramente imparato molte altre cose interessanti e importanti, programmare in una manierà più consapevole e l'organizzazione di squadra sono state sicuramente alcune di queste.
 
 \subsection{Juri Simoncini}
 
