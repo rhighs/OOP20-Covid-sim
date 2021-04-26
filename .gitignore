@@ -78,3 +78,10 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+*.aux
+*.odt
+*.pdf
+*.synctex.gz
+*.toc
+*.out
