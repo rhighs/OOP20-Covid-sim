@@ -93,6 +93,13 @@ Ho anche creato cose non legate al Model dell'applicazione: ad esempio ho creato
 
 \subsection{Roberto Montalti}
 
+Oltre ad aver contribuito all'algoritmo di movimento insieme a Christian Ricci ed Edoardo Savini, mi sono occupato di tutti gli aspetti grafici e fisici dell'applicazione e della gestione delle dipendenze che sono più in stretto contatto con il Jmonkey Engine.
+
+In particolare per la gestione di medesimi, ho deciso di sfruttare il "Service Locator" pattern, con questa scelta di design è stato possibile separare in buona parte tanti aspetti dell'applicazione che non sono necessariamente legati al corretto funzionamento della sua logica.
+Il motivo di questa decisione deriva dal momento in cui Io e Christian abbiamo notato che più andavamo avanti con gli sviluppi e più iniziavano a spargersi dipendenze su tutta l'applicazione.
+
+Qui sotto riporto una semplice illustrazione dell'architettura appena menzionata.
+
 \subsection{Juri Simoncini}
 Io mi sono occupato dell'algortimo di infezione, la challenge principale erano capire su quali aspetti basarci per l'infezione, 
 ho preferito utilizzare come parametri dell'algoritmo le proprietà della mascherina avendo cosi un'algoritmo semplice e leggero.
@@ -102,15 +109,18 @@ Ho deciso di optare per la seconda soluzione dato che le feature da implementare
 Però per alleggerire il codice ho deciso di suddividire le implementazioni dei metodi in varie classi suddivise per schermate.
 Ho poi lavorato sulla simulazione per la manipolazione delle persone dato che mi era utile per le funzionalità del controller.
 
-
-
 \subsection{Edoardo Savini}
+Insieme a Christian Ricci e Roberto Montalti mi sono occupato del Movement Handler mentre personalmente ho effettuato il refactoring di altre classi e il testing delle stesse, incluso il testing automatizzato con GitHub Actions, usando le librerie jUnit per il testing e mockito per la creazione dei mock. Il testing è però incompleto a causa di alcune difficoltà riscontrate con alcune di esse, in quanto l'implementazione non permetteva lo stesso, anche invertendo il controllo.
 
 \chapter{Sviluppo}
 
 \section{Testing automatizzato}
 
-% questo lo fa savini
+Il testing automatizzato (non è possibile chiamarlo \emph{continuous integration} in quanto viene eseguita solo una compilazione con Gradle e i relativi test, senza la produzione di una release) è stato implementato per permettere a tutti i componenti di poter rifattorizzare il test e mettere a conoscenza gli altri componenti se era possibile effettuare il merge delle stesse sul branch principale. Sfrutta le GitHub Actions e si basa su un template fornito da GitHub stesso, poi adattato in quanto presentava alcuni problemi.
+
+Durante il testing è stato utilizzato il framework jUnit per l'esecuzione dei test e le relative asserzioni e la libreria mockito per la creazione dei mock (le entità fantocce con cui abbiamo "ingannato" la classe sotto testing) permettendo l'isolamento delle classi le une dalle altre (cosa imprescindibile durante i test di unità).
+
+Non sono stati creati test di integrazione a causa delle difficoltà riscontrate con il framework jMonkey Engine.
 
 \section{Metodologia di lavoro}
 
@@ -118,80 +128,173 @@ Ho poi lavorato sulla simulazione per la manipolazione delle persone dato che mi
 
 Abbiamo deciso di iniziare a sviluppare questo progetto con una fase di analisi, per capire esattamente cosa bisognasse fare, come potevamo suddividerci il lavoro e quali librerie potevamo utilizzare. Abbiamo presentato tutti le nostre idee riguardo al Model dell'applicazione. In retrospettiva la nostra fase di analisi potrebbe essere stata troppo corta, dato che ci siamo accorti più o meno a metà del progetto che l'engine non era particolarmente buono e abbiamo faticato molto per risolvere alcuni problemi legati alla librerie scelte.
 
-Abbiamo deciso di suddividere in modo equo il lavoro, ma abbiamo anche che sarebbe stato meglio collaborare insieme su alcuni componenti dell'applicazione che sono risultati più difficili da scrivere, ad esempio l'algoritmo di movimento della persona.
+Abbiamo deciso di suddividere in modo equo il lavoro, ma abbiamo anche pensato che sarebbe stato meglio collaborare insieme su alcuni componenti dell'applicazione che sono risultati più difficili da scrivere, ad esempio l'algoritmo di movimento della persona.
 
 \subsection{Distributed Version Control System}
+
 Per il DVCS è stato utilizzato git, dato che tutti i membri del team avevano esperienza solo su questo. Abbiamo creato una repository su github e abbiamo deciso di creare un branch per ogni membro del team. Questo alla fine ci è sembrato poco produttivo, data la difficoltà per ognuno di stare alla pari con le feature che altri membri creavano.
 
 \subsection{Christian Ricci}
 
-Sviluppo del Model dell'applicazione, in particolare la classe Simulazione, la classe Persona e alcuni dei suoi componenti e la classe Spawner. Ho inoltre contribuito ad aggiustare varie classi, tra cui il Virus e il controller della GUI.
+Sviluppo del Model dell'applicazione, in particolare la classe Simulazione, la classe Persona e alcuni dei suoi componenti e la classe Spawner. Sono stato in primo luogo a pensare all'architettura generale del Model e al design di alcuni dei suoi componenti. Ho inoltre contribuito ad fare il \textit{refactoring} di varie classi, tra cui il Virus e il controller della GUI.
 Classi sviluppate singolarmente:
+\begin{itemize}
+\item Interfaccia Entity e classe PersonImpl
+\item Spawner
+\item MainMap
+\end{itemize}
 
 \subsection{Roberto Montalti}
 
+Sviluppo di aspetti grafici e fisici dell'applicazione.
+
+Per quanto riguarda gli aspetti grafici, ho pensato alla creazione dei creazione modelli tridimensionali, per questo ho fatto auisilio degli strumenti grafici blender e jmonkey terrain-editor, grazie a quest'ultimo ho ottenuto una Navigation-mesh della scena, utilizzata dal path-finder sfruttato nell'algoritmo di movimento.
+
+Grazie a quest'ultima è stato possibile sviluppare un algoritmo di movimento il più semplice possibile, senza doverci preoccupare eccessivamente degli ostacoli che una persona può incontrare nel suo percorso,
+dato che il Path Finder ci restituisce direttamente una lista di punti in maniera sequenziale, da inizio a fine percorso (il target).
+
+La Navigation Mesh agisce come un grafo di fatto, dove cercare un percorso ottimale da un nodo dela grafo ad un altro.
+In figura una possiamo notare: i triangoli che rappresentano i nodi del grafo, quindi le zone navigabili, e figure a più lati, che identificano gli ostacoli.
+
+Ho inoltre gestito tutti gli aspetti generali di rendering dell'ambientazione.
+
+Per gli aspetti fisici invece ho gestito la parte di rilevazione delle collisioni e della rilevazione di prossimità di altre persone, dal punto di vista di un'altra.
+Ho ottunuto successo in quest'ultima, grazie ad una "scatola di prossimità, che non è altro che un cubo invisibile e attraversabile, dove oggetti posso entrare e uscire, in questo caso persone.
+Questo meccanismo sta alla base del funzionamento del virus.
+
+In figura una semplice visualizzazione.
+
+Ho inoltre pensato alla creazione del Virus e del PersonPicker.
+Il modo in cui funziona il Virus è molto semplice si chiede ad una persona chi ha vicino in quel ciclo di esecuzione e si confronta il risultato con quello del ciclo precedente, questo è necessario per far sì che una persona tenti di infettarne un'altra solo una volta avvenuta la rilevazione della persona vittima nelle vicinanze.
+Così facendo si garantisce l'integrità delle probabilità di contagio definite nell'infezione.
+
+Il PersonPicker invece è una feature che ho deciso spontaneamente di implementare, per arrichire quella che è l'esperienza utente.
+Questo segue una logica molto semplice, si prende la direzione della telecamera, in seguito si proietta una retta in quella direzione e se questa entra in collisione con una persona, si posiziona la telecamera sopra la persona finchè non ci si stacca da essa.
+
+Oltre a questo ho contribuito al miglioramento della struttura dei package dell'applicazione e alla ristrutturazione del suo codice in svariate classi.
+
 \subsection{Juri Simoncini}
-Lato GUI sia a lato grafico che a lato logico utilizzando la libreria nifty-gui.
+Lato GUI sia a lato grafico che a lato logico utilizzando la libreria Nifty GUI.
+
 L'implementazione grafica si trova dentro al file screen.xml che poi viene passato allo StartScreenController, il controller della nostra GUI.
 Tutta l'interfaccia è stata organizzata per schermate, quindi è presente per ogni schermata (Start, Commands, Edit, Pause) uno screen nel file screen.xml.
 Lo StartScreenController presenta al suo interno tutti i metodi che vengono chiamati dai vari screen (bottoni, pulsanti, textField...).
 Per l'edit screen ho implementato una classe chiamata EditComponent con all'interno la logica per i metodi utili allo StartScreenController, stessa cosa ho attuato per il load screen con il loadComponent.
+
 Mentre per il testo presente nell' HUD ho optato per un oggetto separato dal controller, per non sovraccaricarne il lavoro, chiamato HudText.
 Il testo presente così riesce ad aggiornarsi in tempo reale grazie al metodo SimpleUpdate presente nel Main.
 L'algoritmo di infezione che viene utilizzato per infettare le varie persone presenti nella mappa.
 L'algoritmo si basa sulle dell'oggeto mask: Protection (FP1, FP2, FP3) e Status (UP, DOWN).
 Ho preferito assegnare più rilevanza allo status in base anche alle esperienze nella vita reale dato che una mascherina abbassata avrà un effetto maggiore sulla trasmissione del virus.
+
 Quindi lo status in percentuale ha un 70\% di rilevanza mentre la protection il restante 30.
 Perciò ho pensato alla trasmissibilità dell'infezione come una scala di valori da 0 a 100 in cui, per esempio, se la mascherina è abbassata ed è di tipo FP1 le probabilità di trasmissione è pari a 100.
-Per rappresentare la randomicità del contagio viene estratto un valore random da 0 a 100 e se questo è minore del valore della trasmissibilità calcolato la persona viene contagiata, quindi maggiore è il valore di trasmissibilità maggiori sono le porbabilità di essere contagiato.
+
+Per rappresentare la casualità del contagio viene estratto un valore random da 0 a 100 e se questo è minore del valore della trasmissibilità calcolato la persona viene contagiata, quindi maggiore è il valore di trasmissibilità maggiori sono le porbabilità di essere contagiato.
 
 \subsection{Edoardo Savini}
+
+Sviluppo del Movement Handler e del testing.
+Classi sviluppate singolarmente:
+\begin{itemize}
+    \item \emph{PathManager};
+    \item \emph{StuckManager};
+    \item tutte le classi di testing.
+\end{itemize}
 
 \section{Note di sviluppo}
 
 \subsection{Christian Ricci}
 
+Per quanto riguarda aspetti più avanzati del linguaggio:
 \begin{itemize}
-\item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
-\item JMonkeyEngine AI: libreria utilizzata all'interno dell'implementazione del Movement Component.
 \item Thread Pool: un uso di una thread pool è stato fatto dentro al Movement Component per gestire le richieste di nuove strade.
-\item Generici: l'interfaccia di callback dentro il GUI controller è un'interfaccia funzionale generica, per permettere di registrare un qualunque callback.
+\item Programmazione funzionale e lambda: l'interfaccia di Callback dentro il GUI controller è funzionale, per permettere di scrivere semplici lambda.
+\item Generici: l'interfaccia di callback è anche generica, per permettere di registrare un qualunque callback.
+\end{itemize}
+
+Per quanto riguarda le librerie:
+\begin{itemize}
+\item JMonkeyEngine: engine utilizzato per il Model dell'applicazione;
+\item JMonkeyEngine AI: libreria utilizzata all'interno dell'implementazione del Movement Component;
 \end{itemize}
 
 \subsection{Roberto Montalti}
 
+\begin{itemize}
+\item JMonkeyEngine: engine utilizzato per il Model dell'applicazione;
+\item JMonkeyEngine AI: libreria utilizzata all'interno dell'implementazione del Movement Component;
+\item Bullet: libreria nativa C++, per la gestione di spazi fisici;
+\item Thread Pool: un uso di una thread pool è stato fatto dentro al Movement Component per gestire le richieste di nuove strade;
+\item Jmonkey Terrain Editor e Blender: per la creazione di modelli e per la Navigation Mesh; 
+\end{itemize}
+
 \subsection{Juri Simoncini}
+
+\begin{itemize}
 \item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
 \item Nifty-gui: libreria utilizzata in tutto lo sviluppo della gui.
 \item Uso di lambda expressions.
+\end{itemize}
 
 \subsection{Edoardo Savini}
+
+\begin{itemize}
+    \item \emph{jUnit}: il framework utilizzato per i test;
+    \item \emph{mockito}: il framework che permette di creare dei mock delle interfacce e delle classi, permettendo di isolare i singoli componenti nei test d'unità.
+\end{itemize}
 
 \chapter{Commenti finali}
 
 \section{Autovalutazione e lavori futuri}
+
 \subsection{Christian Ricci}
+
+Mi sento soddisfatto del lavoro fatto per questo progetto; sin dall'inizio ho cercato di dare contributi fondamentali, ma soprattutto ho cercato di esporre le mie idee al gruppo e cercato di migliorare alcune parti della struttura del progetto che secondo me erano fatte male.
+
+Sono però leggermente dispiaciuto del fatto che non sono riuscito ad implementare alcune delle mie idee a causa di alcuni ritardi, ma anche a causa del fatto che non ho contribuito linearmente al progetto: più o meno verso metà non sono più stato molto partecipe e penso che forse il progetto ne abbia sofferto.
+
+Sono stato contento del mio team, in particolare del mio compagno Roberto Montalti, con cui condividevo di più le mie idee e con cui ho collaborato su alcune classi. Questo non è stato il mio primo progetto, però è sicuramente stato il primo progetto con cui ho avuto a che fare con più persone: io ho sempre lavorato da solo ai miei progetti, quindi aver lavorato insieme mi ha fatto capire quanto può essere difficile alcune volte comunicare con il team e coordinarsi sul da fare.
+
+Sono abbastanza contento del lavoro finale, anche se, come ho detto prima, sono stato deluso dal fatto che non sono riuscito ad implementare alcune mie idee. D'altro canto, penso che il risultato finale sia più che soddisfacente, anche tenendo conto del tempo trascorso.
 
 \subsection{Roberto Montalti}
 
+Tenendo in conto gli ostacoli incontrati nel corso di questi mesi e il tempo impiegato per arrivare conoscere a fondo l'engine, mi sento soddisfatto del risultato finale ottenuto, anche se come progetto a parer mio avrebbe potuto offrire di più.
+
+Ho sicuramente imparato molte cose interessanti e importanti, programmare in una manierà più consapevole e l'organizzazione di squadra sono state sicuramente alcune di queste.
+
 \subsection{Juri Simoncini}
-Avrei potuto sicuramente fare di più ma per vari problemi non sono riuscito a mettere in atto tutti gli insegnamenti compresi a lezione soprattutto per quanto riguarda l'utilzzo del pattern MVC nella gui che sarebbe potuto essere attuato in maniera migliore.
+
+Avrei potuto sicuramente fare di più ma per vari problemi non sono riuscito a mettere in atto tutti gli insegnamenti compresi a lezione soprattutto per quanto riguarda l'utilizzo del pattern MVC nella GUI che sarebbe potuto essere attuato in maniera migliore.
+
 D'altro canto ritengo però di averci messo tutto l'impegno possibile per aiutare i miei colleghi nello sviluppo dell'applicazione e nello sviluppo portato avanti da me.
-In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le mie conoscenze facendomi conoscere un engine tutto nuovo e perciò avendo acquisito una nuova skill. 
+
+In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le mie conoscenze facendomi conoscere un engine tutto nuovo e perciò avendo acquisito una nuova skill.
 
 \subsection{Edoardo Savini}
 
-
-
 \section{Difficoltà incontrate e commenti per i docenti}
 
+\subsection{Christian Ricci}
+
+Sono stato abbastanza contento del percorso che si è fatto durante il corso: ho appreso molti argomenti che a mio parere sono molto interessanti ed utili, ad esempio lambda e stream. I professori sono stati molto bravi a spiegare i vari argomenti del corso, e io personalmente son sempre riuscito a seguire bene ogni lezioni: nessun argomento mi è sembrato molto difficile da apprendere.
+
+Avrei però voluto un po' di spiegazione in più riguardo ad alcuni argomenti di laboratorio, in particolare il tool Gradle, che è stato spiegato molto velocemente a mio parere, e che forse avrebbe fruttato spendere qualche ora in più ad imparare come usarlo, specialmente perchè penso che in un contesto lavorativo il build system di un progetto dovrebbe conosciuto quanto il linguaggio stesso. Avrei voluto anche qualche spiegazione in più sullo Unit Testing e forse anche una breve introduzione sul CI.
+
+\subsection{Roberto Montalti}
+
+% sku qui ci vanno i commenti per il corso
+Buona parte di noi, ha avuto problemi non indifferenti nell'essere costanti con lo sviluppo, principalmente per motivi sia lavorati che universitari.
+Questo è il motivo per cui magari alcuni abbiano partecipato al progetto con meno costanza, rispetto ad altri.
+
+\subsection{Juri Simoncini}
+
+\subsection{Edoardo Savini}
 
 \appendix
+
 \chapter{Guida utente}
-
-\chapter{Esercitazioni di laboratorio}
-
-% nessuno li ha fatti vero?
 
 \bibliographystyle{alpha}
 \bibliography{13-template}
