@@ -93,6 +93,13 @@ Ho anche creato cose non legate al Model dell'applicazione: ad esempio ho creato
 
 \subsection{Roberto Montalti}
 
+Oltre ad aver contribuito all'algoritmo di movimento insieme a Christian Ricci ed Edoardo Savini, mi sono occupato di tutti gli aspetti grafici e fisici dell'applicazione e della gestione delle dipendenze che sono più in stretto contatto con il Jmonkey Engine.
+
+In particolare per la gestione di medesimi, ho deciso di sfruttare il "Service Locator" pattern, con questa scelta di design è stato possibile separare in buona parte tanti aspetti dell'applicazione che non sono necessariamente legati al corretto funzionamento della sua logica.
+Il motivo di questa decisione deriva dal momento in cui Io e Christian abbiamo notato che più andavamo avanti con gli sviluppi e più iniziavano a spargersi dipendenze su tutta l'applicazione.
+
+Qui sotto riporto una semplice illustrazione dell'architettura appena menzionata.
+
 \subsection{Juri Simoncini}
 Io mi sono occupato dell'algortimo di infezione, la challenge principale erano capire su quali aspetti basarci per l'infezione, 
 ho preferito utilizzare come parametri dell'algoritmo le proprietà della mascherina avendo cosi un'algoritmo semplice e leggero.
@@ -132,6 +139,33 @@ Classi sviluppate singolarmente:
 
 \subsection{Roberto Montalti}
 
+Sviluppo di aspetti grafici e fisici dell'applicazione.
+
+Per quanto riguarda gli aspetti grafici, ho pensato alla creazione dei creazione modelli tridimensionali, per questo ho fatto auisilio degli strumenti grafici blender e jmonkey terrain-editor, grazie a quest'ultimo ho ottenuto una Navigation-mesh della scena, utilizzata dal path-finder sfruttato nell'algoritmo di movimento.
+
+Grazie a quest'ultima è stato possibile sviluppare un algoritmo di movimento il più semplice possibile, senza doverci preoccupare eccessivamente degli ostacoli che una persona può incontrare nel suo percorso,
+dato che il path-finder ci restituisce direttamente una lista di punti in maniera sequenziale, da inizio a fine percorso (il target).
+
+La Navigation-mesh agisce come un grafo di fatto, dove cercare un percorso ottimale da un nodo dela grafo ad un altro.
+In figura una possiamo notare: i triangoli che rappresentano i nodi del grafo, quindi le zone navigabili, e figure a più lati, che identificano gli ostacoli.
+
+Ho inoltre gestito tutti gli aspetti generali di rendering dell'ambientazione.
+
+Per gli aspetti fisici invece ho gestito la parte di rilevazione delle collisioni e della rilevazione di prossimità di altre persone, dal punto di vista di un'altra.
+Ho ottunuto successo in quest'ultima, grazie ad una "scatola di prossimità, che non è altro che un cubo invisibile e attraversabile, dove oggetti posso entrare e uscire, in questo caso persone.
+Questo meccanismo sta alla base del funzionamento del virus.
+
+In figura una semplice visualizzazione.
+
+Ho inoltre pensato alla creazione del Virus e del PersonPicker.
+Il modo in cui funziona il Virus è molto semplice si chiede ad una persona chi ha vicino in quel ciclo di esecuzione e si confronta il risultato con quello del ciclo precedente, questo è necessario per far sì che una persona tenti di infettarne un'altra solo una volta avvenuta la rilevazione della persona vittima nelle vicinanze.
+Così facendo si garantisce l'integrità delle probabilità di contagio definite nell'infezione.
+
+Il PersonPicker invece è una feature che ho deciso spontaneamente di implementare, per arrichire quella che è l'esperienza utente.
+Questo segue una logica molto semplice, si prende la direzione della telecamera, in seguito si proietta una retta in quella direzione e se questa entra in collisione con una persona, si posiziona la telecamera sopra la persona finchè non ci si stacca da essa.
+
+Oltre a questo ho contribuito al miglioramento della struttura dei package dell'applicazione e alla ristrutturazione del suo codice in svariate classi.
+
 \subsection{Juri Simoncini}
 Lato GUI sia a lato grafico che a lato logico utilizzando la libreria nifty-gui.
 L'implementazione grafica si trova dentro al file screen.xml che poi viene passato allo StartScreenController, il controller della nostra GUI.
@@ -170,6 +204,15 @@ Classi sviluppate singolarmente:
 
 \subsection{Roberto Montalti}
 
+\begin{itemize}
+\item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
+\item JMonkeyEngine AI: libreria utilizzata all'interno dell'implementazione del Movement Component.
+\item Bullet: libreria nativa c++, per la gestione di spazi fisici.
+\item Thread Pool: un uso di una thread pool è stato fatto dentro al Movement Component per gestire le richieste di nuove strade.
+\item Jmonkey terrain-editor e Blender: creazione modelli e Navigation-mesh 
+\end{itemize}
+
+
 \subsection{Juri Simoncini}
 \item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
 \item Nifty-gui: libreria utilizzata in tutto lo sviluppo della gui.
@@ -189,6 +232,9 @@ Classi sviluppate singolarmente:
 \subsection{Christian Ricci}
 
 \subsection{Roberto Montalti}
+Tenendo in conto gli ostacoli incontrati nel corso di questi mesi e il tempo impiegato per arrivare conoscere a fondo l'engine, mi sento soddisfatto del risultato finale ottenuto.
+Anche se come progetto a parer mio avrebbe potuto offrire di più.
+Ho sicuramente imparato molte cose interessanti e importanti, programmare in una manierà più consapevole e l'organizzazione di squadra sono state sicuramente alcune di queste.
 
 \subsection{Juri Simoncini}
 Avrei potuto sicuramente fare di più ma per vari problemi non sono riuscito a mettere in atto tutti gli insegnamenti compresi a lezione soprattutto per quanto riguarda l'utilzzo del pattern MVC nella gui che sarebbe potuto essere attuato in maniera migliore.
@@ -200,14 +246,15 @@ In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le 
 
 
 \section{Difficoltà incontrate e commenti per i docenti}
-
+Buona parte di noi, ha avuto problemi non indiffirenti nell'essere costanti con lo sviluppo, principalmente per motivi sia lavorati che universitari.
+Questo è il motivo per cui magari alcuni abbiano partecipato al progetto con meno costanza, rispetto ad altri.
 
 \appendix
 \chapter{Guida utente}
 
 \chapter{Esercitazioni di laboratorio}
 
-% nessuno li ha fatti vero?
+% nessuno li ha fatti vero? skumonti dice: cringe!
 
 \bibliographystyle{alpha}
 \bibliography{13-template}
