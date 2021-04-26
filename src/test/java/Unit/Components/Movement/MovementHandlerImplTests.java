@@ -76,6 +76,7 @@ public class MovementHandlerImplTests {
         doReturn(path.getFirst()).when(mockedPathManager).getWaypoint();
         doReturn(true).when(mockedPathManager).isPositionNear(any(Path.Waypoint.class));
         doNothing().when(mockedPathManager).setPosition(eq(null));
+        doNothing().when(mockedPathManager).nextWaypoint();
         doReturn(false).when(mockedStuckManager).isStuck();
         doNothing().when(mockedStuckManager).toggle();
 
@@ -83,6 +84,7 @@ public class MovementHandlerImplTests {
 
         verify(mockedPathManager, times(1)).isPositionNear(any(Path.Waypoint.class));
         verify(mockedPathManager, times(1)).setPosition(eq(null));
+        verify(mockedPathManager, times(1)).nextWaypoint();
         verify(mockedStuckManager, times(1)).isStuck();
         verify(mockedStuckManager, times(1)).toggle();
     }
