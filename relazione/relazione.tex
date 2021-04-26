@@ -109,8 +109,6 @@ Ho deciso di optare per la seconda soluzione dato che le feature da implementare
 Però per alleggerire il codice ho deciso di suddividire le implementazioni dei metodi in varie classi suddivise per schermate.
 Ho poi lavorato sulla simulazione per la manipolazione delle persone dato che mi era utile per le funzionalità del controller.
 
-
-
 \subsection{Edoardo Savini}
 Insieme a Christian Ricci e Roberto Montalti mi sono occupato del Movement Handler mentre personalmente ho effettuato il refactoring di altre classi e il testing delle stesse, incluso il testing automatizzato con GitHub Actions, usando le librerie jUnit per il testing e mockito per la creazione dei mock. Il testing è però incompleto a causa di alcune difficoltà riscontrate con alcune di esse, in quanto l'implementazione non permetteva lo stesso, anche invertendo il controllo.
 
@@ -118,7 +116,11 @@ Insieme a Christian Ricci e Roberto Montalti mi sono occupato del Movement Handl
 
 \section{Testing automatizzato}
 
-% questo lo fa savini
+Il testing automatizzato (non è possibile chiamarlo \emph{continuous integration} in quanto viene eseguita solo una compilazione con Gradle e i relativi test, senza la produzione di una release) è stato implementato per permettere a tutti i componenti di poter rifattorizzare il test e mettere a conoscenza gli altri componenti se era possibile effettuare il merge delle stesse sul branch principale. Sfrutta le GitHub Actions e si basa su un template fornito da GitHub stesso, poi adattato in quanto presentava alcuni problemi.
+
+Durante il testing è stato utilizzato il framework jUnit per l'esecuzione dei test e le relative asserzioni e la libreria mockito per la creazione dei mock (le entità fantocce con cui abbiamo "ingannato" la classe sotto testing) permettendo l'isolamento delle classi le une dalle altre (cosa imprescindibile durante i test di unità).
+
+Non sono stati creati test di integrazione a causa delle difficoltà riscontrate con il framework jMonkey Engine.
 
 \section{Metodologia di lavoro}
 
@@ -212,17 +214,17 @@ Classi sviluppate singolarmente:
 \item Jmonkey terrain-editor e Blender: creazione modelli e Navigation-mesh 
 \end{itemize}
 
-
 \subsection{Juri Simoncini}
+\begin{itemize}
 \item JMonkeyEngine: engine utilizzato per tutta l'applicazione.
 \item Nifty-gui: libreria utilizzata in tutto lo sviluppo della gui.
 \item Uso di lambda expressions.
+\end{itemize}
 
 \subsection{Edoardo Savini}
 
 \begin{itemize}
     \item \emph{jUnit}: il framework utilizzato per i test;
-    
     \item \emph{mockito}: il framework che permette di creare dei mock delle interfacce e delle classi, permettendo di isolare i singoli componenti nei test d'unità.
 \end{itemize}
 
@@ -239,22 +241,17 @@ Ho sicuramente imparato molte cose interessanti e importanti, programmare in una
 \subsection{Juri Simoncini}
 Avrei potuto sicuramente fare di più ma per vari problemi non sono riuscito a mettere in atto tutti gli insegnamenti compresi a lezione soprattutto per quanto riguarda l'utilzzo del pattern MVC nella gui che sarebbe potuto essere attuato in maniera migliore.
 D'altro canto ritengo però di averci messo tutto l'impegno possibile per aiutare i miei colleghi nello sviluppo dell'applicazione e nello sviluppo portato avanti da me.
-In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le mie conoscenze facendomi conoscere un engine tutto nuovo e perciò avendo acquisito una nuova skill. 
+In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le mie conoscenze facendomi conoscere un engine tutto nuovo e perciò avendo acquisito una nuova skill.
 
 \subsection{Edoardo Savini}
 
-
-
 \section{Difficoltà incontrate e commenti per i docenti}
-Buona parte di noi, ha avuto problemi non indiffirenti nell'essere costanti con lo sviluppo, principalmente per motivi sia lavorati che universitari.
+
+Buona parte di noi, ha avuto problemi non indifferenti nell'essere costanti con lo sviluppo, principalmente per motivi sia lavorati che universitari.
 Questo è il motivo per cui magari alcuni abbiano partecipato al progetto con meno costanza, rispetto ad altri.
 
 \appendix
 \chapter{Guida utente}
-
-\chapter{Esercitazioni di laboratorio}
-
-% nessuno li ha fatti vero? skumonti dice: cringe!
 
 \bibliographystyle{alpha}
 \bibliography{13-template}
