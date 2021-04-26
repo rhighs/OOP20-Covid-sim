@@ -67,7 +67,12 @@ Ogni persona fa utilizzo di componenti, che gestiscono un solo concetto o sottos
 
 In figura è mostrata l'architettura ad alto livello dell'applicazione.
 
-% qui ci vuole un bel uml immerdato
+\begin{figure}[h]
+\centering{}
+\includegraphics{mainuml.pdf}
+\caption{L'architettura ad altro livello, che mostra i controller per la View e il controller per il Model.}
+\label{img:mainuml}
+\end{figure}
 
 \section{Design dettagliato}
 
@@ -78,6 +83,13 @@ Io mi sono occupato per lo più di alcuni componenti del Model: Ad esempio, la c
 Assieme a Roberto Montalti ed Edoardo Savini ho creato il Movement Component e l'algoritmo di movimento: per l'algoritmo abbiamo pensato che la persona dovesse scegliere un punto casuale dentro la mappa, e grazie ad una libreria per l'AI offerta dal JMonkeyEngine la persona avrebbe trovato la strada migliore per arrivarci. Il Movement Component in sè deve prima richiedere la strada e poi iniziare a seguirla; la richiesta di una nuova strada da seguire può però essere molto costosa, dato che l'algoritmo per trovare la strada migliore è dispendioso. Questo si traduce in una serie di stati per il componente, e quindi abbiamo pensato di usare un pattern chiamato "State Pattern" per gestire tutti questi stati. Inoltre, abbiamo dovuto astrarre la richiesta della strada in una nuova classe, che facesse uso di una thread pool per gestire tutte le richieste di una nuova strada per tutte le persone.
 
 In figura è mostrato un diagramma UML per il Movement Component.
+
+\begin{figure}[h]
+\centering{}
+\includegraphics[width=\textwidth]{movementhandler.pdf}
+\caption{L'architettura ad altro livello, che mostra i controller per la View e il controller per il Model.}
+\label{img:mainuml}
+\end{figure}
 
 Ho inoltre creato una prima versione della simulazione, che aveva semplicemente 2 metodi per inizializzarla e aggiornarla. Juri Simoncini ha poi esteso la simulazione, creando alcuni metodi per manipolare le persone.
 
@@ -94,12 +106,13 @@ Qui sotto riporto una semplice illustrazione dell'architettura appena menzionata
 
 \begin{figure}[h]
 \centering{}
-\includegraphics{./locator_uml.pdf}
+\includegraphics[width=\textwidth]{locator_uml.pdf}
 \caption{Locator UML}
 \label{img:Locator UML}
 \end{figure}
 
 \subsection{Juri Simoncini}
+
 Io mi sono occupato dell'algortimo di infezione, la challenge principale erano capire su quali aspetti basarci per l'infezione, 
 ho preferito utilizzare come parametri dell'algoritmo le proprietà della mascherina avendo cosi un'algoritmo semplice e leggero.
 In seguito mi sono occupato del lato GUI: lato grafico e lato di controller.
@@ -108,7 +121,15 @@ Ho deciso di optare per la seconda soluzione dato che le feature da implementare
 Però per alleggerire il codice ho deciso di suddividire le implementazioni dei metodi in varie classi suddivise per schermate.
 Ho poi lavorato sulla simulazione per la manipolazione delle persone dato che mi era utile per le funzionalità del controller.
 
+\begin{figure}[h]
+\centering{}
+\includegraphics[width=\textwidth]{juriuml.png}
+\caption{GUI e Virus.}
+\label{img:edit}
+\end{figure}
+
 \subsection{Edoardo Savini}
+
 Insieme a Christian Ricci e Roberto Montalti mi sono occupato del Movement Handler mentre personalmente ho effettuato il refactoring di altre classi e il testing delle stesse, incluso il testing automatizzato con GitHub Actions, usando le librerie jUnit per il testing e mockito per la creazione dei mock. Il testing è però incompleto a causa di alcune difficoltà riscontrate con alcune di esse, in quanto l'implementazione non permetteva lo stesso, anche invertendo il controllo.
 
 \chapter{Sviluppo}
@@ -165,7 +186,7 @@ Classi sviluppate singolarmente:
 
 \begin{figure}[h]
 \centering{}
-\includegraphics{./navmesh_obstacle.png}
+\includegraphics[width=\textwidth]{navmesh_obstacle.png}
 \caption{Navigation Mesh}
 \label{img:Navigation Mesh}
 \end{figure}
@@ -295,6 +316,12 @@ In conclusione ritengo che lo sviluppo di questa applicazione abbia ampliato le 
 
 \subsection{Edoardo Savini}
 
+Sono contento del lavoro svolto nel progetto da me e i miei colleghi, ritengo che ci sia stato un buon lavoro di gruppo nonostante alcune difficoltà nella coordinazione del lavoro e nell'impegno dato al progetto.
+
+Sfortunatamente, non ho potuto sempre seguire lo svolgimento del progetto a causa dei miei impegni lavorativi, però ho sempre cercato di interfacciarmi con il resto del gruppo e ho dato il massimo impegno sia durante la fase di analisi, sia durante la fine della progettazione e lo sviluppo.
+
+Durante lo sviluppo ho anche imparato che svolgere un progetto in team può essere più faticoso di quanto ci si potrebbe aspettare. Ho anche potuto apprendere che le nozioni da me avute non sono mai sufficiente, perciò questo progetto ha fatto tornare in me la voglia di apprendere e mi ha fatto capire che in questo mondo c'è sempre qualcosa di nuovo da imparare.
+
 \section{Difficoltà incontrate e commenti per i docenti}
 
 \subsection{Christian Ricci}
@@ -305,13 +332,11 @@ Avrei però voluto un po' di spiegazione in più riguardo ad alcuni argomenti di
 
 \subsection{Roberto Montalti}
 
-Sono contento del percorso attraversato tramite il corso, ho imparato molti concetti utili e tecniche che sottovalutavo in precedenza, l'utilizzo adeguato di design patterns ad esempio, ma ancor più 
-saper riconoscere le situazioni in cui applicare questi patterns.
+Sono contento del percorso attraversato tramite il corso, ho imparato molti concetti utili e tecniche che sottovalutavo in precedenza, l'utilizzo adeguato di design patterns ad esempio, ma ancor più saper riconoscere le situazioni in cui applicare questi patterns.
+
 Riguardo al metodo di insegnamento non ho nulla da ridire, al contrario lo ritengo molto completo riesce ad esserci una parte interattiva e una parte di pura visualizzazione dei contenuti offerti, sia per la parte di laboratorio, sia per le lezioni svolte in aula. 
 
 Avrei inoltre preferito, come cita il mio collega, qualche dettaglio in più sullo Unit Testing ampliamente utilizzato in ambiente lavorativo, che spesso e volentieri risparmia tempo prezioso quando si è in cerca di rotture della logica di un software.
-
-\subsection{Edoardo Savini}
 
 \appendix
 
@@ -374,6 +399,8 @@ Nella schermata di pausa si può:
 \item Cambiare alcuni parametri della simulazione;
 \item Uscire dal programma;
 \end{itemize}
+
+Per uscire dalla pausa, basta premere il tasto E.
 
 \newpage
 
