@@ -296,19 +296,80 @@ Questo è il motivo per cui magari alcuni abbiano partecipato al progetto con me
 
 \chapter{Guida utente}
 
+All'avvio dell'applicazione si aprirà una schermata iniziale da cui si possono selezionare alcune opzioni iniziali e poi iniziare la simulazione.
+
 \begin{figure}[h]
 \centering{}
-\includegraphics{2.png} 
+\includegraphics{1.png} 
 \caption{La schermata iniziale.}
 \label{img:startscreen}
 \end{figure}
 
-\includegraphics[scale=1]{4.png}
-\includegraphics[scale=1]{5.png}
+Spiegazione delle opzioni:
+\begin{itemize}
+\item Numero di persone: il numero totale di persone;
+\item Numero di persone senza mascherina: il numero di persone che non utilizzerano una mascherina;
+\item Tipo di mascherina: questo indica il tipo di protezione che le mascherine useranno. Si può scegliere tra 3 opzioni: FP1, FP2, FP3;
+\end{itemize}
 
-\subsection{Schermata Iniziale}
+Selezionando il pulsante "Start" si inizia subito la simulazione con le opzioni selezionate. Altrimento, selezionando "Load simulation", si accede alla schermata dei preset.
 
-\bibliographystyle{alpha}
-\bibliography{13-template}
+\begin{figure}[h]
+\centering{}
+\includegraphics{2.png} 
+\caption{I preset della simulazione.}
+\label{img:preset}
+\end{figure}
+
+Qui si ha la possibilità di selezionare alcuni preset, che comprendono opzioni pre-selezionate.
+
+Qualunque metodo si scelga per iniziare, si arriverà subito alla schermata della simulazione.
+
+\newpage
+
+\begin{figure}[h]
+\centering{}
+\includegraphics{3.png} 
+\caption{La schermata della simulazione.}
+\label{img:scene}
+\end{figure}
+
+Dentro la simulazione, si può girare liberamente per la mappa usando i pulsanti WASD. Inoltre, cliccando su una persona con il pulsante sinistro del mouse, si andrà in visualizzazione persona: la camera si muoverà secondo la persona e non si potrà più girare liberamente. Per ritornare in visualizzazione globale, basta premere il pulsante destro.
+
+\newpage
+
+Premendo P si andrà nella schermata di pausa.
+
+\begin{figure}[h]
+\centering{}
+\includegraphics{4.png} 
+\caption{La schermata di pausa.}
+\label{img:pause}
+\end{figure}
+
+Nella schermata di pausa si può:
+\begin{itemize}
+\item Visualizzare i comandi della simulazione;
+\item Cambiare alcuni parametri della simulazione;
+\item Uscire dal programma;
+\end{itemize}
+
+\newpage
+
+\begin{figure}[h]
+\centering{}
+\includegraphics{5.png} 
+\caption{Opzioni della simulazione.}
+\label{img:edit}
+\end{figure}
+
+In questa schermata si possono cambiare alcuni parametri. Più nello specifico:
+\begin{itemize}
+\item Aggiungere nuovi infetti: questa opzione va a cambiare persone esistenti, non ne aggiunge di nuove;
+\item Cambiare lo stato delle mascherine (pulsante "Change mask state"): le persone che non indossavano la mascherina adesso la indosserano, e viceversa;
+\item Curare ogni person (pulsante "No infected"): va a curare ogni persona dall'infezione. Ci sarà comunque almeno una persona infettata;
+\end{itemize}
+
+Il pulsante "Apply" va ad applicare queste opzioni; il pulsante "Cancel" annulla le modifiche.
 
 \end{document}
